@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>예술기술도시 《The Anthropologists》</title>
+<meta name="description" content="2026.9.1–9.20 · 경인로 727 1F · 예술기술도시 《The Anthropologists》">
+
+<!-- 검색엔진 노출 차단. 재단 홍보 시작할 때 이 두 줄을 지우세요. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+
+<!-- 카카오톡·SNS 공유 미리보기 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="예술기술도시 《The Anthropologists》">
+<meta property="og:description" content="2026.9.1(화) – 9.20(일) · 경인로 727 1F">
+<meta property="og:image" content="https://anthroydp.site/posters/poster-1.jpg">
+<meta property="og:url" content="https://anthroydp.site/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Gothic+A1:wght@300;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:      #1a1713;
+  --zinc:     #fdfcf7;
+  --zinc-dim: #f4f1e7;
+  --steel:    #7d7469;
+  --cyan:     #4a423a;
+
+  --gap: clamp(18px, 4vw, 40px);
+}
+
+*{ box-sizing: border-box; }
+
+html{ -webkit-text-size-adjust: 100%; }
+
+body{
+  margin: 0;
+  background: var(--zinc);
+  color: var(--ink);
+  font-family: 'Gothic A1', system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.wrap{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--gap);
+}
+
+/* ---------- 상단 데이터 바 ---------- */
+.databar{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--steel);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 10px;
+}
+
+/* ---------- 도판 ---------- */
+.plates{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(34px, 6vw, 64px);
+  padding: clamp(28px, 5vw, 52px) 0;
+}
+
+@media (min-width: 720px){
+  .plates{ grid-template-columns: 1fr 1fr; }
+}
+
+.plate{ margin: 0; }
+
+/* 인쇄 톰보(레지스터 마크) — 실제 인쇄물임을 드러내는 표시 */
+.plate-frame{
+  position: relative;
+  padding: 14px;
+}
+.plate-frame::before,
+.plate-frame::after{
+  content: "";
+  position: absolute;
+  width: 14px; height: 14px;
+  pointer-events: none;
+}
+.plate-frame::before{
+  top: 0; left: 0;
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+}
+.plate-frame::after{
+  bottom: 0; right: 0;
+  border-bottom: 1px solid var(--ink);
+  border-right: 1px solid var(--ink);
+}
+
+.plate-btn{
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--zinc-dim);
+  cursor: zoom-in;
+  font: inherit;
+  color: inherit;
+}
+.plate-btn:focus-visible{ outline: 3px solid var(--cyan); outline-offset: 4px; }
+
+.plate-btn img{
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--zinc-dim);
+}
+
+.plate-btn.is-missing img{ display: none; }
+.plate-btn.is-missing::after{
+  content: "이미지 없음";
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .1em;
+  color: var(--steel);
+  border: 1px dashed var(--steel);
+}
+
+
+/* ---------- 정보 ---------- */
+.facts{
+  border-top: 1px solid var(--ink);
+  padding-top: clamp(22px, 4vw, 38px);
+  display: grid;
+  gap: clamp(18px, 3vw, 34px);
+}
+@media (min-width: 720px){
+  .facts{ grid-template-columns: repeat(3, 1fr); }
+}
+
+.fact dt{
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+.fact dd{
+  margin: 0;
+  font-size: clamp(15px, 1.7vw, 17px);
+  font-weight: 500;
+}
+.fact dd small{
+  display: block;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--steel);
+  margin-top: 3px;
+}
+
+.colophon{
+  border-top: 1px solid var(--ink);
+  margin-top: clamp(28px, 5vw, 52px);
+  padding: 16px 0 clamp(30px, 6vw, 60px);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--steel);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+/* ---------- 확대 보기 ---------- */
+.viewer{
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  place-items: center;
+  padding: 16px;
+  background: rgba(10,12,13,.94);
+  cursor: zoom-out;
+}
+.viewer[open],
+.viewer.is-open{ display: grid; }
+
+.viewer img{
+  max-width: 100%;
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.viewer-close{
+  position: absolute;
+  top: 12px; right: 12px;
+  background: none;
+  border: 1px solid rgba(255,255,255,.5);
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .1em;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.viewer-close:focus-visible{ outline: 3px solid #fff; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <div class="databar">
+    <span>2026.09.01 – 09.20</span>
+    <span>12:00 – 20:00</span>
+    <span>월 휴관</span>
+    <span>경인로 727 1F</span>
+  </div>
+
+  <!-- 포스터 4종. 파일은 /posters/ 폴더에 넣고, 아래 캡션만 바꾸면 됩니다. -->
+  <section class="plates" aria-label="포스터">
+
+    <figure class="plate">
+      <div class="plate-frame">
+        <button type="button" class="plate-btn" data-full="posters/poster-1.jpg">
+          <img src="posters/poster-1.jpg" alt="포스터 1" loading="eager" decoding="async">
+        </button>
+      </div>
+    </figure>
+
+    <figure class="plate">
+      <div class="plate-frame">
+        <button type="button" class="plate-btn" data-full="posters/poster-2.jpg">
+          <img src="posters/poster-2.jpg" alt="포스터 2" loading="lazy" decoding="async">
+        </button>
+      </div>
+    </figure>
+
+    <figure class="plate">
+      <div class="plate-frame">
+        <button type="button" class="plate-btn" data-full="posters/poster-3.jpg">
+          <img src="posters/poster-3.jpg" alt="포스터 3" loading="lazy" decoding="async">
+        </button>
+      </div>
+    </figure>
+
+    <figure class="plate">
+      <div class="plate-frame">
+        <button type="button" class="plate-btn" data-full="posters/poster-4.jpg">
+          <img src="posters/poster-4.jpg" alt="포스터 4" loading="lazy" decoding="async">
+        </button>
+      </div>
+    </figure>
+
+  </section>
+
+  <dl class="facts">
+    <div class="fact">
+      <dt>기간</dt>
+      <dd>2026.9.1(화) – 9.20(일)<small>개막 9.1(화) 16:00</small></dd>
+    </div>
+    <div class="fact">
+      <dt>관람</dt>
+      <dd>12:00 – 20:00<small>월요일 휴관 (9/7, 9/14)</small></dd>
+    </div>
+    <div class="fact">
+      <dt>장소</dt>
+      <dd>경인로 727 1F<small>서울 영등포구 문래동</small></dd>
+    </div>
+  </dl>
+
+  <footer class="colophon">
+    <span>anthroydp.site</span>
+  </footer>
+
+</main>
+
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="포스터 크게 보기">
+  <button type="button" class="viewer-close" id="viewerClose">닫기 ESC</button>
+  <img id="viewerImg" src="" alt="">
+</div>
+
+<script>
+(function(){
+  var viewer   = document.getElementById('viewer');
+  var viewerImg= document.getElementById('viewerImg');
+  var closeBtn = document.getElementById('viewerClose');
+  var lastFocus= null;
+
+  // 이미지가 아직 없을 때 깨진 아이콘 대신 자리 표시
+  Array.prototype.forEach.call(document.querySelectorAll('.plate-btn img'), function(img){
+    img.addEventListener('error', function(){
+      img.parentNode.classList.add('is-missing');
+    });
+  });
+
+  function open(src, alt){
+    viewerImg.src = src;
+    viewerImg.alt = alt || '';
+    viewer.classList.add('is-open');
+    lastFocus = document.activeElement;
+    closeBtn.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close(){
+    viewer.classList.remove('is-open');
+    viewerImg.src = '';
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.plate-btn'), function(btn){
+    btn.addEventListener('click', function(){
+      if (btn.classList.contains('is-missing')) return;
+      var img = btn.querySelector('img');
+      open(btn.getAttribute('data-full'), img ? img.alt : '');
+    });
+  });
+
+  viewer.addEventListener('click', function(e){
+    if (e.target === viewer || e.target === closeBtn) close();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && viewer.classList.contains('is-open')) close();
+  });
+})();
+</script>
+
+</body>
+</html>
