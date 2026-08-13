@@ -27,7 +27,7 @@
 :root{
   --ink:      #1a1713;
   --zinc:     #fdfcf7;
-  --zinc-dim: #f4f1e7;
+  --zinc-dim: #fdfcf7;
   --steel:    #7d7469;
   --cyan:     #4a423a;
 
@@ -71,7 +71,7 @@ body{
 .plates{
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(34px, 6vw, 64px);
+  gap: clamp(11px, 2vw, 21px);
   padding: clamp(28px, 5vw, 52px) 0;
 }
 
@@ -81,27 +81,8 @@ body{
 
 .plate{ margin: 0; }
 
-/* 인쇄 톰보(레지스터 마크) — 실제 인쇄물임을 드러내는 표시 */
 .plate-frame{
-  position: relative;
-  padding: 14px;
-}
-.plate-frame::before,
-.plate-frame::after{
-  content: "";
-  position: absolute;
-  width: 14px; height: 14px;
-  pointer-events: none;
-}
-.plate-frame::before{
-  top: 0; left: 0;
-  border-top: 1px solid var(--ink);
-  border-left: 1px solid var(--ink);
-}
-.plate-frame::after{
-  bottom: 0; right: 0;
-  border-bottom: 1px solid var(--ink);
-  border-right: 1px solid var(--ink);
+  padding: 0;
 }
 
 .plate-btn{
