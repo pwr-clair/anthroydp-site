@@ -35,14 +35,12 @@
   /* 아카이브북 — 페이지 내 섹션 없음(별도 페이지 연결 예정). 다른 탭과 구별되는 초록 반투명 */
 
   section{padding-top:56px;scroll-margin-top:64px}
+  #about{padding-top:24px}
   h2{font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px dashed var(--accent)}
 
   .langswitch{position:absolute;top:20px;right:20px;font-size:12px;font-weight:700;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--card)}
 
   /* 전시소개 — 가운데 정렬 타이틀 블록 */
-  .titleblock{text-align:center;padding:8px 0 4px}
-  .titleblock .t{font-size:22px;font-weight:800;word-break:keep-all;line-height:1.4}
-  .titleblock .rule{width:100%;height:0;border-top:3px dashed var(--accent);margin:5px auto 0}
   .credits{text-align:center;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
   .credits strong{color:var(--ink);font-weight:700}
 
@@ -85,29 +83,27 @@
   #credit summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;
     font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink)}
   #credit summary::-webkit-details-marker{display:none}
-  #credit .tri{display:inline-block;color:var(--accent);font-size:11px;transition:transform .15s}
+  #credit .tri{display:inline-block;color:var(--accent);font-size:16px;line-height:1;transition:transform .15s}
   #credit details[open] .tri{transform:rotate(90deg)}
+  #credit{padding-top:32px}
   #credit .card{margin-top:14px;margin-bottom:0}
 
-  /* 관람 설문 — 위아래로 확실히 띄우고 가는 선으로 구분 */
-  #survey{padding-top:60px;position:relative}
-  #survey::before{content:"";position:absolute;top:30px;left:50%;transform:translateX(-50%);
-    width:40px;border-top:2px dashed var(--line)}
-  #survey + section{padding-top:60px}
+  /* 관람 설문 — 폐막식 버튼 바로 아래에 붙임 */
+  #survey{padding-top:0}
 
   /* 문의 — 글씨·행간 축소 */
   #contact dl{grid-template-columns:84px 1fr;row-gap:5px;font-size:13.5px}
   #contact dt{font-size:13px;padding-top:1px}
 
   .sectionnote{font-size:13px;color:var(--sub);margin-bottom:14px;word-break:keep-all}
-  footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
+  footer{margin-top:32px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
   .map{width:100%;height:220px;border:1px solid var(--line);border-radius:14px;margin-top:12px}
 
   /* 서문 */
-  .preface{margin-top:14px;font-size:14.5px;line-height:1.9;color:#d6d2ea;word-break:keep-all;text-align:left}
+  .preface{margin-top:0;font-size:14.5px;line-height:1.9;color:#d6d2ea;word-break:keep-all;text-align:left}
   .preface p{margin-bottom:16px}
   .preface details{margin-top:-4px}
-  .preface summary{list-style:none;cursor:pointer;text-align:center;font-size:13.5px;font-weight:700;color:var(--accent);padding:6px 0 2px}
+  .preface summary{list-style:none;cursor:pointer;text-align:center;font-size:14.5px;font-weight:800;color:var(--accent);padding:6px 0 2px}
   .preface summary::-webkit-details-marker{display:none}
   .preface summary .less{display:none}
   .preface details[open] summary .more{display:none}
@@ -121,6 +117,7 @@
 
   /* 아카이브 북 바로가기 — 상단 탭과 같은 알약 버튼 */
   .booklink-wrap{text-align:center;margin-top:30px}
+  #bio .foot .booklink{margin:0 4px}
   .booklink{display:inline-block;font-size:13px;font-weight:800;color:var(--accent);
     text-decoration:none;padding:8px 18px;border-radius:999px;
     border:1px solid var(--accent);background:var(--accent-soft)}
@@ -202,6 +199,8 @@
 <nav>
   <div class="row">
     <a href="#about">전시 소개</a>
+    <!-- TODO: 작품 소개 페이지 URL(works.html 예정) -->
+    <a class="book js-works" href="#">작품 소개</a>
     <a href="#visit">관람 안내</a>
     <a href="#opening">개막식</a>
     <a href="#program">연계 프로그램</a>
@@ -216,10 +215,6 @@
 <div class="wrap">
 
 <section id="about">
-  <div class="titleblock">
-    <div class="t">《인류학 연습: 인간은 우리인가?》</div>
-    <div class="rule"></div>
-  </div>
   <div class="preface">
     <p>인류학은 낯선 타자를 이해하기 위한 학문으로 시작되었다. 그러나 동시대 예술가들은 탐사의 반경을 타자에 한정하지 않는다. 그들은 자기 자신과 공동체, 비인간적 존재, 그리고 미래적 상상까지를 연구의 장으로 확장하며, 이를 위해 인류학적 관찰과 기록의 방식을 적극적으로 차용한다. 문화인류학의 대표적인 방법론인 민족지(ethnography)는 특정한 시공간의 지정학적 맥락 속에서 공동체의 삶을 가까이 관찰하고, 때로는 그 안에 참여하며 기록하는 실천을 포함한다. 제국주의 시대에 서구가 비서구를 대상으로 발전시켜 온 이 방법론은 오늘날 문명의 전개 방식과 질서가 변화함에 따라 연구 대상과 접근 방식 모두에서 근본적인 전환을 겪고 있다. 가령 지난 세기의 질문인 "인간은 무엇인가"가 진화생물학과 사회과학이 제시한 인간의 정의를 전제로 했다면, 오늘날 "인간은 우리인가?"라는 질문은 그 전제 자체를 흔들며 '우리'의 경계와 질문이 성립하는 조건을 다시 사유하게 만든다.</p>
     <details>
@@ -303,7 +298,7 @@
 
   <div class="card" style="background:var(--bg)">
     <h3 style="font-size:14px">Notice</h3>
-    <p>모든 프로그램은 무료로 진행되나, 사전 신청자에게 먼저 좌석을 안내드리며, 상황에 따라 현장 관람객도 참여하실 수 있도록 안내할 예정입니다. 프로그램 신청은 아래 큐알로 연결된 링크에서 하실 수 있으며, 예약자는 참석을 꼭 부탁드립니다. 천재지변 및 참여자의 사정에 따라 프로그램의 일정과 내용에 있어 약간의 변동이 발생할 경우 문화도시 영등포 공식 SNS(@cultural_city_ydp) 등을 통해 사전 고지하도록 하겠습니다.</p>
+    <p>사전신청 후 부득이 참석이 어려울 경우 예약 취소를 부탁드립니다. 천재지변 및 주최측의 사정에 따라 프로그램의 일정과 내용에 변동이 있을 경우, 문화도시 영등포 공식 SNS(@cultural_city_ydp)를 통해 사전 고지하도록 하겠습니다.</p>
   </div>
 </section>
 
@@ -318,9 +313,27 @@
   </span>
 </section>
 
+<section id="survey">
+  <a class="card cello survey" href="https://forms.gle/7tScAANZycqissXh6" target="_blank" rel="noopener">
+    <h3><span class="ex">《인류학 연습: 인간은 우리인가?》</span> 설문 참여</h3>
+    <p>전시를 관람하셨다면 3분만 내어 의견을 들려주세요.<br>참여해주시면 <strong>PIGRA 펜</strong>(🇨🇭스위스메이드)을 드립니다.</p>
+  </a>
+</section>
+
+<section id="contact">
+  <h2>문의</h2>
+  <div class="card">
+    <dl>
+      <dt>인스타그램</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:var(--accent2)">@cultural_city_ydp</a></dd>
+      <dt>단체 관람</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:var(--accent2)">chae42@ydpcf.or.kr</a></dd>
+      <dt>프레스·홍보</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:var(--accent2)">chwnyang@gmail.com</a></dd>
+    </dl>
+  </div>
+</section>
+
 <section id="credit">
   <details class="fold">
-    <summary><span class="tri">▸</span>크레딧</summary>
+    <summary><span class="tri">►</span>크레딧</summary>
   <div class="card creditbox">
     <div class="cgroup">
       <h4>영등포문화재단</h4>
@@ -350,26 +363,6 @@
   </details>
 </section>
 
-<section id="survey">
-  <a class="card cello survey" href="https://forms.gle/7tScAANZycqissXh6" target="_blank" rel="noopener">
-    <h3><span class="ex">《인류학 연습: 인간은 우리인가?》</span> 설문 참여</h3>
-    <p>전시를 관람하셨다면 3분만 내어 의견을 들려주세요.<br>참여해주시면 <strong>PIGRA 펜</strong>(🇨🇭스위스메이드)을 드립니다.</p>
-  </a>
-</section>
-
-<section id="contact">
-  <h2>문의</h2>
-  <div class="card">
-    <dl>
-      <dt>인스타그램</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:var(--accent2)">@cultural_city_ydp</a></dd>
-      <dt>단체 관람</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:var(--accent2)">chae42@ydpcf.or.kr</a></dd>
-      <dt>프레스·홍보</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:var(--accent2)">chwnyang@gmail.com</a></dd>
-    </dl>
-  </div>
-</section>
-
-
-
 <footer>
   <a href="https://www.ydp.go.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">영등포구</a> · <a href="https://www.ydpcf.or.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">영등포문화재단</a> · <a href="https://www.ydpcf.or.kr/culture_city/culture_city.do" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">문화도시 영등포</a> <!-- TODO: 주최/주관/후원 역할 표기 최종 확인 --><br>
   ©2026 예술기술도시 《인류학 연습: 인간은 우리인가?》<br>
@@ -383,13 +376,17 @@
   <h3 id="bioName"></h3>
   <div class="en" id="bioEn"></div>
   <p class="tx" id="bioTx"></p>
-  <div class="foot"><a class="booklink js-archive" href="#">아카이브 북 바로가기</a></div>
+  <div class="foot">
+    <a class="booklink js-works" href="#">작품 소개</a>
+    <a class="booklink js-archive" href="#">아카이브 북</a>
+  </div>
 </dialog>
 
 <script>
 (function(){
-  /* 아카이브북 주소 — 이 한 줄만 바꾸면 탭·버튼·팝업 3곳이 함께 연결됩니다 */
-  var ARCHIVE_URL = '#';
+  /* 주소 두 줄만 바꾸면 탭·버튼·팝업이 한꺼번에 연결됩니다 */
+  var ARCHIVE_URL = '#';   /* 아카이브 북 */
+  var WORKS_URL   = '#';   /* 작품 소개 (works.html 예정) */
 
   var BIOS = {
 "권희수": {"en":"Heesoo Kwon","tx":"권희수는 자신과 가족의 삶, 여성 계보, 한국 신화를 바탕으로 의례적이고 자기민족지적인 아카이브 작업 레이무숨을 이어가고 있다. 디지털 기술을 도구 삼아 조상의 기억을 따라가며 가부장적 서사를 낯설게 재해석한다. 2017년 시작된 이 프로젝트는 아날로그와 디지털 매체를 결합한 3D 애니메이션과 사진 아카이브로, 작가가 창안한 '자전적 페미니즘 종교'의 신전이자 여성 조상들이 공존하는 유토피아를 그린다."},
@@ -424,11 +421,12 @@
   /* 바깥쪽(어두운 배경)을 탭하면 닫기 */
   dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
 
-  if (ARCHIVE_URL !== '#') {
-    Array.prototype.forEach.call(document.querySelectorAll('.js-archive'), function(a){
-      a.href = ARCHIVE_URL; a.target = '_blank'; a.rel = 'noopener';
+  [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL]].forEach(function(pair){
+    if (pair[1] === '#') return;
+    Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
+      a.href = pair[1]; a.target = '_blank'; a.rel = 'noopener';
     });
-  }
+  });
 })();
 </script>
 </body>
