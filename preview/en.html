@@ -32,6 +32,9 @@
   nav .row::-webkit-scrollbar{display:none}
   nav a{flex:none;font-size:13px;font-weight:600;color:var(--sub);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
   nav a:active{color:var(--accent);border-color:var(--accent)}
+  /* 관람 설문 탭 — 포스터 빨강 강조 */
+  nav a.red{color:#f0604a;border-color:#f0604a;background:rgba(240,96,74,.15);font-weight:800}
+  nav a.red:active{color:#f0604a;border-color:#f0604a}
 
   section{padding-top:56px;scroll-margin-top:64px}
   #about{padding-top:24px}
@@ -177,7 +180,7 @@
     <!-- TODO: 아카이브북 페이지 URL — 아래 바로가기 버튼과 함께 2곳 -->
     <a class="book js-archive" href="#">Archive Book</a>
     <a href="#closing">Closing</a>
-    <a href="#survey">Survey</a>
+    <a class="red" href="#survey">Survey</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>

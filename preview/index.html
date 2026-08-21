@@ -32,6 +32,9 @@
   nav .row::-webkit-scrollbar{display:none}
   nav a{flex:none;font-size:13px;font-weight:600;color:var(--sub);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
   nav a:active{color:var(--accent);border-color:var(--accent)}
+  /* 관람 설문 탭 — 포스터 빨강 강조 */
+  nav a.red{color:#f0604a;border-color:#f0604a;background:rgba(240,96,74,.15);font-weight:800}
+  nav a.red:active{color:#f0604a;border-color:#f0604a}
   /* 아카이브북 — 페이지 내 섹션 없음(별도 페이지 연결 예정). 다른 탭과 구별되는 초록 반투명 */
 
   section{padding-top:56px;scroll-margin-top:64px}
@@ -212,7 +215,7 @@
     <!-- TODO: 아카이브북 페이지 URL(archive.html 예정). 자료 확정되면 href 교체 — 아래 바로가기 버튼과 함께 2곳 -->
     <a class="book js-archive" href="#">아카이브북</a>
     <a href="#closing">폐막식</a>
-    <a href="#survey">관람 설문</a>
+    <a class="red" href="#survey">관람 설문</a>
     <a href="#contact">문의</a>
   </div>
 </nav>

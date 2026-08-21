@@ -29,6 +29,9 @@
   nav .row::-webkit-scrollbar{display:none}
   nav a{flex:none;font-size:13px;font-weight:600;color:var(--sub);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
   nav a:active{color:var(--accent);border-color:var(--accent)}
+  /* 관람 설문 탭 — 포스터 빨강 강조 */
+  nav a.red{color:#f0604a;border-color:#f0604a;background:rgba(240,96,74,.15);font-weight:800}
+  nav a.red:active{color:#f0604a;border-color:#f0604a}
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800;
     width:74.4px;padding-left:0;padding-right:0;text-align:center}
 
@@ -119,7 +122,7 @@
     <!-- TODO: 아카이브북 페이지 URL -->
     <a class="book" href="#">아카이브북</a>
     <a href="index.html#closing">폐막식</a>
-    <a href="index.html#survey">관람 설문</a>
+    <a class="red" href="index.html#survey">관람 설문</a>
     <a href="index.html#contact">문의</a>
   </div>
 </nav>
