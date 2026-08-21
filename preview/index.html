@@ -83,9 +83,9 @@
   #credit summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;
     font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink)}
   #credit summary::-webkit-details-marker{display:none}
-  #credit .tri{display:inline-block;color:var(--accent);font-size:16px;line-height:1;transition:transform .15s}
+  #credit .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
   #credit details[open] .tri{transform:rotate(90deg)}
-  #credit{padding-top:32px}
+  #credit{padding-top:16px}
   #credit .card{margin-top:14px;margin-bottom:0}
 
   /* 관람 설문 — 폐막식 버튼 바로 아래에 붙임 */
@@ -96,7 +96,7 @@
   #contact dt{font-size:13px;padding-top:1px}
 
   .sectionnote{font-size:13px;color:var(--sub);margin-bottom:14px;word-break:keep-all}
-  footer{margin-top:32px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
+  footer{margin-top:24px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
   .map{width:100%;height:220px;border:1px solid var(--line);border-radius:14px;margin-top:12px}
 
   /* 서문 */
@@ -113,6 +113,9 @@
   .preface details[open] summary{order:99;padding-top:2px}
   /* 아카이브북 탭 — 원래 색상 복원 */
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
+  /* 작품 소개 — 꽉 채운 초록 */
+  nav a.book.fill{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+  nav a.book.fill:active{color:var(--bg);border-color:var(--bg)}
   nav a.book:active{color:var(--accent);border-color:var(--accent)}
 
   /* 아카이브 북 바로가기 — 상단 탭과 같은 알약 버튼 */
@@ -122,6 +125,9 @@
     text-decoration:none;padding:8px 18px;border-radius:999px;
     border:1px solid var(--accent);background:var(--accent-soft)}
   .booklink:active{border-color:#eafce9;color:#eafce9}
+  .booklink + .booklink{margin-left:6px}
+  .booklink.fill{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+  .booklink.fill:active{border-color:var(--bg);color:var(--bg)}
 
   /* 초록 셀로판 — 검정 위에 초록 필름을 덮은 느낌 */
   .card.cello{background:rgba(30,210,30,.22);border:1px solid rgba(30,210,30,.7);
@@ -200,7 +206,7 @@
   <div class="row">
     <a href="#about">전시 소개</a>
     <!-- TODO: 작품 소개 페이지 URL(works.html 예정) -->
-    <a class="book js-works" href="#">작품 소개</a>
+    <a class="book fill js-works" href="#">작품 소개</a>
     <a href="#visit">관람 안내</a>
     <a href="#opening">개막식</a>
     <a href="#program">연계 프로그램</a>
@@ -228,10 +234,11 @@
     <strong>기획</strong> 조주리<br>
     <strong>참여작가</strong> <button type="button" class="artist" data-a="권희수">권희수</button>, <button type="button" class="artist" data-a="김시흔">김시흔</button>, <button type="button" class="artist" data-a="김재민이">김재민이</button>, <button type="button" class="artist" data-a="듀킴">듀킴</button>, <button type="button" class="artist" data-a="반재하">반재하</button>, <button type="button" class="artist" data-a="장영해">장영해</button>,<br><button type="button" class="artist" data-a="장종완">장종완</button>, <button type="button" class="artist" data-a="조영각">조영각</button>, <button type="button" class="artist" data-a="주슬아">주슬아</button>, <button type="button" class="artist" data-a="최가영">최가영</button>, <button type="button" class="artist" data-a="최고은">최고은</button>, <button type="button" class="artist" data-a="최선">최선</button>
   </p>
-  <p class="credits"><strong>협력</strong> 종근당고촌재단 생명과학융합예술교육<br>[바이오 오디세이] 정혜정, 사이언스(황준규)</p>
+  <p class="credits"><strong>협력</strong> <button type="button" class="artist partner" data-a="종근당고촌재단 생명과학융합예술교육">종근당고촌재단 생명과학융합예술교육</button><br><button type="button" class="artist partner" data-a="[바이오 오디세이] 정혜정, 사이언스(황준규)">[바이오 오디세이] 정혜정, 사이언스(황준규)</button></p>
   <div class="booklink-wrap">
-    <!-- TODO: 아카이브북 페이지 URL(archive.html 예정) — 상단 탭과 함께 2곳 -->
-    <a class="booklink js-archive" href="#">아카이브 북 바로가기</a>
+    <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
+    <a class="booklink fill js-works" href="#" aria-label="작품 소개">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+    <a class="booklink js-archive" href="#">아카이브북</a>
   </div>
 </section>
 
@@ -377,8 +384,8 @@
   <div class="en" id="bioEn"></div>
   <p class="tx" id="bioTx"></p>
   <div class="foot">
-    <a class="booklink js-works" href="#">작품 소개</a>
-    <a class="booklink js-archive" href="#">아카이브 북</a>
+    <a class="booklink fill js-works" href="#">작품 소개</a>
+    <a class="booklink js-archive" id="bioArchive" href="#">아카이브북</a>
   </div>
 </dialog>
 
@@ -408,8 +415,12 @@
   Array.prototype.forEach.call(document.querySelectorAll('.artist'), function(b){
     b.addEventListener('click', function(){
       var name = b.getAttribute('data-a');
-      var d = BIOS[name];
+      /* 협력 기관은 소개글이 없으므로 이름 + 작품 소개 버튼만 */
+      var partner = b.classList.contains('partner');
+      var d = partner ? {en:'', tx:''} : BIOS[name];
       if (!d) return;
+      document.getElementById('bioTx').style.display = partner ? 'none' : '';
+      document.getElementById('bioArchive').style.display = partner ? 'none' : '';
       document.getElementById('bioName').textContent = name;
       document.getElementById('bioEn').textContent   = d.en;
       document.getElementById('bioTx').textContent   = d.tx;
