@@ -42,7 +42,7 @@
   /* 전시소개 — 가운데 정렬 타이틀 블록 */
   .titleblock{text-align:center;padding:8px 0 4px}
   .titleblock .t{font-size:22px;font-weight:800;word-break:keep-all;line-height:1.4}
-  .titleblock .rule{width:48px;height:0;border-top:3px dashed var(--accent);margin:18px auto}
+  .titleblock .rule{width:100%;height:0;border-top:3px dashed var(--accent);margin:5px auto 0}
   .credits{text-align:center;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
   .credits strong{color:var(--ink);font-weight:700}
 
@@ -81,6 +81,14 @@
   .cgroup p + p{margin-top:14px}
   .cgroup .hl{color:var(--accent)}
 
+  /* 크레딧 — 제목 옆 세모로 펼쳤다 접기 (밑줄 점선 없음) */
+  #credit summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;
+    font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink)}
+  #credit summary::-webkit-details-marker{display:none}
+  #credit .tri{display:inline-block;color:var(--accent);font-size:11px;transition:transform .15s}
+  #credit details[open] .tri{transform:rotate(90deg)}
+  #credit .card{margin-top:14px;margin-bottom:0}
+
   /* 관람 설문 — 위아래로 확실히 띄우고 가는 선으로 구분 */
   #survey{padding-top:60px;position:relative}
   #survey::before{content:"";position:absolute;top:30px;left:50%;transform:translateX(-50%);
@@ -96,7 +104,7 @@
   .map{width:100%;height:220px;border:1px solid var(--line);border-radius:14px;margin-top:12px}
 
   /* 서문 */
-  .preface{margin-top:24px;font-size:14.5px;line-height:1.9;color:#d6d2ea;word-break:keep-all;text-align:left}
+  .preface{margin-top:14px;font-size:14.5px;line-height:1.9;color:#d6d2ea;word-break:keep-all;text-align:left}
   .preface p{margin-bottom:16px}
   .preface details{margin-top:-4px}
   .preface summary{list-style:none;cursor:pointer;text-align:center;font-size:13.5px;font-weight:700;color:var(--accent);padding:6px 0 2px}
@@ -310,42 +318,9 @@
   </span>
 </section>
 
-<section id="survey">
-  <a class="card cello survey" href="https://forms.gle/7tScAANZycqissXh6" target="_blank" rel="noopener">
-    <h3><span class="ex">《인류학 연습: 인간은 우리인가?》</span> 설문 참여</h3>
-    <p>전시를 관람하셨다면 3분만 내어 의견을 들려주세요.<br>참여해주시면 <strong>PIGRA 펜</strong>(🇨🇭스위스메이드)을 드립니다.</p>
-  </a>
-</section>
-
-<section id="contact">
-  <h2>문의</h2>
-  <div class="card">
-    <dl>
-      <dt>인스타그램</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:var(--accent2)">@cultural_city_ydp</a></dd>
-      <dt>단체 관람</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:var(--accent2)">chae42@ydpcf.or.kr</a></dd>
-      <dt>프레스·홍보</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:var(--accent2)">chwnyang@gmail.com</a></dd>
-    </dl>
-  </div>
-</section>
-
-<section id="linked">
-  <h2>연계전시</h2>
-  <!-- TODO: 링크 확정되면 이 div를 <a class="card" href="..." target="_blank" rel="noopener">로 교체 -->
-  <div class="card">
-    <div class="cgroup">
-      <h4>2026 소공인특별전 〈뿌리의 노래〉</h4>
-      <p>2026년 9월 18일(금) ~ 10월 11일(일)<br>
-      ※ 월요일, 공휴일 휴관 (화~금 : 10시~19시, 토~일 : 10시~18시)</p>
-      <p>- 소공인특별전 : 술술센터 지하 1층 술술갤러리<br>
-      - 아카이브전 : 마이팩토리(서울소공인협회) 1층</p>
-      <p>- 참여소공인 : 봉화산업(김경중), 삼덕특수기어(정두인), 에이스정공(조양연), 한빛테크랩(이승준)<br>
-      - 참여작가 : 김성진, 성태윤, 정성진, 진나래</p>
-    </div>
-  </div>
-</section>
-
 <section id="credit">
-  <h2>크레딧</h2>
+  <details class="fold">
+    <summary><span class="tri">▸</span>크레딧</summary>
   <div class="card creditbox">
     <div class="cgroup">
       <h4>영등포문화재단</h4>
@@ -372,7 +347,28 @@
       <p>주최·주관 | 영등포구, 영등포문화재단, 영등포문화도시센터<br>협력 | 종근당고촌재단, 종도빌딩</p>
     </div>
   </div>
+  </details>
 </section>
+
+<section id="survey">
+  <a class="card cello survey" href="https://forms.gle/7tScAANZycqissXh6" target="_blank" rel="noopener">
+    <h3><span class="ex">《인류학 연습: 인간은 우리인가?》</span> 설문 참여</h3>
+    <p>전시를 관람하셨다면 3분만 내어 의견을 들려주세요.<br>참여해주시면 <strong>PIGRA 펜</strong>(🇨🇭스위스메이드)을 드립니다.</p>
+  </a>
+</section>
+
+<section id="contact">
+  <h2>문의</h2>
+  <div class="card">
+    <dl>
+      <dt>인스타그램</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:var(--accent2)">@cultural_city_ydp</a></dd>
+      <dt>단체 관람</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:var(--accent2)">chae42@ydpcf.or.kr</a></dd>
+      <dt>프레스·홍보</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:var(--accent2)">chwnyang@gmail.com</a></dd>
+    </dl>
+  </div>
+</section>
+
+
 
 <footer>
   <a href="https://www.ydp.go.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">영등포구</a> · <a href="https://www.ydpcf.or.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">영등포문화재단</a> · <a href="https://www.ydpcf.or.kr/culture_city/culture_city.do" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">문화도시 영등포</a> <!-- TODO: 주최/주관/후원 역할 표기 최종 확인 --><br>

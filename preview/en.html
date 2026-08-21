@@ -41,7 +41,7 @@
   /* 전시소개 */
   .titleblock{text-align:center;padding:8px 0 4px}
   .titleblock .t{font-size:22px;font-weight:800;word-break:keep-all;line-height:1.4}
-  .titleblock .rule{width:48px;height:0;border-top:3px dashed var(--accent);margin:18px auto}
+  .titleblock .rule{width:100%;height:0;border-top:3px dashed var(--accent);margin:5px auto 0}
   .credits{text-align:center;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
   .credits strong{color:var(--ink);font-weight:700}
   .credits + .credits{margin-top:14px}
@@ -70,7 +70,7 @@
   .map{width:100%;height:220px;border:1px solid var(--line);border-radius:14px;margin-top:12px}
 
   /* 서문 */
-  .preface{margin-top:24px;font-size:14.5px;line-height:1.9;color:#d6d2ea;word-break:keep-all;text-align:left}
+  .preface{margin-top:14px;font-size:14.5px;line-height:1.9;color:#d6d2ea;word-break:keep-all;text-align:left}
   .preface p{margin-bottom:16px}
   .preface details{margin-top:-4px}
   .preface summary{list-style:none;cursor:pointer;text-align:center;font-size:13.5px;font-weight:700;color:var(--accent);padding:6px 0 2px}
@@ -94,6 +94,14 @@
   .cgroup h4{font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:5px}
   .cgroup p{font-size:13px;line-height:1.8;color:var(--sub);margin:0}
   .cgroup p + p{margin-top:14px}
+
+  /* 크레딧 — 제목 옆 세모로 펼쳤다 접기 (밑줄 점선 없음) */
+  #credit summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;
+    font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink)}
+  #credit summary::-webkit-details-marker{display:none}
+  #credit .tri{display:inline-block;color:var(--accent);font-size:11px;transition:transform .15s}
+  #credit details[open] .tri{transform:rotate(90deg)}
+  #credit .card{margin-top:14px;margin-bottom:0}
 
   /* 관람 설문 — 위아래로 확실히 띄우고 가는 선으로 구분 */
   #survey{padding-top:60px;position:relative}
@@ -278,44 +286,9 @@
   </span>
 </section>
 
-<section id="survey">
-  <!-- TODO: href에 설문 구글폼 URL -->
-  <a class="card cello survey" href="#">
-    <h3><span class="ex">Doing Anthropology: Are Humans We?</span> Visitor Survey</h3>
-    <p>If you have visited the exhibition, please take three minutes to tell us about your experience.<br>Participants receive a <strong>PIGRA pen</strong> (🇨🇭Swiss made).</p>
-  </a>
-</section>
-
-<section id="contact">
-  <h2>CONTACT</h2>
-  <div class="card">
-    <dl>
-      <dt>Instagram</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:var(--accent2)">@cultural_city_ydp</a></dd>
-      <dt>Group visits</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:var(--accent2)">chae42@ydpcf.or.kr</a></dd>
-      <dt>Press &amp; PR</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:var(--accent2)">chwnyang@gmail.com</a></dd>
-    </dl>
-  </div>
-</section>
-
-<section id="linked">
-  <h2>LINKED EXHIBITION</h2>
-  <!-- TODO: 링크 확정되면 이 div를 <a class="card" href="..." target="_blank" rel="noopener">로 교체 -->
-  <!-- TODO: 영문 전시명은 임시 번역 — 주최측 확정 표기 확인 필요 -->
-  <div class="card">
-    <div class="cgroup">
-      <h4>2026 Small Manufacturers Special Exhibition 〈Song of Roots〉</h4>
-      <p>Sep 18 (Fri) – Oct 11 (Sun), 2026<br>
-      ※ Closed Mondays and public holidays (Tue–Fri 10:00–19:00, Sat–Sun 10:00–18:00)</p>
-      <p>- Main show : Sulsul Gallery, B1, Sulsul Center<br>
-      - Archive show : My Factory (Seoul Small Manufacturers Association), 1F</p>
-      <p>- Participating manufacturers : Bonghwa Industry (Kyungjoong Kim), Samduk Special Gear (Duin Jung), Ace Precision (Yangyeon Cho), Hanbit Techlab (Seungjun Lee)<br>
-      - Artists : Sungjin Kim, Taeyoon Sung, Sungjin Jung, Narae Jin</p>
-    </div>
-  </div>
-</section>
-
 <section id="credit">
-  <h2>CREDITS</h2>
+  <details class="fold">
+    <summary><span class="tri">▸</span>CREDITS</summary>
   <!-- TODO: 인명·업체명 영문 표기는 임시 로마자 표기 — 재단 공식 표기 확인 필요 -->
   <div class="card creditbox">
     <div class="cgroup">
@@ -343,7 +316,29 @@
       <p>Organized by | Yeongdeungpo-gu, Yeongdeungpo Cultural Foundation, Culture City Yeongdeungpo Center<br>In cooperation with | Chong Kun Dang Gochon Foundation, Jongdo Building</p>
     </div>
   </div>
+  </details>
 </section>
+
+<section id="survey">
+  <!-- TODO: href에 설문 구글폼 URL -->
+  <a class="card cello survey" href="#">
+    <h3><span class="ex">Doing Anthropology: Are Humans We?</span> Visitor Survey</h3>
+    <p>If you have visited the exhibition, please take three minutes to tell us about your experience.<br>Participants receive a <strong>PIGRA pen</strong> (🇨🇭Swiss made).</p>
+  </a>
+</section>
+
+<section id="contact">
+  <h2>CONTACT</h2>
+  <div class="card">
+    <dl>
+      <dt>Instagram</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:var(--accent2)">@cultural_city_ydp</a></dd>
+      <dt>Group visits</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:var(--accent2)">chae42@ydpcf.or.kr</a></dd>
+      <dt>Press &amp; PR</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:var(--accent2)">chwnyang@gmail.com</a></dd>
+    </dl>
+  </div>
+</section>
+
+
 
 <footer>
   <a href="https://www.ydp.go.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Yeongdeungpo-gu</a> · <a href="https://www.ydpcf.or.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Yeongdeungpo Cultural Foundation</a> · <a href="https://www.ydpcf.or.kr/culture_city/culture_city.do" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Culture City Yeongdeungpo</a><br>
