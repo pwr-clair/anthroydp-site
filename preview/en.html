@@ -99,7 +99,8 @@
   #credit summary::-webkit-details-marker{display:none}
   #credit .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
   #credit details[open] .tri{transform:rotate(90deg)}
-  #credit{padding-top:16px}
+  #credit{padding-top:0}
+  #contact .card{margin-bottom:0}
   #credit .card{margin-top:14px;margin-bottom:0}
 
   /* 관람 설문 — 폐막식 버튼 바로 아래에 붙임 */
@@ -121,9 +122,8 @@
 
   /* 아카이브북 탭 */
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
-  /* Works — 꽉 채운 주조색 */
-  nav a.book.fill{background:var(--accent);border-color:var(--accent);color:var(--bg)}
-  nav a.book.fill:active{color:var(--bg);border-color:var(--bg)}
+  /* 강조 탭 2개는 같은 폭 */
+  nav a.book{min-width:104px;text-align:center}
   nav a.book:active{color:var(--accent);border-color:var(--accent)}
 
   /* 아카이브 북 바로가기 — 상단 탭과 같은 알약 버튼 */
@@ -133,8 +133,7 @@
     border:1px solid var(--accent);background:var(--accent-soft)}
   .booklink:active{border-color:#efeaff;color:#efeaff}
   .booklink + .booklink{margin-left:6px}
-  .booklink.fill{background:var(--accent);border-color:var(--accent);color:var(--bg)}
-  .booklink.fill:active{border-color:var(--bg);color:var(--bg)}
+  .booklink{min-width:116px;text-align:center}
 
   /* 셀로판 — 검정 위에 보라 필름 */
   .card.cello{background:rgba(125,109,242,.22);border:1px solid rgba(125,109,242,.7);
@@ -171,7 +170,7 @@
   <div class="row">
     <a href="#about">About</a>
     <!-- TODO: 작품 소개 페이지 URL(works.html 예정) -->
-    <a class="book fill js-works" href="#">Works</a>
+    <a class="book js-works" href="#" aria-label="Works">&nbsp;</a>
     <a href="#visit">Visit</a>
     <a href="#opening">Opening</a>
     <a href="#program">Programs</a>
@@ -203,7 +202,7 @@
   <p class="credits"><strong>In collaboration with</strong> Chong Kun Dang Gochon Foundation,<br>Life Science × Art Education [Bio Odyssey] — Hyejung Jung, Science (Jungyu Hwang)</p>
   <div class="booklink-wrap">
     <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
-    <a class="booklink fill js-works" href="#" aria-label="Works">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+    <a class="booklink js-works" href="#" aria-label="Works">&nbsp;</a>
     <a class="booklink js-archive" href="#">Archive Book</a>
   </div>
 </section>
@@ -272,7 +271,7 @@
 
   <div class="card" style="background:var(--bg)">
     <h3 style="font-size:14px">Notice</h3>
-    <p>If you are unable to attend after registering, please cancel your reservation. Should the schedule or content of a program change due to unforeseen circumstances or to the organizer’s situation, we will announce it in advance through the official Culture City Yeongdeungpo social media (@cultural_city_ydp).</p>
+    <p>All programs are free of charge. Priority seating will be given to those who register in advance, while walk-in visitors may also be admitted depending on availability. If you are unable to attend after registering, please cancel your reservation. Should the schedule or content of a program change due to unforeseen circumstances or to the organizer’s situation, we will announce it in advance through the official Culture City Yeongdeungpo social media (@cultural_city_ydp).</p>
   </div>
 </section>
 
