@@ -116,14 +116,14 @@
   a.card.survey{text-align:center;padding:24px 22px}
   a.card.survey::after{content:none}
   a.card.survey h3{font-size:16.5px;font-weight:700;line-height:1.55;letter-spacing:0}
-  a.card.survey .ex{font-size:11px;font-weight:700;opacity:.72;letter-spacing:0}
+  a.card.survey .ex{font-size:inherit;font-weight:inherit}
   a.card.survey p{font-size:13.5px;line-height:1.8;margin-top:12px}
   a.card.survey strong{color:#efeaff;font-weight:800}
 
   /* 아카이브북 탭 */
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
   /* 강조 탭 2개는 같은 폭 */
-  nav a.book{width:74.4px;padding-left:0;padding-right:0;text-align:center}
+  nav a.book{min-width:74.4px;white-space:nowrap;text-align:center}
   nav a.book:active{color:var(--accent);border-color:var(--accent)}
 
   /* 아카이브 북 바로가기 — 상단 탭과 같은 알약 버튼 */
@@ -197,9 +197,9 @@
   <!-- 영문 표기 = 포스터 기준 최종 확정 (2026-08-12 클라라) -->
   <p class="credits">
     <strong>Curated by</strong> Juri Cho<br>
-    <strong>Artists</strong> Heesoo Kwon, Siheun Kim, Gemini Kim, Dew Kim, Jaeha Ban, Chang Younghae,<br>Jongwan Jang, Youngkak Cho, Sla Joo, Kayoung Choi, Che Go Eun, Sun Choi
+    <strong>Artists</strong> Heesoo Kwon, Siheun Kim, Gemini Kim, Dew Kim, Jaeha Ban, Chang Younghae, Jongwan Jang, Youngkak Cho, Sla Joo, Kayoung Choi, Che Go Eun, Sun Choi
   </p>
-  <p class="credits"><strong>In collaboration with</strong> Chong Kun Dang Gochon Foundation,<br>Life Science × Art Education [Bio Odyssey] — Hyejung Jung, Science (Jungyu Hwang)</p>
+  <p class="credits"><strong>In collaboration with</strong> Chong Kun Dang Gochon Foundation, Life Science × Art Education [Bio Odyssey] — Hyejung Jung, Science (Jungyu Hwang)</p>
   <div class="booklink-wrap">
     <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
     <a class="booklink js-works" href="#">Works</a>
@@ -288,7 +288,7 @@
 
 <section id="survey">
   <!-- TODO: href에 설문 구글폼 URL -->
-  <a class="card cello survey" href="#">
+  <a class="card cello survey" href="https://forms.gle/7tScAANZycqissXh6" target="_blank" rel="noopener">
     <h3><span class="ex">Doing Anthropology: Are Humans We?</span> Visitor Survey</h3>
     <p>If you have visited the exhibition, please take three minutes to tell us about your experience.<br>Participants receive a <strong>PIGRA pen</strong> (🇨🇭Swiss made).</p>
   </a>
