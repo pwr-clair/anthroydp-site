@@ -115,7 +115,7 @@
   /* 아카이브북 탭 — 원래 색상 복원 */
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
   /* 강조 탭 2개(작품 소개·아카이브북)는 같은 폭 */
-  nav a.book{min-width:92px;text-align:center}
+  nav a.book{width:74.4px;padding-left:0;padding-right:0;text-align:center}
   nav a.book:active{color:var(--accent);border-color:var(--accent)}
 
   /* 아카이브 북 바로가기 — 상단 탭과 같은 알약 버튼 */
@@ -392,7 +392,7 @@
 (function(){
   /* 주소 두 줄만 바꾸면 탭·버튼·팝업이 한꺼번에 연결됩니다 */
   var ARCHIVE_URL = '#';   /* 아카이브 북 */
-  var WORKS_URL   = '#';   /* 작품 소개 (works.html 예정) */
+  var WORKS_URL   = 'works.html';   /* 작품 소개 (works.html 예정) */
 
   var BIOS = {
 "권희수": {"en":"Heesoo Kwon","tx":"권희수는 자신과 가족의 삶, 여성 계보, 한국 신화를 바탕으로 의례적이고 자기민족지적인 아카이브 작업 레이무숨을 이어가고 있다. 디지털 기술을 도구 삼아 조상의 기억을 따라가며 가부장적 서사를 낯설게 재해석한다. 2017년 시작된 이 프로젝트는 아날로그와 디지털 매체를 결합한 3D 애니메이션과 사진 아카이브로, 작가가 창안한 '자전적 페미니즘 종교'의 신전이자 여성 조상들이 공존하는 유토피아를 그린다."},
@@ -434,7 +434,8 @@
   [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL]].forEach(function(pair){
     if (pair[1] === '#') return;
     Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
-      a.href = pair[1]; a.target = '_blank'; a.rel = 'noopener';
+      a.href = pair[1];
+      if (pair[1].indexOf('http') === 0) { a.target = '_blank'; a.rel = 'noopener'; }
     });
   });
 })();

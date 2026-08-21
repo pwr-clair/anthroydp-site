@@ -123,7 +123,7 @@
   /* 아카이브북 탭 */
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
   /* 강조 탭 2개는 같은 폭 */
-  nav a.book{min-width:104px;text-align:center}
+  nav a.book{width:74.4px;padding-left:0;padding-right:0;text-align:center}
   nav a.book:active{color:var(--accent);border-color:var(--accent)}
 
   /* 아카이브 북 바로가기 — 상단 탭과 같은 알약 버튼 */
@@ -350,11 +350,12 @@
 (function(){
   /* 주소 두 줄만 바꾸면 탭·버튼이 한꺼번에 연결됩니다 */
   var ARCHIVE_URL = '#';   /* Archive Book */
-  var WORKS_URL   = '#';   /* Works (works.html 예정) */
+  var WORKS_URL   = 'works.html';   /* Works (works.html 예정) */
   [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL]].forEach(function(pair){
     if (pair[1] === '#') return;
     Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
-      a.href = pair[1]; a.target = '_blank'; a.rel = 'noopener';
+      a.href = pair[1];
+      if (pair[1].indexOf('http') === 0) { a.target = '_blank'; a.rel = 'noopener'; }
     });
   });
 })();
