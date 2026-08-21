@@ -41,7 +41,7 @@
   .langswitch{position:absolute;top:20px;right:20px;font-size:12px;font-weight:700;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--card)}
 
   /* 전시소개 — 가운데 정렬 타이틀 블록 */
-  .credits{text-align:center;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
+  .credits{text-align:left;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
   .credits strong{color:var(--ink);font-weight:700}
 
   .card{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:12px;color:inherit;text-decoration:none}
@@ -85,7 +85,7 @@
   #credit summary::-webkit-details-marker{display:none}
   #credit .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
   #credit details[open] .tri{transform:rotate(90deg)}
-  #credit{padding-top:0}
+  #credit{padding-top:1px}
   #contact .card{margin-bottom:0}
   #credit .card{margin-top:14px;margin-bottom:0}
 
@@ -205,7 +205,7 @@
   <div class="row">
     <a href="#about">전시 소개</a>
     <!-- TODO: 작품 소개 페이지 URL(works.html 예정) -->
-    <a class="book js-works" href="#" aria-label="작품 소개">&nbsp;</a>
+    <a class="book js-works" href="#">전시작품</a>
     <a href="#visit">관람 안내</a>
     <a href="#opening">개막식</a>
     <a href="#program">연계 프로그램</a>
@@ -236,7 +236,7 @@
   <p class="credits"><strong>협력</strong> <button type="button" class="artist partner" data-a="종근당고촌재단 생명과학융합예술교육<br>[바이오 오디세이] 정혜정, 사이언스(황준규)">종근당고촌재단 생명과학융합예술교육<br>[바이오 오디세이] 정혜정, 사이언스(황준규)</button></p>
   <div class="booklink-wrap">
     <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
-    <a class="booklink js-works" href="#" aria-label="작품 소개">&nbsp;</a>
+    <a class="booklink js-works" href="#">전시작품</a>
     <a class="booklink js-archive" href="#">아카이브북</a>
   </div>
 </section>
@@ -383,7 +383,7 @@
   <div class="en" id="bioEn"></div>
   <p class="tx" id="bioTx"></p>
   <div class="foot">
-    <a class="booklink js-works" href="#">작품 소개</a>
+    <a class="booklink js-works" href="#">전시작품</a>
     <a class="booklink js-archive" id="bioArchive" href="#">아카이브북</a>
   </div>
 </dialog>

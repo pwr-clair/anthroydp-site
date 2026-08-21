@@ -40,7 +40,7 @@
   .langswitch{position:absolute;top:20px;right:20px;font-size:12px;font-weight:700;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--card)}
 
   /* 전시소개 */
-  .credits{text-align:center;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
+  .credits{text-align:left;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
   .credits strong{color:var(--ink);font-weight:700}
   .credits + .credits{margin-top:14px}
 
@@ -99,7 +99,7 @@
   #credit summary::-webkit-details-marker{display:none}
   #credit .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
   #credit details[open] .tri{transform:rotate(90deg)}
-  #credit{padding-top:0}
+  #credit{padding-top:1px}
   #contact .card{margin-bottom:0}
   #credit .card{margin-top:14px;margin-bottom:0}
 
@@ -170,7 +170,7 @@
   <div class="row">
     <a href="#about">About</a>
     <!-- TODO: 작품 소개 페이지 URL(works.html 예정) -->
-    <a class="book js-works" href="#" aria-label="Works">&nbsp;</a>
+    <a class="book js-works" href="#">Works</a>
     <a href="#visit">Visit</a>
     <a href="#opening">Opening</a>
     <a href="#program">Programs</a>
@@ -202,7 +202,7 @@
   <p class="credits"><strong>In collaboration with</strong> Chong Kun Dang Gochon Foundation,<br>Life Science × Art Education [Bio Odyssey] — Hyejung Jung, Science (Jungyu Hwang)</p>
   <div class="booklink-wrap">
     <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
-    <a class="booklink js-works" href="#" aria-label="Works">&nbsp;</a>
+    <a class="booklink js-works" href="#">Works</a>
     <a class="booklink js-archive" href="#">Archive Book</a>
   </div>
 </section>
