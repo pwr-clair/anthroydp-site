@@ -35,13 +35,15 @@
   section{padding-top:44px}
   h2{font-size:15px;font-weight:800;letter-spacing:.06em;margin-bottom:12px}
 
-  /* 플로어 플랜 */
-  .plan{width:100%;display:block;border:1px solid var(--line);border-radius:14px;background:#000}
-  .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px}
-  .chips a{flex:none;min-width:38px;text-align:center;font-size:13px;font-weight:700;
-    color:var(--accent);text-decoration:none;padding:6px 8px;border-radius:999px;
-    border:1px solid var(--accent);background:var(--accent-soft)}
-  .chips a:active{color:#eafce9;border-color:#eafce9}
+  /* 플로어 플랜 — 도면 위 번호를 눌러 작품으로 이동 */
+  .planwrap{position:relative;border:1px solid var(--line);border-radius:14px;background:#000;overflow:hidden}
+  .plan{width:100%;display:block}
+  .pin{position:absolute;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:999px;
+    display:grid;place-items:center;font-size:12.5px;font-weight:800;text-decoration:none;
+    color:var(--accent);border:1px solid var(--accent);background:rgba(30,210,30,.18)}
+  .pin:active{color:var(--bg);background:var(--accent)}
+  @media (max-width:420px){ .pin{width:25px;height:25px;font-size:11px} }
+  .plannote{font-size:12.5px;color:var(--sub);margin-top:10px;text-align:center}
 
   /* 작품 */
   .work{padding-top:42px;scroll-margin-top:64px}
@@ -53,6 +55,12 @@
   figure{margin:16px 0 0}
   figure img{width:100%;display:block;border-radius:12px;background:var(--card)}
   figure img + img{margin-top:8px}
+  /* 세로로 긴 이미지는 높이 기준으로 줄여 가운데 정렬 */
+  figure.tall img{width:auto;max-width:100%;max-height:62vh;margin:0 auto}
+  /* 두 점을 좌우로 나란히 */
+  figure.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+  figure.pair img + img{margin-top:0}
+  figure.pair figcaption{grid-column:1 / -1}
   figcaption{font-size:12px;color:var(--sub);margin-top:8px;text-align:center;word-break:keep-all}
   .wtx{font-size:14.5px;line-height:1.9;color:#d6d2ea;margin-top:16px;word-break:keep-all}
 
@@ -120,13 +128,23 @@
 
 <section id="plan" style="scroll-margin-top:64px">
   <h2>플로어 플랜</h2>
-  <img class="plan" src="works-assets/floorplan.png" alt="전시장 도면. 작품 1번부터 13번까지의 위치가 번호로 표시되어 있습니다.">
-  <div class="chips">
-    <a href="#w1">1</a><a href="#w2">2</a><a href="#w3">3</a><a href="#w4">4</a>
-    <a href="#w5">5</a><a href="#w6">6</a><a href="#w7">7</a><a href="#w8">8</a>
-    <a href="#w9">9</a><a href="#w10">10</a><a href="#w11">11</a><a href="#w12">12</a>
-    <a href="#w13">13</a>
+  <div class="planwrap">
+    <img class="plan" src="works-assets/floorplan.png" alt="전시장 도면">
+      <a class="pin" href="#w1" style="left:23.7%;top:19.4%">1</a>
+      <a class="pin" href="#w2" style="left:72.0%;top:8.2%">2</a>
+      <a class="pin" href="#w3" style="left:88.4%;top:23.1%">3</a>
+      <a class="pin" href="#w4" style="left:64.8%;top:38.5%">4</a>
+      <a class="pin" href="#w5" style="left:88.4%;top:57.4%">5</a>
+      <a class="pin" href="#w6" style="left:88.4%;top:77.7%">6</a>
+      <a class="pin" href="#w7" style="left:72.0%;top:92.4%">7</a>
+      <a class="pin" href="#w8" style="left:32.6%;top:92.4%">8</a>
+      <a class="pin" href="#w9" style="left:17.5%;top:77.7%">9</a>
+      <a class="pin" href="#w10" style="left:40.3%;top:64.1%">10</a>
+      <a class="pin" href="#w11" style="left:17.5%;top:52.4%">11</a>
+      <a class="pin" href="#w12" style="left:31.7%;top:40.8%">12</a>
+      <a class="pin" href="#w13" style="left:42.7%;top:37.5%">13</a>
   </div>
+  <p class="plannote">번호를 누르면 해당 작품 설명으로 이동합니다.</p>
 </section>
 
 <article id="w1" class="work">
@@ -134,7 +152,7 @@
   <h3>최고은</h3>
   <div class="wtitle">〈나는 전기양의 꿈을 꾸는가?〉</div>
   <div class="wcap">2026 · 시트지와 천에 디지털 프린트, 가변크기</div>
-  <figure>
+  <figure class="tall">
     <img src="works-assets/w01.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가?" loading="lazy" data-zoom>
     <figcaption>작가 화풍을 학습한 AI로 생성한 이미지</figcaption>
   </figure>
@@ -224,7 +242,7 @@
   <h3>장종완</h3>
   <div class="wtitle">〈오메가 포인트〉 · 〈킬리만자로의 선물〉</div>
   <div class="wcap">〈오메가 포인트〉 2023 · 린넨에 아크릴릭 과슈, 안료, 227.3 × 181.8 cm<br>〈킬리만자로의 선물〉 2024 · 린넨에 아크릴릭 과슈, 안료, 227.3 × 181.8 cm</div>
-  <figure>
+  <figure class="pair">
     <img src="works-assets/w08-1.jpg" alt="장종완, 오메가 포인트" loading="lazy" data-zoom>
     <img src="works-assets/w08-2.jpg" alt="장종완, 킬리만자로의 선물" loading="lazy" data-zoom>
     <figcaption>〈오메가 포인트〉 이미지 제공: 파운드리 서울</figcaption>
@@ -276,7 +294,7 @@
   <h3>듀킴</h3>
   <div class="wtitle">〈Kissing Forever ∞ Kiss of Chaos ☆〉</div>
   <div class="wcap">2020 · 단채널 비디오, 56초 (반복재생)</div>
-  <figure><img src="works-assets/w12.jpg" alt="듀킴, Kissing Forever ∞ Kiss of Chaos" loading="lazy" data-zoom></figure>
+  <figure class="tall"><img src="works-assets/w12.jpg" alt="듀킴, Kissing Forever ∞ Kiss of Chaos" loading="lazy" data-zoom></figure>
   <p class="wtx">〈Kiss of Chaos ☆〉는 케이팝 뮤직비디오 형식을 빌려 퀴어와 젠더의 흐려지는 경계를 샤머니즘의 시각으로 탐구한다. 작가는 선과 악, 주체와 대상을 가르는 서구 종교의 이분법에 맞서, 서구인들이 '흑신앙'이라 폄훼했던 북아시아 무속의 주술적 수행을 경유해 그 구분을 흩뜨린다. 작가는 아이돌 자아 '호니허니듀'가 됨으로써 정상성 바깥에 놓인 실패자의 욕망을 드러내며, 끊임없이 분열하고 확장하는 카오스적 세계로 나아간다.</p>
   <details class="bio"><summary><span class="tri">►</span>듀킴 Dew Kim</summary>
     <p>종교와 퀴어성, 포스트휴먼적 정체성이 충돌하는 자리에서 신체를 탐구한다. 몸을 고정된 형상이 아니라 믿음과 저항, 변형이 만나는 장소로 다루며, 취약성과 욕망, 그리고 스스로 선택하지 않은 역사를 몸이 어떻게 떠안는지를 묻는다. 조각, 설치, 퍼포먼스를 오가며 헌신과 규율, 갈망의 몸짓 속에서 권력이 어떻게 작동하는지를 살핀다.</p>
@@ -296,7 +314,7 @@
 </article>
 
 <footer>
-  <a href="index.html">← 전시 안내로 돌아가기</a><br>
+  <a href="https://www.ydp.go.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">영등포구</a> · <a href="https://www.ydpcf.or.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">영등포문화재단</a> · <a href="https://www.ydpcf.or.kr/culture_city/culture_city.do" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">문화도시 영등포</a><br>
   ©2026 예술기술도시 《인류학 연습: 인간은 우리인가?》<br>
   by Workswork co., ltd.
 </footer>
