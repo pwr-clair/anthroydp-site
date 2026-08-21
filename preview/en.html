@@ -31,7 +31,7 @@
   nav .row{max-width:640px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
   nav .row::-webkit-scrollbar{display:none}
   nav a{flex:none;font-size:13px;font-weight:600;color:var(--sub);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
-  nav a:active{color:var(--accent2);border-color:var(--accent2)}
+  nav a:active{color:var(--accent);border-color:var(--accent)}
 
   section{padding-top:56px;scroll-margin-top:64px}
   h2{font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px dashed var(--accent)}
@@ -88,10 +88,18 @@
   #contact dl{grid-template-columns:84px 1fr;row-gap:5px;font-size:13.5px}
   #contact dt{font-size:13px;padding-top:1px}
 
-  /* 크레딧·연계전시 */
-  #credit dl, #linked dl{grid-template-columns:104px 1fr;row-gap:9px;font-size:13px}
-  #credit dt, #linked dt{font-size:12px}
-  #credit .creditbox dd{color:var(--sub)}
+  /* 크레딧·연계전시 — 리플렛 지면과 같은 왼쪽 정렬 블록 */
+  .cgroup{margin-bottom:18px}
+  .cgroup:last-child{margin-bottom:0}
+  .cgroup h4{font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:5px}
+  .cgroup p{font-size:13px;line-height:1.8;color:var(--sub);margin:0}
+  .cgroup p + p{margin-top:14px}
+
+  /* 관람 설문 — 위아래로 확실히 띄우고 가는 선으로 구분 */
+  #survey{padding-top:60px;position:relative}
+  #survey::before{content:"";position:absolute;top:30px;left:50%;transform:translateX(-50%);
+    width:40px;border-top:2px dashed var(--line)}
+  #survey + section{padding-top:60px}
 
   /* ZOOM 배지 — 제목 맨 앞. 흰 반투명 바탕 + 스위스 국기 빨강 볼드 */
   .badge.zoom{background:rgba(255,255,255,.8);color:#da291c;font-weight:800;margin:0 6px 0 0}
@@ -116,7 +124,7 @@
   .booklink{display:inline-block;font-size:13px;font-weight:800;color:var(--accent);
     text-decoration:none;padding:8px 18px;border-radius:999px;
     border:1px solid var(--accent);background:var(--accent-soft)}
-  .booklink:active{border-color:var(--accent2);color:var(--accent2)}
+  .booklink:active{border-color:#efeaff;color:#efeaff}
 
   /* 셀로판 — 검정 위에 보라 필름 */
   .card.cello{background:rgba(125,109,242,.22);border:1px solid rgba(125,109,242,.7);
@@ -199,7 +207,7 @@
       <dt>Hours</dt><dd>12:00 – 20:00</dd>
       <dt>Closed</dt><dd>Mondays (Sep 7 &amp; 14)</dd>
       <dt>Admission</dt><dd>Free</dd>
-      <dt>Venue</dt><dd>1F Jongdo Bldg., 727 Gyeongin-ro,<br>Yeongdeungpo-gu, Seoul (Mullae-dong)<br><span style="font-size:13px;color:var(--sub)">Mullae Stn. Exit ○, ○ min walk <!-- TODO --></span></dd>
+      <dt>Venue</dt><dd>1F Jongdo Bldg., 727 Gyeongin-ro,<br>Yeongdeungpo-gu, Seoul (Mullae-dong)</dd>
     </dl>
     <iframe class="map" src="https://maps.google.com/maps?q=727+Gyeongin-ro+Yeongdeungpo-gu+Seoul&z=16&output=embed" loading="lazy" title="Map"></iframe>
   </div>
@@ -217,7 +225,7 @@
 
 <section id="program">
   <h2>EXTENDED PROGRAMS · CROSS TALK SERIES</h2>
-  <p class="sectionnote">Tap a card to register. <strong style="color:var(--accent)">Each program seats 15 (first come, first served)</strong>, up to 4 people per registration. All programs are free.</p>
+  <p class="sectionnote">Tap a card to register.<br><strong style="color:var(--accent)">Each program seats 15 (first come, first served)</strong>, up to 4 people per registration. All programs are free.</p>
 
   <a class="card cello" href="https://forms.gle/kSAgtHG3iK7CMWjR8" target="_blank" rel="noopener">
     <h3>Click! Rhythms of Yeongdeungpo Technoeotbak and the Soul of Street Scribbles</h3>
@@ -294,14 +302,15 @@
   <!-- TODO: 링크 확정되면 이 div를 <a class="card" href="..." target="_blank" rel="noopener">로 교체 -->
   <!-- TODO: 영문 전시명은 임시 번역 — 주최측 확정 표기 확인 필요 -->
   <div class="card">
-    <h3>2026 Small Manufacturers Special Exhibition 〈Song of Roots〉</h3>
-    <div class="meta">Sep 18 (Fri) – Oct 11 (Sun), 2026 · Closed Mondays &amp; public holidays<br>Tue–Fri 10:00–19:00 · Sat–Sun 10:00–18:00</div>
-    <dl style="margin-top:14px">
-      <dt>Main show</dt><dd>Sulsul Gallery, B1, Sulsul Center</dd>
-      <dt>Archive show</dt><dd>My Factory (Seoul Small Manufacturers Association), 1F</dd>
-      <dt>Participants</dt><dd>Bonghwa Industry (Kyungjoong Kim), Samduk Special Gear (Duin Jung),<br>Ace Precision (Yangyeon Cho), Hanbit Techlab (Seungjun Lee)</dd>
-      <dt>Artists</dt><dd>Sungjin Kim, Taeyoon Sung, Sungjin Jung, Narae Jin</dd>
-    </dl>
+    <div class="cgroup">
+      <h4>2026 Small Manufacturers Special Exhibition 〈Song of Roots〉</h4>
+      <p>Sep 18 (Fri) – Oct 11 (Sun), 2026<br>
+      ※ Closed Mondays and public holidays (Tue–Fri 10:00–19:00, Sat–Sun 10:00–18:00)</p>
+      <p>- Main show : Sulsul Gallery, B1, Sulsul Center<br>
+      - Archive show : My Factory (Seoul Small Manufacturers Association), 1F</p>
+      <p>- Participating manufacturers : Bonghwa Industry (Kyungjoong Kim), Samduk Special Gear (Duin Jung), Ace Precision (Yangyeon Cho), Hanbit Techlab (Seungjun Lee)<br>
+      - Artists : Sungjin Kim, Taeyoon Sung, Sungjin Jung, Narae Jin</p>
+    </div>
   </div>
 </section>
 
@@ -309,15 +318,30 @@
   <h2>CREDITS</h2>
   <!-- TODO: 인명·업체명 영문 표기는 임시 로마자 표기 — 재단 공식 표기 확인 필요 -->
   <div class="card creditbox">
-    <dl>
-      <dt>Yeongdeungpo Cultural Foundation</dt><dd>CEO Lee Gunwang</dd>
-      <dt>Culture City Yeongdeungpo Center</dt><dd>Director Kim Jihoon<br>Planning Team Moon Yuseok · Byun Chaerin</dd>
-      <dt>Curation</dt><dd>Curator Juri Cho<br>Editor Yeonji Lee</dd>
-      <dt>Artists</dt><dd>Heesoo Kwon, Siheun Kim, Gemini Kim, Dew Kim, Jaeha Ban, Chang Younghae, Jongwan Jang, Youngkak Cho, Sla Joo, Kayoung Choi, Che Go Eun, Sun Choi<br>Chong Kun Dang Gochon Foundation, Life Science × Art Education [Bio Odyssey]</dd>
-      <dt>Production</dt><dd>Agency From A Inc.<br>Operations Cho Ara · PR Yang Chaewon<br>Graphic Design Matter and Non-Matter<br>Spatial Design Think and Make<br>Video Nopiwanelbi</dd>
-      <dt>Organized by</dt><dd>Yeongdeungpo-gu, Yeongdeungpo Cultural Foundation, Culture City Yeongdeungpo Center</dd>
-      <dt>In cooperation with</dt><dd>Chong Kun Dang Gochon Foundation, Jongdo Building</dd>
-    </dl>
+    <div class="cgroup">
+      <h4>Yeongdeungpo Cultural Foundation</h4>
+      <p>CEO | Lee Gunwang</p>
+    </div>
+    <div class="cgroup">
+      <h4>Culture City Yeongdeungpo Center</h4>
+      <p>Director | Kim Jihoon<br>Planning Team | Moon Yuseok<br>Planning Team | Byun Chaerin</p>
+    </div>
+    <div class="cgroup">
+      <h4>Curation</h4>
+      <p>Curator | Juri Cho<br>Editor | Yeonji Lee</p>
+    </div>
+    <div class="cgroup">
+      <h4>Artists</h4>
+      <p>Heesoo Kwon, Siheun Kim, Gemini Kim, Dew Kim, Jaeha Ban, Chang Younghae, Jongwan Jang, Youngkak Cho, Sla Joo, Kayoung Choi, Che Go Eun, Sun Choi, Chong Kun Dang Gochon Foundation Life Science × Art Education [Bio Odyssey]</p>
+    </div>
+    <div class="cgroup">
+      <h4>Production</h4>
+      <p>Agency | From A Inc.<br>Operations | Cho Ara<br>PR | Yang Chaewon</p>
+      <p>Graphic Design | Matter and Non-Matter<br>Spatial Design | Think and Make<br>Video | Nopiwanelbi</p>
+    </div>
+    <div class="cgroup">
+      <p>Organized by | Yeongdeungpo-gu, Yeongdeungpo Cultural Foundation, Culture City Yeongdeungpo Center<br>In cooperation with | Chong Kun Dang Gochon Foundation, Jongdo Building</p>
+    </div>
   </div>
 </section>
 

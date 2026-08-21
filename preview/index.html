@@ -31,7 +31,7 @@
   nav .row{max-width:640px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
   nav .row::-webkit-scrollbar{display:none}
   nav a{flex:none;font-size:13px;font-weight:600;color:var(--sub);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
-  nav a:active{color:var(--accent2);border-color:var(--accent2)}
+  nav a:active{color:var(--accent);border-color:var(--accent)}
   /* 아카이브북 — 페이지 내 섹션 없음(별도 페이지 연결 예정). 다른 탭과 구별되는 초록 반투명 */
 
   section{padding-top:56px;scroll-margin-top:64px}
@@ -73,10 +73,19 @@
   /* 기획·참여작가 아래 협력 줄 — 위 두 줄과 같은 형식, 간격만 띄움 */
   .credits + .credits{margin-top:14px}
 
-  /* 크레딧·연계전시 — 라벨 폭 넓게, 잔글씨 */
-  #credit dl, #linked dl{grid-template-columns:104px 1fr;row-gap:9px;font-size:13px}
-  #credit dt, #linked dt{font-size:12px}
-  #credit .creditbox dd{color:var(--sub)}
+  /* 크레딧·연계전시 — 리플렛 지면과 같은 왼쪽 정렬 블록 */
+  .cgroup{margin-bottom:18px}
+  .cgroup:last-child{margin-bottom:0}
+  .cgroup h4{font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:5px}
+  .cgroup p{font-size:13px;line-height:1.8;color:var(--sub);margin:0}
+  .cgroup p + p{margin-top:14px}
+  .cgroup .hl{color:var(--accent)}
+
+  /* 관람 설문 — 위아래로 확실히 띄우고 가는 선으로 구분 */
+  #survey{padding-top:60px;position:relative}
+  #survey::before{content:"";position:absolute;top:30px;left:50%;transform:translateX(-50%);
+    width:40px;border-top:2px dashed var(--line)}
+  #survey + section{padding-top:60px}
 
   /* 문의 — 글씨·행간 축소 */
   #contact dl{grid-template-columns:84px 1fr;row-gap:5px;font-size:13.5px}
@@ -107,7 +116,7 @@
   .booklink{display:inline-block;font-size:13px;font-weight:800;color:var(--accent);
     text-decoration:none;padding:8px 18px;border-radius:999px;
     border:1px solid var(--accent);background:var(--accent-soft)}
-  .booklink:active{border-color:var(--accent2);color:var(--accent2)}
+  .booklink:active{border-color:#eafce9;color:#eafce9}
 
   /* 초록 셀로판 — 검정 위에 초록 필름을 덮은 느낌 */
   .card.cello{background:rgba(30,210,30,.22);border:1px solid rgba(30,210,30,.7);
@@ -232,7 +241,7 @@
       <dt>시간</dt><dd>12:00 – 20:00</dd>
       <dt>휴관</dt><dd>매주 월요일 (9/7, 9/14)</dd>
       <dt>관람료</dt><dd>무료</dd>
-      <dt>장소</dt><dd>영등포구 경인로 727, 종도빌딩 1층 (문래동)<br><span style="font-size:13px;color:var(--sub)">문래역 ○번 출구 도보 ○분 <!-- TODO: 확인 --></span></dd>
+      <dt>장소</dt><dd>영등포구 경인로 727, 종도빌딩 1층 (문래동)</dd>
     </dl>
     <iframe class="map" src="https://maps.google.com/maps?q=서울+영등포구+경인로+727&z=16&output=embed" loading="lazy" title="오시는 길"></iframe>
   </div>
@@ -249,7 +258,7 @@
 
 <section id="program">
   <h2>전시연계 프로그램 · 크로스토크</h2>
-  <p class="sectionnote">크로스토크 — 카드를 누르면 신청 페이지로 연결됩니다. <strong style="color:var(--accent)">각 프로그램 정원 15명(선착순)</strong>, 1회 최대 4명까지 신청 가능합니다. 전 프로그램 무료.</p>
+  <p class="sectionnote">카드를 누르면 신청 페이지로 연결됩니다.<br><strong style="color:var(--accent)">각 프로그램 정원 15명(선착순)</strong>, 1회 최대 4명까지 신청 가능합니다. 전 프로그램 무료.</p>
 
   <a class="card cello" href="https://forms.gle/kSAgtHG3iK7CMWjR8" target="_blank" rel="noopener">
     <h3>클릭! 영등포 테크노 엇박자와 낙서의 영혼</h3>
@@ -323,29 +332,45 @@
   <h2>연계전시</h2>
   <!-- TODO: 링크 확정되면 이 div를 <a class="card" href="..." target="_blank" rel="noopener">로 교체 -->
   <div class="card">
-    <h3>2026 소공인특별전 〈뿌리의 노래〉</h3>
-    <div class="meta">2026. 9. 18(금) – 10. 11(일) · 월요일·공휴일 휴관<br>화–금 10:00–19:00 · 토–일 10:00–18:00</div>
-    <dl style="margin-top:14px">
-      <dt>소공인특별전</dt><dd>술술센터 지하 1층 술술갤러리</dd>
-      <dt>아카이브전</dt><dd>마이팩토리(서울소공인협회) 1층</dd>
-      <dt>참여소공인</dt><dd>봉화산업(김경중), 삼덕특수기어(정두인),<br>에이스정공(조양연), 한빛테크랩(이승준)</dd>
-      <dt>참여작가</dt><dd>김성진, 성태윤, 정성진, 진나래</dd>
-    </dl>
+    <div class="cgroup">
+      <h4>2026 소공인특별전 〈뿌리의 노래〉</h4>
+      <p>2026년 9월 18일(금) ~ 10월 11일(일)<br>
+      ※ 월요일, 공휴일 휴관 (화~금 : 10시~19시, 토~일 : 10시~18시)</p>
+      <p>- 소공인특별전 : 술술센터 지하 1층 술술갤러리<br>
+      - 아카이브전 : 마이팩토리(서울소공인협회) 1층</p>
+      <p>- 참여소공인 : 봉화산업(김경중), 삼덕특수기어(정두인), 에이스정공(조양연), 한빛테크랩(이승준)<br>
+      - 참여작가 : 김성진, 성태윤, 정성진, 진나래</p>
+    </div>
   </div>
 </section>
 
 <section id="credit">
   <h2>크레딧</h2>
   <div class="card creditbox">
-    <dl>
-      <dt>영등포문화재단</dt><dd>대표이사 이건왕</dd>
-      <dt>영등포문화도시센터</dt><dd>문화도시센터장 김지훈<br>문화도시기획팀 문유석 · 변채린</dd>
-      <dt>기획</dt><dd>큐레이터 조주리<br>에디터 이연지</dd>
-      <dt>참여작가</dt><dd>권희수, 김시흔, 김재민이, 듀킴, 반재하, 장영해, 장종완, 조영각, 주슬아, 최가영, 최고은, 최선<br>종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]</dd>
-      <dt>전시 운영</dt><dd>대행사 (주)프럼에이<br>운영 조아라 · 홍보 양채원<br>그래픽 디자인 물질과비물질<br>공간조성 띵크앤메이크<br>영상 촬영·편집 높이와넓이</dd>
-      <dt>주최·주관</dt><dd>영등포구, 영등포문화재단, 영등포문화도시센터</dd>
-      <dt>협력</dt><dd>종근당고촌재단, 종도빌딩</dd>
-    </dl>
+    <div class="cgroup">
+      <h4>영등포문화재단</h4>
+      <p>대표이사 | 이건왕</p>
+    </div>
+    <div class="cgroup">
+      <h4>영등포문화도시센터</h4>
+      <p>문화도시센터장 | 김지훈<br>문화도시기획팀 | 문유석<br>문화도시기획팀 | 변채린</p>
+    </div>
+    <div class="cgroup">
+      <h4>기획</h4>
+      <p>큐레이터 | 조주리<br>에디터 | 이연지</p>
+    </div>
+    <div class="cgroup">
+      <h4>참여작가</h4>
+      <p>권희수, 김시흔, 김재민이, 듀킴, 반재하, 장영해, 장종완, 조영각, 주슬아, 최가영, 최고은, 최선, 종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]</p>
+    </div>
+    <div class="cgroup">
+      <h4>전시 운영</h4>
+      <p>대행사 | (주)프럼에이<br>운영 | 조아라<br>홍보 | 양채원</p>
+      <p>그래픽 디자인 | 물질과비물질<br>공간조성 | 띵크앤메이크<br>영상 촬영 및 편집 | 높이와넓이</p>
+    </div>
+    <div class="cgroup">
+      <p>주최·주관 | 영등포구, 영등포문화재단, 영등포문화도시센터<br>협력 | 종근당고촌재단, 종도빌딩</p>
+    </div>
   </div>
 </section>
 
