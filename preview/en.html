@@ -132,6 +132,22 @@
   a.card.cello.survey strong{color:#ffe9e5}
   a.card.cello.survey:active{border-color:#f0604a}
 
+  /* 작가 이름 버튼 + 소개 팝업 (한글판과 동일 구조) */
+  .artist{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;
+    border-bottom:1px dashed rgba(125,109,242,.5)}
+  .artist:active{color:#efeaff;border-bottom-color:#efeaff}
+  #bio{max-width:520px;width:calc(100% - 36px);max-height:80vh;margin:auto;
+    background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:24px 22px 22px}
+  #bio[open]{display:flex;flex-direction:column}
+  #bio::backdrop{background:rgba(0,0,0,.75)}
+  #bio h3{font-size:19px;font-weight:800;word-break:keep-all;padding-right:34px}
+  #bio .ko{font-size:13px;color:var(--accent);letter-spacing:.02em;margin-top:3px}
+  #bio .tx{font-size:14.5px;line-height:1.8;color:#d6d2ea;margin-top:16px;overflow:auto}
+  #bio .foot{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);text-align:center}
+  #bio .foot .booklink{margin:0 4px}
+  #bio .x{position:absolute;top:14px;right:14px;width:30px;height:30px;line-height:1;
+    font-size:14px;color:var(--sub);background:none;border:1px solid var(--line);border-radius:999px;cursor:pointer}
+
   /* 아카이브북 탭 */
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
   /* 강조 탭 2개는 같은 폭 */
@@ -209,7 +225,7 @@
   <!-- 영문 표기 = 포스터 기준 최종 확정 (2026-08-12 클라라) -->
   <p class="credits">
     <strong>Curated by</strong> Juri Cho<br>
-    <strong>Artists</strong> Heesoo Kwon, Siheun Kim, Gemini Kim, Dew Kim, Jaeha Ban, Chang Younghae, Jongwan Jang, Youngkak Cho, Sla Joo, Kayoung Choi, Che Go Eun, Sun Choi<br>
+    <strong>Artists</strong> <button type="button" class="artist" data-a="Heesoo Kwon">Heesoo Kwon</button>, <button type="button" class="artist" data-a="Siheun Kim">Siheun Kim</button>, <button type="button" class="artist" data-a="Gemini Kim">Gemini Kim</button>, <button type="button" class="artist" data-a="Dew Kim">Dew Kim</button>, <button type="button" class="artist" data-a="Jaeha Ban">Jaeha Ban</button>, <button type="button" class="artist" data-a="Chang Younghae">Chang Younghae</button>, <button type="button" class="artist" data-a="Jongwan Jang">Jongwan Jang</button>, <button type="button" class="artist" data-a="Youngkak Cho">Youngkak Cho</button>, <button type="button" class="artist" data-a="Sla Joo">Sla Joo</button>, <button type="button" class="artist" data-a="Kayoung Choi">Kayoung Choi</button>, <button type="button" class="artist" data-a="Che Go Eun">Che Go Eun</button>, <button type="button" class="artist" data-a="Sun Choi">Sun Choi</button><br>
     <strong>In collaboration with</strong> Chong Kun Dang Gochon Foundation, Life Science × Art Education [Bio Odyssey] — Hyejung Jung, Science (Jungyu Hwang)
   </p>
   <div class="booklink-wrap">
@@ -359,11 +375,49 @@
 
 </div>
 
+<dialog id="bio">
+  <button type="button" class="x" id="bioX" aria-label="Close">✕</button>
+  <h3 id="bioName"></h3>
+  <div class="ko" id="bioKo"></div>
+  <p class="tx" id="bioTx"></p>
+  <div class="foot">
+    <a class="booklink js-works" href="#">Works</a>
+    <a class="booklink js-archive" href="#">Archive Book</a>
+  </div>
+</dialog>
+
 <script>
 (function(){
   /* 주소 두 줄만 바꾸면 탭·버튼이 한꺼번에 연결됩니다 */
   var ARCHIVE_URL = '#';   /* Archive Book */
   var WORKS_URL   = '#';   /* Works (works.html 예정) */
+var BIOS = {
+"Heesoo Kwon": {"ko": "권희수", "tx": "Heesoo Kwon works on Leymusoom, a ritualistic and auto-ethnographic archive project rooted in her own and her family's life, matrilineal genealogies, and Korean mythology. Using digital technology as a tool of creation, she traces ancestral memories to reimagine patriarchal narratives. Begun in 2017, the project is an archive of 3D animation and photography combining analog and digital media—a shrine to Kwon's invented \"autobiographical feminist religion,\" envisioning a utopia where her female ancestors coexist."},
+"Siheun Kim": {"ko": "김시흔", "tx": "Siheun Kim explores the contemporary condition in which technology senses and translates the world, drawing on the sculptural languages of the othered body and fluid mediation. Through site-based research, she collects ecological and historical traces and reconfigures them through game-engine-based moving images, 3D printing, sensors, and kinetic systems. Through the Dispositif—a hybrid moving-image and sculptural apparatus that brings these elements together—Kim gives sensory form to the ways bodies, places, and nonhuman temporalities remain irreducible to any single image or informational form."},
+"Gemini Kim": {"ko": "김재민이", "tx": "Gemini Kim is an artist originally from Incheon. Although he carries a bit of a complex about how Korea focuses so heavily on central Seoul, he ironically desires to live in the heart of Seoul more than anyone else. Focusing on the concept of 'the periphery,' his projects track regional changes over time. He also founded the 'Korean Association of Subalterns' to study this peripheral mentality, aiming to bring hidden stories from outside the mainstream cultural world into the spotlight."},
+"Dew Kim": {"ko": "듀킴", "tx": "Dew Kim explores the body at the point where religion, queerness, and posthuman identity collide. He treats the body not as a fixed form but as a site where faith, resistance, and transformation meet, asking how it comes to carry vulnerability, desire, and histories it did not choose. Moving between sculpture, installation, and performance, he examines how power operates within gestures of devotion, discipline, and longing. Through performances of \"becoming\" - becoming a shaman, becoming an idol - he weaves the aesthetics of popular culture together with ritual symbolism, creating theatrical spaces where pleasure and vulnerability meet."},
+"Jaeha Ban": {"ko": "반재하", "tx": "Jaeha Ban takes moments in which systems malfunction as the primary material of her practice. Her work is grounded in research that observes and traces the marks of circulation, technology, and division embedded in everyday objects and events. Through performance, installation, and video, she juxtaposes the synchronous flows produced by systems of circulation and technological infrastructure with the asynchronous conditions generated by the division of the Korean Peninsula. Ban seeks to transform points of systemic malfunction into sites where new forms of perception are activated."},
+"Chang Younghae": {"ko": "장영해", "tx": "Younghae Chang works across video, performance, and installation, focusing on the structures through which violence and desire transform and distort the body. For the artist, the body exists as an entity that is reshaped and reconfigured through technology. Employing mediating apparatuses such as cameras, AI, and X-ray imaging, Chang examines processes that convert the body into images, fragment it, and render it objectified."},
+"Jongwan Jang": {"ko": "장종완", "tx": "Jongwan Jang portrays the endless anxiety of human-centered societies and modern humanity, which emphasizes selfish rationality, from a peculiarly warm but cynical perspective. The artist's works combine colorful and seemingly lighthearted images with his acute view of contemporary society. The ironic landscape maximizes its kitschiness through the use of animal hide, symbolizing the human desire for salvation, the neglect of nature and animals, and foolish, blind faith."},
+"Youngkak Cho": {"ko": "조영각", "tx": "Youngkak Cho works across media art, artificial intelligence, and design. For more than a decade he has explored ways of treating AI not as a tool but as a condition of the work, recently shifting from generation-centered practice toward the infrastructural conditions of AI as subject matter."},
+"Sla Joo": {"ko": "주슬아", "tx": "Sla Joo's practice centers on themes of fragmentation and transformation, informed by influences from animation and literature. I am drawn to narratives in which bodies are altered, identities are dismantled, and new forms of subjectivity emerge. Such narratives offer a way to reflect on how identity is continuously fractured and reconfigured within contemporary society. Through the use of multiple media, I explore transitions between different material and representational forms, often introducing intentional glitches and errors into the process. These disruptions become a means of visualizing the anxiety, instability, and transformation that accompany the breakdown and reconstruction of identity, while opening up possibilities for new narrative structures."},
+"Kayoung Choi": {"ko": "최가영", "tx": "Kayoung Choi takes tangible objects present in the here and now as clues, tracing memories and imaginings of times and places she has never experienced. She collects these objects, travels to the sites where they originally belonged, and moves in pursuit of the histories and personal memories bound up in them. Positioning herself at a distant coordinate and then looking back toward this side, her fieldwork folds and rolls up the map of times and spaces that could never be joined, drawing a new trajectory across it. Setting up a proportional equation between others and the self, past and present, she gives form to questions addressed to who we are now through painting, video, installation, and performance."},
+"Che Go Eun": {"ko": "최고은", "tx": "After training in Korean painting, Che Go relocated to Europe, where she has spent the past decade working primarily with digital imagery. By combining traditional painting with computational technologies including digital collage, 3D modeling, robotic drawing, virtual reality, and AI-generated images, she investigates the ontological connections and ruptures that emerge between the painter and image-generating technologies, while exploring the expanded possibilities of painting as a medium. Drawing inspiration from female narratives found in love, video games, beauty culture, folklore, and religion, she develops works that generate new visual imaginaries from these diverse sources."},
+"Sun Choi": {"ko": "최선", "tx": "Sun Choi transforms the material traces of events unfolding within the society he inhabits into the substance of his artistic practice. Employing materials marked by social incidents including saliva left on the street, grease seeping from the carcasses of pigs buried after mass culling, foam collected from wastewater sediment, and capsaicin spray used by police for crowd control, he creates what he calls \"unpainted paintings,\" minimizing deliberate brushwork wherever possible. Through the transformation of these materials, his practice converts social reality into artistic meaning. Extending beyond painting, his work encompasses video, sound, and spatial installations, expanding across diverse media while remaining grounded in the materiality of contemporary social experience."}
+  };
+  var dlg = document.getElementById('bio');
+  Array.prototype.forEach.call(document.querySelectorAll('.artist'), function(b){
+    b.addEventListener('click', function(){
+      var name = b.getAttribute('data-a'), d = BIOS[name]; if (!d) return;
+      document.getElementById('bioName').textContent = name;
+      document.getElementById('bioKo').textContent   = d.ko;
+      document.getElementById('bioTx').textContent   = d.tx;
+      dlg.showModal();
+    });
+  });
+  document.getElementById('bioX').addEventListener('click', function(){ dlg.close(); });
+  dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
+
   [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL]].forEach(function(pair){
     if (pair[1] === '#') { Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){ a.classList.add('soon'); }); return; }
     Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
