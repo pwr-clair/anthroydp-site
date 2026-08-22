@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="googlebot" content="noindex, nofollow">
-<title>공식 포스터 — 인류학 연습: 인간은 우리인가?</title>
-<meta property="og:title" content="공식 포스터 — 인류학 연습: 인간은 우리인가?">
+<title>프레스 키트 — 인류학 연습: 인간은 우리인가?</title>
+<meta property="og:title" content="프레스 키트 — 인류학 연습: 인간은 우리인가?">
 <meta property="og:image" content="https://anthroydp.site/posters/poster-2.jpg">
 <style>
   :root{
@@ -33,6 +33,15 @@
   .poster figcaption{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;font-size:12.5px;font-weight:700}
   .poster figcaption span{color:var(--sub);font-weight:600}
   .poster.r figcaption{color:#f0604a} .poster.g figcaption{color:#1ed21e} .poster.b figcaption{color:#3a7bf0} .poster.p figcaption{color:#7d6df2}
+  dl{display:grid;grid-template-columns:84px 1fr;row-gap:5px;font-size:13.5px}
+  dt{color:var(--sub);font-weight:600;font-size:13px;padding-top:1px}
+  dd{word-break:keep-all}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+  .btnrow{text-align:center;margin-top:18px}
+  .btn{display:inline-block;min-width:160px;text-align:center;font-size:13px;font-weight:800;color:var(--accent);
+    text-decoration:none;padding:9px 18px;border-radius:999px;border:1px solid var(--accent);background:var(--accent-soft);margin:0 4px}
+  .btn.soon{opacity:.45;pointer-events:none}
   footer{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
 </style>
 </head>
@@ -64,11 +73,43 @@
     <a class="poster r" href="/posters/poster-4.jpg" target="_blank" rel="noopener"><img src="/posters/poster-4.jpg" alt="공식 포스터 — 레드" loading="lazy"><figcaption>Red <span>↗</span></figcaption></a>
   </div>
 </section>
+
+<section id="info">
+  <h2>전시 정보 <span style="color:var(--sub);font-weight:600;font-size:13px">Exhibition</span></h2>
+  <div class="card">
+    <dl>
+      <dt>기간</dt><dd>2026. 9. 1(화) – 9. 20(일) · 개막 9. 1(화) 16:00</dd>
+      <dt>관람</dt><dd>12:00 – 20:00 · 월요일 휴관(9/7, 9/14) · 무료</dd>
+      <dt>장소</dt><dd>종도빌딩 1층 — 서울 영등포구 경인로 727 (문래동)</dd>
+      <dt>주최</dt><dd>영등포구 · 영등포문화재단 · 문화도시 영등포</dd>
+    </dl>
+  </div>
+</section>
+
+<section id="press">
+  <h2>프레스 문의 <span style="color:var(--sub);font-weight:600;font-size:13px">Press</span></h2>
+  <div class="card">
+    <dl>
+      <dt>담당</dt><dd>양채원 (프레스·홍보)</dd>
+      <dt>이메일</dt><dd><a href="mailto:chwnyang@gmail.com">chwnyang@gmail.com</a></dd>
+      <dt>인스타그램</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener">@cultural_city_ydp</a></dd>
+    </dl>
+  </div>
+  <div class="btnrow">
+    <!-- 보도자료 파일이 오면 PRESS_URL 한 줄만 채우면 버튼이 살아남 -->
+    <a class="btn js-press soon" href="#">보도자료 다운로드</a>
+    <a class="btn" href="#posters">공식 포스터</a>
+  </div>
+</section>
 <footer>
   영등포구 · 영등포문화재단 · 문화도시 영등포<br>
   ©2026 예술기술도시 《인류학 연습: 인간은 우리인가?》<br>
   by Workswork co., ltd.
 </footer>
 </div>
+<script>
+  var PRESS_URL = '#';   /* 보도자료 PDF 링크 */
+  if (PRESS_URL !== '#') { var b=document.querySelector('.js-press'); b.href=PRESS_URL; b.classList.remove('soon'); b.target='_blank'; b.rel='noopener'; }
+</script>
 </body>
 </html>
