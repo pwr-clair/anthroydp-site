@@ -45,7 +45,10 @@
     display:grid;place-items:center;font-size:11px;font-weight:800;text-decoration:none;
     color:var(--accent);border:1px solid var(--accent);background:rgba(30,210,30,.18)}
   .pin:active{color:var(--bg);background:var(--accent)}
-  @media (max-width:420px){ .pin{width:19px;height:19px;font-size:10px} }
+  /* 번호 아래 작가명 */
+  .pin::after{content:attr(data-name);position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    margin-top:2px;white-space:nowrap;font-size:10px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+  @media (max-width:420px){ .pin{width:19px;height:19px;font-size:10px} .pin::after{font-size:9px} }
   .plannote{font-size:12.5px;color:var(--sub);margin-top:10px;text-align:center}
 
   /* 작품 */
@@ -133,19 +136,19 @@
   <h2>플로어 플랜</h2>
   <div class="planwrap">
     <img class="plan" src="works-assets/floorplan.png" alt="전시장 도면">
-      <a class="pin" href="#w1" style="left:23.7%;top:19.4%">1</a>
-      <a class="pin" href="#w2" style="left:72.0%;top:8.2%">2</a>
-      <a class="pin" href="#w3" style="left:88.4%;top:23.1%">3</a>
-      <a class="pin" href="#w4" style="left:64.8%;top:38.5%">4</a>
-      <a class="pin" href="#w5" style="left:88.4%;top:57.4%">5</a>
-      <a class="pin" href="#w6" style="left:88.4%;top:77.7%">6</a>
-      <a class="pin" href="#w7" style="left:72.0%;top:92.4%">7</a>
-      <a class="pin" href="#w8" style="left:32.6%;top:92.4%">8</a>
-      <a class="pin" href="#w9" style="left:17.5%;top:77.7%">9</a>
-      <a class="pin" href="#w10" style="left:40.3%;top:64.1%">10</a>
-      <a class="pin" href="#w11" style="left:17.5%;top:52.4%">11</a>
-      <a class="pin" href="#w12" style="left:31.7%;top:40.8%">12</a>
-      <a class="pin" href="#w13" style="left:42.7%;top:37.5%">13</a>
+      <a class="pin" href="#w1" data-name="최고은" style="left:23.7%;top:19.4%">1</a>
+      <a class="pin" href="#w2" data-name="장영해" style="left:72.0%;top:8.2%">2</a>
+      <a class="pin" href="#w3" data-name="주슬아" style="left:88.4%;top:23.1%">3</a>
+      <a class="pin" href="#w4" data-name="조영각" style="left:64.8%;top:38.5%">4</a>
+      <a class="pin" href="#w5" data-name="최가영" style="left:88.4%;top:57.4%">5</a>
+      <a class="pin" href="#w6" data-name="김시흔" style="left:88.4%;top:77.7%">6</a>
+      <a class="pin" href="#w7" data-name="권희수" style="left:72.0%;top:92.4%">7</a>
+      <a class="pin" href="#w8" data-name="장종완" style="left:32.6%;top:92.4%">8</a>
+      <a class="pin" href="#w9" data-name="[바이오 오디세이]" style="left:17.5%;top:77.7%">9</a>
+      <a class="pin" href="#w10" data-name="반재하" style="left:40.3%;top:64.1%">10</a>
+      <a class="pin" href="#w11" data-name="김재민이" style="left:17.5%;top:52.4%">11</a>
+      <a class="pin" href="#w12" data-name="듀킴" style="left:31.7%;top:40.8%">12</a>
+      <a class="pin" href="#w13" data-name="최선" style="left:42.7%;top:37.5%">13</a>
   </div>
   <p class="plannote">번호를 누르면 해당 작품 설명으로 이동합니다.</p>
 </section>
