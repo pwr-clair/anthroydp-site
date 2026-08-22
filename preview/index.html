@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>인류학 연습: 인간은 우리인가? — 전시 안내</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="googlebot" content="noindex, nofollow">
+<title>인류학 연습: 인간은 우리인가? — 전시 안내</title>
 <style>
   :root{
     /* 한글판 키컬러: 주조=포스터 초록, 보조=포스터 파랑 (영문판은 보라/빨강) */
@@ -88,7 +88,7 @@
   #credit summary::-webkit-details-marker{display:none}
   #credit .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
   #credit details[open] .tri{transform:rotate(90deg)}
-  #credit{padding-top:1px}
+  #credit{padding-top:18px}
   #contact .card{margin-bottom:0}
   #credit .card{margin-top:14px;margin-bottom:0}
 
@@ -236,7 +236,8 @@
     <strong>기획</strong> 조주리<br>
     <strong>참여작가</strong> <button type="button" class="artist" data-a="권희수">권희수</button>, <button type="button" class="artist" data-a="김시흔">김시흔</button>, <button type="button" class="artist" data-a="김재민이">김재민이</button>, <button type="button" class="artist" data-a="듀킴">듀킴</button>, <button type="button" class="artist" data-a="반재하">반재하</button>, <button type="button" class="artist" data-a="장영해">장영해</button>, <button type="button" class="artist" data-a="장종완">장종완</button>, <button type="button" class="artist" data-a="조영각">조영각</button>, <button type="button" class="artist" data-a="주슬아">주슬아</button>, <button type="button" class="artist" data-a="최가영">최가영</button>, <button type="button" class="artist" data-a="최고은">최고은</button>, <button type="button" class="artist" data-a="최선">최선</button>
   </p>
-  <p class="credits"><strong>협력</strong> <button type="button" class="artist partner" data-a="종근당고촌재단 생명과학융합예술교육 [바이오 오디세이] 정혜정, 사이언스(황준규)">종근당고촌재단 생명과학융합예술교육 [바이오 오디세이] 정혜정, 사이언스(황준규)</button></p>
+  <!-- button은 inline-block이라 긴 협력 문구가 통째로 줄바꿈·가운데 정렬됨 → span으로 라벨 옆에서 자연 줄바꿈 -->
+  <p class="credits"><strong>협력</strong> <span class="artist partner" role="button" tabindex="0" data-a="종근당고촌재단 생명과학융합예술교육 [바이오 오디세이] 정혜정, 사이언스(황준규)">종근당고촌재단 생명과학융합예술교육 [바이오 오디세이] 정혜정, 사이언스(황준규)</span></p>
   <div class="booklink-wrap">
     <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
     <a class="booklink js-works" href="#">전시작품</a>
@@ -255,7 +256,7 @@
       <dt>관람료</dt><dd>무료</dd>
       <dt>장소</dt><dd>영등포구 경인로 727, 종도빌딩 1층 (문래동)</dd>
     </dl>
-    <iframe class="map" src="https://maps.google.com/maps?q=서울+영등포구+경인로+727&z=16&output=embed" loading="lazy" title="오시는 길"></iframe>
+    <iframe class="map" src="https://maps.google.com/maps?q=서울특별시+영등포구+문래동2가+25-1&z=17&output=embed" loading="lazy" title="오시는 길"></iframe>
   </div>
 </section>
 
@@ -427,6 +428,9 @@
       document.getElementById('bioEn').textContent   = d.en;
       document.getElementById('bioTx').textContent   = d.tx;
       dlg.showModal();
+    });
+    if (b.tagName === 'SPAN') b.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); }
     });
   });
 
