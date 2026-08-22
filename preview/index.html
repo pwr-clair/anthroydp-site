@@ -96,10 +96,8 @@
   /* 문의 — 글씨·행간 축소 */
   #contact dl{grid-template-columns:84px 1fr;row-gap:5px;font-size:13.5px}
   #contact dt{font-size:13px;padding-top:1px}
-  /* 공식 포스터 다운로드 — 4색 알약 */
-  .posters a{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:999px;margin-right:6px;
-    font-size:11px;font-weight:800;text-decoration:none;border:1px solid currentColor;background:rgba(255,255,255,.04)}
-  .posters a.r{color:#f0604a} .posters a.g{color:#1ed21e} .posters a.b{color:#3a7bf0} .posters a.p{color:#7d6df2}
+  /* 문의 — 초록 밑줄 링크 */
+  #contact a.ul{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
   /* 아직 열리지 않은 링크(#) — 흐리게·클릭 불가 */
   a.soon{opacity:.45;pointer-events:none}
 
@@ -347,7 +345,7 @@
       <dt>인스타그램</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:#f0604a">@cultural_city_ydp</a></dd>
       <dt>단체 관람</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:#f0604a">chae42@ydpcf.or.kr</a></dd>
       <dt>프레스·홍보</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:#f0604a">chwnyang@gmail.com</a></dd>
-      <dt>공식 포스터</dt><dd class="posters"><a class="r" href="/posters/poster-4.jpg" target="_blank" rel="noopener">R</a><a class="g" href="/posters/poster-2.jpg" target="_blank" rel="noopener">G</a><a class="b" href="/posters/poster-1.jpg" target="_blank" rel="noopener">B</a><a class="p" href="/posters/poster-3.jpg" target="_blank" rel="noopener">P</a></dd>
+      <dt>포스터</dt><dd><a href="posters.html" class="ul">공식 포스터 다운로드</a></dd>
     </dl>
   </div>
 </section>
