@@ -87,6 +87,12 @@
   /* 문의 — 글씨·행간 축소 */
   #contact dl{grid-template-columns:84px 1fr;row-gap:5px;font-size:13.5px}
   #contact dt{font-size:13px;padding-top:1px}
+  /* 공식 포스터 다운로드 — 4색 알약 */
+  .posters a{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:999px;margin-right:6px;
+    font-size:11px;font-weight:800;text-decoration:none;border:1px solid currentColor;background:rgba(255,255,255,.04)}
+  .posters a.r{color:#f0604a} .posters a.g{color:#1ed21e} .posters a.b{color:#3a7bf0} .posters a.p{color:#7d6df2}
+  /* 아직 열리지 않은 링크(#) — 흐리게·클릭 불가 */
+  a.soon{opacity:.45;pointer-events:none}
 
   /* 크레딧·연계전시 — 리플렛 지면과 같은 왼쪽 정렬 블록 */
   .cgroup{margin-bottom:18px}
@@ -310,6 +316,7 @@
       <dt>Instagram</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:var(--accent2)">@cultural_city_ydp</a></dd>
       <dt>Group visits</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:var(--accent2)">chae42@ydpcf.or.kr</a></dd>
       <dt>Press &amp; PR</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:var(--accent2)">chwnyang@gmail.com</a></dd>
+      <dt>Posters</dt><dd class="posters"><a class="r" href="/posters/poster-4.jpg" download="Anthropologists_Poster_R.jpg">R</a><a class="g" href="/posters/poster-2.jpg" download="Anthropologists_Poster_G.jpg">G</a><a class="b" href="/posters/poster-1.jpg" download="Anthropologists_Poster_B.jpg">B</a><a class="p" href="/posters/poster-3.jpg" download="Anthropologists_Poster_P.jpg">P</a></dd>
     </dl>
   </div>
 </section>
@@ -361,7 +368,7 @@
   var ARCHIVE_URL = '#';   /* Archive Book */
   var WORKS_URL   = 'works.html';   /* Works (works.html 예정) */
   [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL]].forEach(function(pair){
-    if (pair[1] === '#') return;
+    if (pair[1] === '#') { Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){ a.classList.add('soon'); }); return; }
     Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
       a.href = pair[1];
       if (pair[1].indexOf('http') === 0) { a.target = '_blank'; a.rel = 'noopener'; }
