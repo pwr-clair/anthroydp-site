@@ -137,6 +137,9 @@
   .artist{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;
     border-bottom:1px dashed rgba(125,109,242,.5)}
   .artist:active{color:#efeaff;border-bottom-color:#efeaff}
+  /* 협력 = 참여작가 목록의 일부(포스터와 동일). 라벨 없이 한 줄 띄워 거리만 둔다.
+     바깥은 block(여백용), 안쪽 .artist는 inline이어야 밑줄이 글자만 감싼다. */
+  .partner-row{display:block;margin-top:.55em}
   #bio{max-width:520px;width:calc(100% - 36px);max-height:80vh;margin:auto;
     background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:24px 22px 22px}
   #bio[open]{display:flex;flex-direction:column}
@@ -149,7 +152,7 @@
   #bio .x{position:absolute;top:14px;right:14px;width:30px;height:30px;line-height:1;
     font-size:14px;color:var(--sub);background:none;border:1px solid var(--line);border-radius:999px;cursor:pointer}
 
-  /* 아카이브북 탭 */
+  /* 연구노트 탭 */
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
   /* 강조 탭 2개는 같은 폭 */
   nav a.book{min-width:74.4px;white-space:nowrap;text-align:center}
@@ -203,8 +206,8 @@
     <a href="#visit">Visit</a>
     <a href="#opening">Opening</a>
     <a href="#program">Programs</a>
-    <!-- TODO: 아카이브북 페이지 URL — 아래 바로가기 버튼과 함께 2곳 -->
-    <a class="book js-archive" href="#">Archive Book</a>
+    <!-- TODO: 연구노트 페이지 URL — 아래 바로가기 버튼과 함께 2곳 -->
+    <a class="book js-archive" href="#">Research Note</a>
     <a href="#closing">Closing</a>
     <a class="red" href="#survey">Survey</a>
     <a href="#contact">Contact</a>
@@ -226,13 +229,13 @@
   <!-- 영문 표기 = 포스터 기준 최종 확정 (2026-08-12 클라라) -->
   <p class="credits">
     <strong>Curated by</strong> Juri Cho<br>
-    <strong>Artists</strong> <button type="button" class="artist" data-a="Heesoo Kwon">Heesoo Kwon</button>, <button type="button" class="artist" data-a="Siheun Kim">Siheun Kim</button>, <button type="button" class="artist" data-a="Gemini Kim">Gemini Kim</button>, <button type="button" class="artist" data-a="Dew Kim">Dew Kim</button>, <button type="button" class="artist" data-a="Jaeha Ban">Jaeha Ban</button>, <button type="button" class="artist" data-a="Chang Younghae">Chang Younghae</button>, <button type="button" class="artist" data-a="Jongwan Jang">Jongwan Jang</button>, <button type="button" class="artist" data-a="Youngkak Cho">Youngkak Cho</button>, <button type="button" class="artist" data-a="Sla Joo">Sla Joo</button>, <button type="button" class="artist" data-a="Kayoung Choi">Kayoung Choi</button>, <button type="button" class="artist" data-a="Che Go Eun">Che Go Eun</button>, <button type="button" class="artist" data-a="Sun Choi">Sun Choi</button><br>
-    <strong>In collaboration with</strong> Chong Kun Dang Kochon Foundation, Life Science and Convergence Art Education Program [Bio Odyssey] — Haejung Jung, Psients (Mikael Hwang)
+    <strong>Artists</strong> <button type="button" class="artist" data-a="Heesoo Kwon">Heesoo Kwon</button>, <button type="button" class="artist" data-a="Siheun Kim">Siheun Kim</button>, <button type="button" class="artist" data-a="Gemini Kim">Gemini Kim</button>, <button type="button" class="artist" data-a="Dew Kim">Dew Kim</button>, <button type="button" class="artist" data-a="Jaeha Ban">Jaeha Ban</button>, <button type="button" class="artist" data-a="Chang Younghae">Chang Younghae</button>, <button type="button" class="artist" data-a="Jongwan Jang">Jongwan Jang</button>, <button type="button" class="artist" data-a="Youngkak Cho">Youngkak Cho</button>, <button type="button" class="artist" data-a="Sla Joo">Sla Joo</button>, <button type="button" class="artist" data-a="Kayoung Choi">Kayoung Choi</button>, <button type="button" class="artist" data-a="Che Go Eun">Che Go Eun</button>, <button type="button" class="artist" data-a="Sun Choi">Sun Choi</button>
+    <span class="partner-row">Chong Kun Dang Kochon Foundation, Life Science and Convergence Art Education Program [Bio Odyssey]</span>
   </p>
   <div class="booklink-wrap">
     <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
     <a class="booklink js-works" href="#">Works</a>
-    <a class="booklink js-archive" href="#">Archive Book</a>
+    <a class="booklink js-archive" href="#">Research Note</a>
   </div>
 </section>
 
@@ -383,14 +386,14 @@
   <p class="tx" id="bioTx"></p>
   <div class="foot">
     <a class="booklink js-works" href="#">Works</a>
-    <a class="booklink js-archive" href="#">Archive Book</a>
+    <a class="booklink js-archive" href="#">Research Note</a>
   </div>
 </dialog>
 
 <script>
 (function(){
   /* 주소 두 줄만 바꾸면 탭·버튼이 한꺼번에 연결됩니다 */
-  var ARCHIVE_URL = '#';   /* Archive Book */
+  var ARCHIVE_URL = '#';   /* Research Note */
   var WORKS_URL   = '#';   /* Works (works.html 예정) */
 var BIOS = {
 "Heesoo Kwon": {"ko": "권희수", "tx": "Heesoo Kwon works on Leymusoom, a ritualistic and auto-ethnographic archive project rooted in her own and her family's life, matrilineal genealogies, and Korean mythology. Using digital technology as a tool of creation, she traces ancestral memories to reimagine patriarchal narratives. Begun in 2017, the project is an archive of 3D animation and photography combining analog and digital media—a shrine to Kwon's invented \"autobiographical feminist religion,\" envisioning a utopia where her female ancestors coexist."},

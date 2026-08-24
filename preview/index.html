@@ -36,7 +36,7 @@
   /* 관람 설문 탭 — 포스터 빨강 강조 */
   nav a.red{color:#f0604a;border-color:#f0604a;background:rgba(240,96,74,.15);font-weight:800}
   nav a.red:active{color:#f0604a;border-color:#f0604a}
-  /* 아카이브북 — 페이지 내 섹션 없음(별도 페이지 연결 예정). 다른 탭과 구별되는 초록 반투명 */
+  /* 연구노트 — 페이지 내 섹션 없음(별도 페이지 연결 예정). 다른 탭과 구별되는 초록 반투명 */
 
   section{padding-top:56px;scroll-margin-top:64px}
   #about{padding-top:24px}
@@ -118,13 +118,13 @@
   /* 열린 상태에선 접기 버튼을 글 맨 끝으로 */
   .preface details[open]{display:flex;flex-direction:column}
   .preface details[open] summary{order:99;padding-top:2px}
-  /* 아카이브북 탭 — 원래 색상 복원 */
+  /* 연구노트 탭 — 원래 색상 복원 */
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
-  /* 강조 탭 2개(작품 소개·아카이브북)는 같은 폭 */
+  /* 강조 탭 2개(작품 소개·연구노트)는 같은 폭 */
   nav a.book{width:74.4px;padding-left:0;padding-right:0;text-align:center}
   nav a.book:active{color:var(--accent);border-color:var(--accent)}
 
-  /* 아카이브 북 바로가기 — 상단 탭과 같은 알약 버튼 */
+  /* 연구노트 바로가기 — 상단 탭과 같은 알약 버튼 */
   .booklink-wrap{text-align:center;margin-top:30px}
   #bio .foot .booklink{margin:0 4px}
   .booklink{display:inline-block;font-size:13px;font-weight:800;color:var(--accent);
@@ -174,6 +174,9 @@
   .artist{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;
     border-bottom:1px dashed rgba(58,123,240,.45)}
   .artist:active{color:#eaf1fe;border-bottom-color:#eaf1fe}
+  /* 협력 = 참여작가 목록의 일부(포스터와 동일). 라벨 없이 한 줄 띄워 거리만 둔다.
+     바깥은 block(여백용), 안쪽 .artist는 inline이어야 밑줄이 글자만 감싼다. */
+  .partner-row{display:block;margin-top:.55em}
   .credits-hint{text-align:center;font-size:12px;color:var(--sub);margin-top:10px}
 
   /* 작가 소개 팝업 */
@@ -221,8 +224,8 @@
     <a href="#visit">관람 안내</a>
     <a href="#opening">개막식</a>
     <a href="#program">연계 프로그램</a>
-    <!-- TODO: 아카이브북 페이지 URL(archive.html 예정). 자료 확정되면 href 교체 — 아래 바로가기 버튼과 함께 2곳 -->
-    <a class="book js-archive" href="#">아카이브북</a>
+    <!-- TODO: 연구노트 페이지 URL(archive.html 예정). 자료 확정되면 href 교체 — 아래 바로가기 버튼과 함께 2곳 -->
+    <a class="book js-archive" href="#">연구노트</a>
     <a href="#closing">폐막식</a>
     <a class="red" href="#survey">관람 설문</a>
     <a href="#contact">문의</a>
@@ -243,14 +246,14 @@
   </div>
   <p class="credits">
     <strong>기획</strong> 조주리<br>
-    <strong>참여작가</strong> <button type="button" class="artist" data-a="권희수">권희수</button>, <button type="button" class="artist" data-a="김시흔">김시흔</button>, <button type="button" class="artist" data-a="김재민이">김재민이</button>, <button type="button" class="artist" data-a="듀킴">듀킴</button>, <button type="button" class="artist" data-a="반재하">반재하</button>, <button type="button" class="artist" data-a="장영해">장영해</button>, <button type="button" class="artist" data-a="장종완">장종완</button>, <button type="button" class="artist" data-a="조영각">조영각</button>, <button type="button" class="artist" data-a="주슬아">주슬아</button>, <button type="button" class="artist" data-a="최가영">최가영</button>, <button type="button" class="artist" data-a="최고은">최고은</button>, <button type="button" class="artist" data-a="최선">최선</button><br>
-    <!-- 협력은 button이 아닌 span: button은 inline-block이라 긴 문구가 통째로 줄바꿈·가운데 정렬됨 -->
-    <strong>협력</strong> <span class="artist partner" role="button" tabindex="0" data-a="종근당고촌재단 생명과학융합예술교육 [바이오 오디세이] 정혜정, 사이언스(황준규)">종근당고촌재단 생명과학융합예술교육 [바이오 오디세이] 정혜정, 사이언스(황준규)</span>
+    <strong>참여작가</strong> <button type="button" class="artist" data-a="권희수">권희수</button>, <button type="button" class="artist" data-a="김시흔">김시흔</button>, <button type="button" class="artist" data-a="김재민이">김재민이</button>, <button type="button" class="artist" data-a="듀킴">듀킴</button>, <button type="button" class="artist" data-a="반재하">반재하</button>, <button type="button" class="artist" data-a="장영해">장영해</button>, <button type="button" class="artist" data-a="장종완">장종완</button>, <button type="button" class="artist" data-a="조영각">조영각</button>, <button type="button" class="artist" data-a="주슬아">주슬아</button>, <button type="button" class="artist" data-a="최가영">최가영</button>, <button type="button" class="artist" data-a="최고은">최고은</button>, <button type="button" class="artist" data-a="최선">최선</button>
+    <!-- span이지 button이 아님: button은 inline-block이라 긴 문구가 통째로 줄바꿈된다 -->
+    <span class="partner-row"><span class="artist partner" role="button" tabindex="0" data-a="종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]">종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]</span></span>
   </p>
   <div class="booklink-wrap">
     <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
     <a class="booklink js-works" href="#">전시작품</a>
-    <a class="booklink js-archive" href="#">아카이브북</a>
+    <a class="booklink js-archive" href="#">연구노트</a>
   </div>
 </section>
 
@@ -397,14 +400,14 @@
   <p class="tx" id="bioTx"></p>
   <div class="foot">
     <a class="booklink js-works" href="#">전시작품</a>
-    <a class="booklink js-archive" id="bioArchive" href="#">아카이브북</a>
+    <a class="booklink js-archive" id="bioArchive" href="#">연구노트</a>
   </div>
 </dialog>
 
 <script>
 (function(){
   /* 주소 두 줄만 바꾸면 탭·버튼·팝업이 한꺼번에 연결됩니다 */
-  var ARCHIVE_URL = '#';   /* 아카이브 북 */
+  var ARCHIVE_URL = '#';   /* 연구노트 */
   var WORKS_URL   = '#';   /* 작품 소개 (works.html 예정) */
 
   var BIOS = {
