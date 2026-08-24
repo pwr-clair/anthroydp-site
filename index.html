@@ -1,332 +1,471 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>예술기술도시 《The Anthropologists》</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%233A7BF0'/%3E%3C/svg%3E">
-<meta name="description" content="2026.9.1–9.20 · 문래동2가 21-6 종도빌딩 1F · 예술기술도시 《The Anthropologists》">
-
-<!-- 검색엔진 노출 차단. 재단 홍보 시작할 때 이 두 줄을 지우세요. -->
-<meta name="robots" content="noindex, nofollow">
-<meta name="googlebot" content="noindex, nofollow">
+<title>인류학 연습: 인간은 우리인가? — 전시 안내</title>
+<meta name="description" content="2026.9.1(화)–9.20(일) · 문래동2가 21-6 종도빌딩 1층 · 인류학 연습: 인간은 우리인가?">
 
 <!-- 카카오톡·SNS 공유 미리보기 -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="예술기술도시 《The Anthropologists》">
-<meta property="og:description" content="2026.9.1(화) – 9.20(일) · 문래동2가 21-6 종도빌딩 1F">
+<meta property="og:title" content="인류학 연습: 인간은 우리인가?">
+<meta property="og:description" content="2026.9.1(화) – 9.20(일) · 문래동2가 21-6 종도빌딩 1층">
 <meta property="og:image" content="https://anthroydp.site/posters/poster-1.jpg">
 <meta property="og:url" content="https://anthroydp.site/">
+<meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Gothic+A1:wght@300;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%233A7BF0'/%3E%3C/svg%3E">
 <style>
-:root{
-  --ink:      #1a1713;
-  --zinc:     #fdfcf7;
-  --zinc-dim: #fdfcf7;
-  --steel:    #7d7469;
-  --cyan:     #4a423a;
+  :root{
+    /* 한글판 키컬러: 주조=포스터 초록, 보조=포스터 파랑 (영문판은 보라/빨강) */
+    --bg:#0d0f15; --card:#151a26; --ink:#f0f2f7; --sub:#a0a9c6;
+    --accent:#3a7bf0; --accent-soft:rgba(58,123,240,.14); --line:#27304a;
+    --accent2:#3a7bf0; --accent2-soft:rgba(58,123,240,.16);
+    --todo:#d9a13c; --todo-bg:rgba(217,161,60,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px 80px}
 
-  --gap: clamp(18px, 4vw, 40px);
-}
+  /* 헤더 */
+  header{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:13px;letter-spacing:.12em;color:var(--accent);font-weight:700;margin-bottom:10px}
+  h1{font-size:30px;line-height:1.55;font-weight:800;word-break:keep-all;text-decoration:underline dashed var(--accent) 3px;text-underline-offset:9px}
+  h1 .en{display:block;font-size:15px;font-weight:500;color:var(--sub);margin-top:6px;letter-spacing:.02em}
+  .keyinfo{margin-top:18px;font-size:15px;color:var(--sub)}
+  .keyinfo strong{color:var(--ink)}
 
-*{ box-sizing: border-box; }
+  /* 앵커 내비 */
+  nav{position:sticky;top:0;background:rgba(14,12,23,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+  nav .row{max-width:640px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+  nav .row::-webkit-scrollbar{display:none}
+  nav a{flex:none;font-size:13px;font-weight:600;color:var(--sub);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+  nav a:active{color:var(--accent);border-color:var(--accent)}
+  /* 관람 설문 탭 — 포스터 빨강 강조 */
+  nav a.red{color:#f0604a;border-color:#f0604a;background:rgba(240,96,74,.15);font-weight:800}
+  nav a.red:active{color:#f0604a;border-color:#f0604a}
+  /* 연구노트 — 페이지 내 섹션 없음(별도 페이지 연결 예정). 다른 탭과 구별되는 초록 반투명 */
 
-html{ -webkit-text-size-adjust: 100%; }
+  section{padding-top:56px;scroll-margin-top:64px}
+  #about{padding-top:24px}
+  h2{font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px dashed var(--accent)}
 
-body{
-  margin: 0;
-  background: var(--zinc);
-  color: var(--ink);
-  font-family: 'Gothic A1', system-ui, sans-serif;
-  font-weight: 300;
-  line-height: 1.6;
-}
+  .langswitch{position:absolute;top:20px;right:20px;font-size:12px;font-weight:700;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--card)}
 
-.wrap{
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: var(--gap);
-}
+  /* 전시소개 — 가운데 정렬 타이틀 블록 */
+  .credits{text-align:left;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
+  .credits strong{color:var(--ink);font-weight:700}
 
-/* ---------- 상단 데이터 바 ---------- */
-.databar{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 18px;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--steel);
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 10px;
-}
+  .card{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:12px;color:inherit;text-decoration:none}
+  .card h3{font-size:14.5px;font-weight:700;margin-bottom:4px;word-break:keep-all}
+  .card .meta{font-size:12.5px;color:var(--sub)}
+  .card p{font-size:13px;color:var(--sub);margin-top:8px;word-break:keep-all}
 
-/* ---------- 도판 ---------- */
-.plates{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(11px, 2vw, 21px);
-  padding: clamp(28px, 5vw, 52px) 0;
-}
+  /* 폼 연결 카드 — 카드 전체가 링크 */
+  a.card{position:relative;padding-right:44px}
+  a.card::after{content:"↗";position:absolute;top:20px;right:18px;font-size:15px;font-weight:700;color:var(--accent2)}
+  a.card:active{border-color:var(--accent2)}
+  /* 폼 URL 미연결 상태 표시 — 연결 후 .todo 클래스만 제거 */
+  a.card.todo{border:1.5px dashed var(--todo);background:var(--todo-bg)}
+  a.card.todo::after{color:var(--todo)}
 
-@media (min-width: 720px){
-  .plates{ grid-template-columns: 1fr 1fr; }
-}
+  .deadline{display:inline-block;font-size:11.5px;font-weight:700;color:var(--accent2);background:var(--accent2-soft);border-radius:999px;padding:2px 10px;margin-top:10px}
 
-.plate{ margin: 0; }
+  dl{display:grid;grid-template-columns:88px 1fr;row-gap:10px;font-size:14px}
+  dt{color:var(--sub);font-weight:600;font-size:13px;padding-top:2px}
+  dd{word-break:keep-all}
 
-.plate-frame{
-  padding: 0;
-}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent2-soft);color:var(--accent2);vertical-align:2px;margin-left:6px}
 
-.plate-btn{
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: var(--zinc-dim);
-  cursor: zoom-in;
-  font: inherit;
-  color: inherit;
-}
-.plate-btn:focus-visible{ outline: 3px solid var(--cyan); outline-offset: 4px; }
-
-.plate-btn img{
-  display: block;
-  width: 100%;
-  height: auto;
-  background: var(--zinc-dim);
-}
-
-.plate-btn.is-missing img{ display: none; }
-.plate-btn.is-missing::after{
-  content: "이미지 없음";
-  display: grid;
-  place-items: center;
-  aspect-ratio: 4 / 5;
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  letter-spacing: .1em;
-  color: var(--steel);
-  border: 1px dashed var(--steel);
-}
+  /* 관람 안내 — 줄간격 절반 */
+  #visit dl{row-gap:5px}
 
 
-/* ---------- 정보 ---------- */
-.facts{
-  border-top: 1px solid var(--ink);
-  padding-top: clamp(22px, 4vw, 38px);
-  display: grid;
-  gap: clamp(18px, 3vw, 34px);
-}
-@media (min-width: 720px){
-  .facts{ grid-template-columns: repeat(3, 1fr); }
-}
+  /* 크레딧·연계전시 — 리플렛 지면과 같은 왼쪽 정렬 블록 */
+  .cgroup{margin-bottom:18px}
+  .cgroup:last-child{margin-bottom:0}
+  .cgroup h4{font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:5px}
+  .cgroup p{font-size:13px;line-height:1.8;color:var(--sub);margin:0}
+  .cgroup p + p{margin-top:14px}
+  .cgroup .hl{color:var(--accent)}
 
-.fact dt{
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--cyan);
-  margin-bottom: 8px;
-}
-.fact dd{
-  margin: 0;
-  font-size: clamp(15px, 1.7vw, 17px);
-  font-weight: 500;
-}
-.fact dd small{
-  display: block;
-  font-weight: 300;
-  font-size: 14px;
-  color: var(--steel);
-  margin-top: 3px;
-}
+  /* 크레딧 — 제목 옆 세모로 펼쳤다 접기 (밑줄 점선 없음) */
+  #credit summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;
+    font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink)}
+  #credit summary::-webkit-details-marker{display:none}
+  #credit .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
+  #credit details[open] .tri{transform:rotate(90deg)}
+  #credit{padding-top:18px}
+  #contact .card{margin-bottom:0}
+  #credit .card{margin-top:14px;margin-bottom:0}
 
-.colophon{
-  border-top: 1px solid var(--ink);
-  margin-top: clamp(28px, 5vw, 52px);
-  padding: 16px 0 clamp(30px, 6vw, 60px);
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--steel);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 18px;
-}
+  /* 관람 설문 — 폐막식 버튼 바로 아래에 붙임 */
+  #survey{padding-top:0}
 
-/* ---------- 확대 보기 ---------- */
-.viewer{
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: none;
-  place-items: center;
-  padding: 16px;
-  background: rgba(10,12,13,.94);
-  cursor: zoom-out;
-}
-.viewer[open],
-.viewer.is-open{ display: grid; }
+  /* 문의 — 글씨·행간 축소 */
+  #contact dl{grid-template-columns:84px 1fr;row-gap:5px;font-size:13.5px}
+  #contact dt{font-size:13px;padding-top:1px}
+  /* 문의 — 초록 밑줄 링크 */
+  #contact a.ul{color:var(--accent);text-decoration:underline;text-underline-offset:3px;font-size:12.5px}
+  /* 아직 열리지 않은 링크(#) — 흐리게·클릭 불가 */
+  a.soon{opacity:.45;pointer-events:none}
 
-.viewer img{
-  max-width: 100%;
-  max-height: 92vh;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
+  .sectionnote{font-size:12.5px;color:var(--sub);margin-bottom:14px;word-break:keep-all}
+  footer{margin-top:24px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
+  .map{width:100%;height:220px;border:1px solid var(--line);border-radius:14px;margin-top:12px}
 
-.viewer-close{
-  position: absolute;
-  top: 12px; right: 12px;
-  background: none;
-  border: 1px solid rgba(255,255,255,.5);
-  color: #fff;
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  letter-spacing: .1em;
-  padding: 8px 14px;
-  cursor: pointer;
-}
-.viewer-close:focus-visible{ outline: 3px solid #fff; outline-offset: 3px; }
+  /* 서문 */
+  .preface{margin-top:0;font-size:14.5px;line-height:1.9;color:#d6d2ea;word-break:keep-all;text-align:left}
+  .preface p{margin-bottom:16px}
+  .preface details{margin-top:-4px}
+  .preface summary{list-style:none;cursor:pointer;text-align:center;font-size:14.5px;font-weight:800;color:var(--accent);padding:6px 0 2px}
+  .preface summary::-webkit-details-marker{display:none}
+  .preface summary .less{display:none}
+  .preface details[open] summary .more{display:none}
+  .preface details[open] summary .less{display:inline}
+  /* 열린 상태에선 접기 버튼을 글 맨 끝으로 */
+  .preface details[open]{display:flex;flex-direction:column}
+  .preface details[open] summary{order:99;padding-top:2px}
+  /* 연구노트 탭 — 원래 색상 복원 */
+  nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
+  /* 강조 탭 2개(작품 소개·연구노트)는 같은 폭 */
+  nav a.book{width:74.4px;padding-left:0;padding-right:0;text-align:center}
+  nav a.book:active{color:var(--accent);border-color:var(--accent)}
 
-@media (prefers-reduced-motion: reduce){
-  *{ animation: none !important; transition: none !important; }
-}
+  /* 연구노트 바로가기 — 상단 탭과 같은 알약 버튼 */
+  .booklink-wrap{text-align:center;margin-top:30px}
+  #bio .foot .booklink{margin:0 4px}
+  .booklink{display:inline-block;font-size:13px;font-weight:800;color:var(--accent);
+    text-decoration:none;padding:8px 18px;border-radius:999px;
+    border:1px solid var(--accent);background:var(--accent-soft)}
+  .booklink:active{border-color:#eaf1fe;color:#eaf1fe}
+  .booklink + .booklink{margin-left:6px}
+  .booklink{min-width:104px;text-align:center}
+
+  /* 초록 셀로판 — 검정 위에 초록 필름을 덮은 느낌 */
+  .card.cello{background:rgba(58,123,240,.22);border:1px solid rgba(58,123,240,.7);
+    box-shadow:inset 0 0 22px rgba(58,123,240,.2)}
+  .card.cello h3{color:#eaf1fe}
+  .card.cello .meta{color:#a9c7f7}
+  .card.cello p{color:#a9c7f7}
+  .card.cello .deadline{background:rgba(0,0,0,.35);color:#c6dbfb}
+  a.card.cello::after{color:#7fabf5}
+  a.card.cello:active{border-color:rgba(58,123,240,.95)}
+  /* 폼 미연결 — 같은 초록이되 테두리만 점선(연결되면 todo 클래스만 제거) */
+  a.card.cello.todo{border:1.5px dashed rgba(58,123,240,.6);background:rgba(58,123,240,.10);box-shadow:none}
+  a.card.cello.todo::after{color:#7fabf5}
+  /* 준비 중 — 클릭 불가 */
+  .card.cello.soon{opacity:.5;padding-right:20px;cursor:default}
+
+  /* ZOOM 배지 — 제목 맨 앞. 흰 불투명 바탕 + 스위스 국기 빨강 볼드 */
+  .badge.zoom{background:rgba(255,255,255,.8);color:#da291c;font-weight:800;margin:0 6px 0 0}
+
+  /* 섹션 간격 — 개막식↔연계프로그램, 연계프로그램↔폐막식만 절반으로 */
+  #program, #closing{padding-top:28px}
+
+  /* 관람 설문 — 제목 없는 단독 박스. 투명 초록은 .cello를 그대로 씀 */
+  a.card.survey{text-align:center;padding:24px 22px}
+  a.card.survey::after{content:none}
+  /* 헤드는 전시명·설문 참여 전부 같은 크기 */
+  a.card.survey h3{font-size:14.5px;font-weight:700;line-height:1.55;letter-spacing:0}
+  a.card.survey .ex{font-size:inherit;font-weight:inherit}
+  a.card.survey p{font-size:13.5px;line-height:1.8;margin-top:12px}
+  a.card.survey strong{color:#eaf1fe;font-weight:800}
+  /* 관람 설문 카드 — 상단 '관람 설문' 탭과 같은 포스터 빨강 톤 */
+  a.card.cello.survey{background:rgba(240,96,74,.15);border:1px solid #f0604a;box-shadow:inset 0 0 22px rgba(240,96,74,.18)}
+  a.card.cello.survey h3{color:#ffe9e5}
+  a.card.cello.survey p{color:#f7b3a7}
+  a.card.cello.survey strong{color:#ffe9e5}
+  a.card.cello.survey:active{border-color:#f0604a}
+
+  /* 참여작가 — 누르면 소개 팝업 */
+  .artist{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;
+    border-bottom:1px dashed rgba(58,123,240,.45)}
+  .artist:active{color:#eaf1fe;border-bottom-color:#eaf1fe}
+  /* 협력 = 참여작가 목록의 일부(포스터와 동일). 라벨 없이 한 줄 띄워 거리만 둔다.
+     바깥은 block(여백용), 안쪽 .artist는 inline이어야 밑줄이 글자만 감싼다. */
+  .partner-row{display:block;margin-top:.55em}
+  .credits-hint{text-align:center;font-size:12px;color:var(--sub);margin-top:10px}
+
+  /* 작가 소개 팝업 */
+  /* margin:auto 필수 — 맨 위 *{margin:0} 리셋이 브라우저 기본 가운데정렬을 지워버림.
+     position은 지정하지 말 것(기본 fixed여야 화면 기준 중앙에 뜬다). */
+  #bio{max-width:520px;width:calc(100% - 36px);max-height:80vh;margin:auto;
+    background:var(--card);color:var(--ink);
+    border:1px solid var(--line);border-radius:16px;padding:24px 22px 22px}
+  /* display는 반드시 [open]에만 — 그냥 #bio에 걸면 닫아도 화면에 남는다 */
+  #bio[open]{display:flex;flex-direction:column}
+  /* 소개글이 길면 본문만 스크롤 — 닫기 ✕는 제자리에 고정 */
+  #bio .tx{overflow:auto}
+  #bio::backdrop{background:rgba(0,0,0,.75)}
+  #bio h3{font-size:19px;font-weight:800;word-break:keep-all;padding-right:34px}
+  #bio .en{font-size:13px;color:var(--accent);letter-spacing:.02em;margin-top:3px}
+  #bio .tx{font-size:14.5px;line-height:1.9;color:#d6d2ea;word-break:keep-all;margin-top:16px}
+  #bio .foot{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);text-align:center}
+  #bio .x{position:absolute;top:14px;right:14px;width:30px;height:30px;line-height:1;
+    font-size:14px;color:var(--sub);background:none;border:1px solid var(--line);
+    border-radius:999px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<main class="wrap">
-
-  <div class="databar">
-    <span>2026.09.01 – 09.20</span>
-    <span>12:00 – 20:00</span>
-    <span>월 휴관</span>
-    <span>문래동2가 21-6 종도빌딩 1F</span>
+<header style="position:relative">
+  <a class="langswitch" href="en.html">EN</a>
+  <div class="wrap" style="padding-bottom:0">
+    <div class="eyebrow">2026 예술기술도시</div>
+    <h1>인류학 연습:<br>인간은 우리인가?
+      <span class="en">Doing Anthropology: Are Humans We?</span>
+    </h1>
+    <p class="keyinfo">
+      <strong>2026. 9. 1(화) – 9. 20(일)</strong> · 12:00–20:00<br>
+      월요일 휴관(9/7·9/14) · 무료 관람<br>
+      서울시 영등포구 문래동2가 21-6 (종도빌딩 1층)
+    </p>
   </div>
+</header>
 
-  <!-- 포스터 4종. 파일은 /posters/ 폴더에 넣고, 아래 캡션만 바꾸면 됩니다. -->
-  <section class="plates" aria-label="포스터">
+<nav>
+  <div class="row">
+    <a href="#about">전시 소개</a>
+    <!-- TODO: 작품 소개 페이지 URL(works.html 예정) -->
+    <a class="book js-works" href="#">전시작품</a>
+    <a href="#visit">관람 안내</a>
+    <a href="#opening">개막식</a>
+    <a href="#program">연계 프로그램</a>
+    <!-- TODO: 연구노트 페이지 URL(archive.html 예정). 자료 확정되면 href 교체 — 아래 바로가기 버튼과 함께 2곳 -->
+    <a class="book js-archive" href="#">연구노트</a>
+    <a href="#closing">폐막식</a>
+    <a class="red" href="#survey">관람 설문</a>
+    <a href="#contact">문의</a>
+  </div>
+</nav>
 
-    <figure class="plate">
-      <div class="plate-frame">
-        <button type="button" class="plate-btn" data-full="posters/poster-1.jpg">
-          <img src="posters/poster-1.jpg" alt="포스터 1" loading="eager" decoding="async">
-        </button>
-      </div>
-    </figure>
+<div class="wrap">
 
-    <figure class="plate">
-      <div class="plate-frame">
-        <button type="button" class="plate-btn" data-full="posters/poster-2.jpg">
-          <img src="posters/poster-2.jpg" alt="포스터 2" loading="lazy" decoding="async">
-        </button>
-      </div>
-    </figure>
+<section id="about">
+  <div class="preface">
+    <p>인류학은 낯선 타자를 이해하기 위한 학문으로 시작되었다. 그러나 동시대 예술가들은 탐사의 반경을 타자에 한정하지 않는다. 그들은 자기 자신과 공동체, 비인간적 존재, 그리고 미래적 상상까지를 연구의 장으로 확장하며, 이를 위해 인류학적 관찰과 기록의 방식을 적극적으로 차용한다. 문화인류학의 대표적인 방법론인 민족지(ethnography)는 특정한 시공간의 지정학적 맥락 속에서 공동체의 삶을 가까이 관찰하고, 때로는 그 안에 참여하며 기록하는 실천을 포함한다. 제국주의 시대에 서구가 비서구를 대상으로 발전시켜 온 이 방법론은 오늘날 문명의 전개 방식과 질서가 변화함에 따라 연구 대상과 접근 방식 모두에서 근본적인 전환을 겪고 있다. 가령 지난 세기의 질문인 "인간은 무엇인가"가 진화생물학과 사회과학이 제시한 인간의 정의를 전제로 했다면, 오늘날 "인간은 우리인가?"라는 질문은 그 전제 자체를 흔들며 '우리'의 경계와 질문이 성립하는 조건을 다시 사유하게 만든다.</p>
+    <details>
+      <summary><span class="more">더 읽기 ≫</span><span class="less">접기 ≪</span></summary>
+      <p>문명을 구성해온 자연환경, 도시문화, 기술발전의 세 축은 이제 인류가 발전시킨 인공지능, 새롭게 합성된 물질적 환경, 그리고 그동안 가시화되지 않았던 비인간 존재 및 행성적 조건들과 얽히며 새로운 질서로 재편되고 있다. 팬데믹과 기후위기라는 전지구적 전환점을 거치며 이러한 변화는 더욱 가속화되었고, 예술과 기술의 단순한 결합을 넘어 서로를 조건짓고 변형시키는 동시대 미술 환경의 근본적인 전환을 이끌고 있다. 이번 전시는 이러한 전환의 한가운데에서 예술가를 단순한 문화생산자가 아닌 기술·환경·사회적 조건을 탐사하는 실천적 행위자, 곧 오늘날의 인류학자들Anthropologists로 호명한다. 이들은 더 이상 외부의 타자를 관찰하는 데 머무르지 않는다. 탐사의 반경은 자기 자신과 공동체에 내재한 타자성, 인간 중심적 존재론을 넘어 새롭게 호명되는 비인간 존재와 행성적 조건, 의인화된 기술과 끝없이 증식하는 인공사물들, 그리고 아직 도래하지 않은 미래와 인간의 경험 이전의 시간까지 포함한다.</p>
+      <p>전시 《인류학 연습: 인간은 우리인가?》 Doing Anthropology: Are Humans We?는 지난봄부터 최근까지 이어진 모임과 워크숍을 통해 축적된 예술적 연구와 기술적 협업의 과정을 하나의 시공간으로 응축하고, 그 과정에서 형성된 복잡다단한 인간의 풍경을 드러내는 일시적인 장이다. 참여 예술가들은 자신의 삶과 환경 속에서 채집한 감각과 데이터, 서사, 그리고 기술적 매개를 통해 구축한 시청각적 아카이브를 바탕으로 저마다의 민족지를 구성하고자 하였다. 이러한 예술적 민족지는 단순한 관찰과 기록을 넘어 인공지능 기술과 인터페이스, 데이터 구조와 네트워크를 횡단하는 기술적 조건 속에서 재구성되는 동시대의 분석 언어로 작동한다. 동시에 걷기, 쫓아가기, 말하기, 듣기, 쓰기, 지우기와 같은 가장 근본적인 인간의 행위와 반복 노동을 통해 세계와 자신, 경계 바깥에 대한 이해를 갱신하고자 하였다. 민족적 동질성과 사회적으로 합의된 의미 체계가 강하게 작동하는 한국 사회에서 이러한 접근은 외부를 향한 시선에 머무르지 않고 내부를 다시 관찰하도록 이끈다.</p>
+      <p>이처럼 전시는 오늘날 '인간'이라는 범주를 고정된 정의가 아니라 기술과 환경, 다양한 존재들과의 관계 속에서 끊임없이 재구성되는 과정으로 바라본다. 관객은 이 다층적인 기록과 서사 사이를 이동하며 타인의 경험 속에서 자신의 위치를 되묻고, 미래를 상상하는 과정에서 현재의 조건을 새롭게 사유하게 된다. 전시의 시간에 합류한 우리 모두는 잠시나마 각자의 자리에서 동시대의 인류학자가 되어 자신의 삶과 세계를 다시 관찰하고, '우리'라는 공동체와 '인간'이라는 보편적 명명 사이의 거리를 가늠하는 연습을 하게 될 것이다. 그리고 그 틈에서 그동안 충분히 주목받지 못했던 다양한 행위자들의 궤도와 위상을 다시 추적하며, 끝내는 인간이라는 질문으로 되돌아오게 될 것이다. 어쩌면 인류학을 연습한다는 것은 끝없이 타자를 향해 나아가는 일이 아니라, 그 모든 우회를 거쳐 인간을 다시 낯설게 만나는 일인지도 모른다.</p>
+    </details>
+  </div>
+  <p class="credits">
+    <strong>기획</strong> 조주리<br>
+    <strong>참여작가</strong> <button type="button" class="artist" data-a="권희수">권희수</button>, <button type="button" class="artist" data-a="김시흔">김시흔</button>, <button type="button" class="artist" data-a="김재민이">김재민이</button>, <button type="button" class="artist" data-a="듀킴">듀킴</button>, <button type="button" class="artist" data-a="반재하">반재하</button>, <button type="button" class="artist" data-a="장영해">장영해</button>, <button type="button" class="artist" data-a="장종완">장종완</button>, <button type="button" class="artist" data-a="조영각">조영각</button>, <button type="button" class="artist" data-a="주슬아">주슬아</button>, <button type="button" class="artist" data-a="최가영">최가영</button>, <button type="button" class="artist" data-a="최고은">최고은</button>, <button type="button" class="artist" data-a="최선">최선</button>
+    <!-- span이지 button이 아님: button은 inline-block이라 긴 문구가 통째로 줄바꿈된다 -->
+    <span class="partner-row"><span class="artist partner" role="button" tabindex="0" data-a="종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]">종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]</span></span>
+  </p>
+  <div class="booklink-wrap">
+    <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
+    <a class="booklink js-works" href="#">전시작품</a>
+    <a class="booklink js-archive" href="#">연구노트</a>
+  </div>
+</section>
 
-    <figure class="plate">
-      <div class="plate-frame">
-        <button type="button" class="plate-btn" data-full="posters/poster-3.jpg">
-          <img src="posters/poster-3.jpg" alt="포스터 3" loading="lazy" decoding="async">
-        </button>
-      </div>
-    </figure>
+<section id="visit">
+  <!-- 헤더 부제와 중복이나 가장 많이 볼 정보라 유지 — 추후 결정(홀드) -->
+  <h2>관람 안내</h2>
+  <div class="card">
+    <dl>
+      <dt>기간</dt><dd>2026. 9. 1(화) – 9. 20(일)</dd>
+      <dt>시간</dt><dd>12:00 – 20:00</dd>
+      <dt>휴관</dt><dd>매주 월요일 (9/7, 9/14)</dd>
+      <dt>관람료</dt><dd>무료</dd>
+      <dt>장소</dt><dd>서울시 영등포구 문래동2가 21-6 (종도빌딩 1층)</dd>
+    </dl>
+    <iframe class="map" src="https://maps.google.com/maps?q=37.5123849,126.8944350+(%EC%A2%85%EB%8F%84%EB%B9%8C%EB%94%A9)&z=17&output=embed" loading="lazy" title="오시는 길"></iframe>
+  </div>
+</section>
 
-    <figure class="plate">
-      <div class="plate-frame">
-        <button type="button" class="plate-btn" data-full="posters/poster-4.jpg">
-          <img src="posters/poster-4.jpg" alt="포스터 4" loading="lazy" decoding="async">
-        </button>
-      </div>
-    </figure>
+<section id="opening">
+  <h2>개막식</h2>
+  <a class="card cello" href="https://forms.gle/3jpuDhaAFKGVBsLa7" target="_blank" rel="noopener">
+    <h3>개막식 「질문을 질문하기」</h3>
+    <div class="meta">9. 1(화) 16:00 · 전시장</div>
+    <span class="deadline">RSVP 마감 8. 30(일)</span>
+  </a>
+</section>
 
-  </section>
+<section id="program">
+  <h2>전시연계 프로그램 · 크로스토크</h2>
+  <p class="sectionnote">카드를 누르면 신청 페이지로 연결됩니다.<br><strong style="color:var(--accent)">각 프로그램 정원 15명(선착순)</strong>, 1회 최대 4명까지 신청 가능합니다. 전 프로그램 무료.</p>
 
-  <dl class="facts">
-    <div class="fact">
-      <dt>기간</dt>
-      <dd>2026.9.1(화) – 9.20(일)<small>개막 9.1(화) 16:00</small></dd>
+  <a class="card cello" href="https://forms.gle/kSAgtHG3iK7CMWjR8" target="_blank" rel="noopener">
+    <h3>클릭! 영등포 테크노 엇박자와 낙서의 영혼</h3>
+    <div class="meta">9. 16(수) 18:00 · 김재민이(작가) × 정다혜</div>
+  </a>
+  <a class="card cello" href="https://forms.gle/bbqGPKnuFb1zwNKBA" target="_blank" rel="noopener">
+    <h3>온 보드 — 불러보지 못한 이름과 열어보지 못한 기억을 항해하기</h3>
+    <div class="meta">9. 16(수) 19:00 · 최가영(작가) × 최선(작가)</div>
+  </a>
+  <a class="card cello" href="https://forms.gle/MWWiMaJCLCqVmhyL8" target="_blank" rel="noopener">
+    <h3><span class="badge zoom">ZOOM</span>버추얼 퍼포먼스: 오렌지 방과 함께 일하기</h3>
+    <div class="meta">9. 17(목) 12:00 · 권희수(작가) × 조주리(기획자) · 온라인 링크 추후 전달</div>
+  </a>
+  <a class="card cello" href="https://forms.gle/3jTBzap37a5n7xvT8" target="_blank" rel="noopener">
+    <h3>장소는 몇 번이나 읽힐 수 있을까?</h3>
+    <div class="meta">9. 18(금) 17:00 · 주슬아(작가) × 임석호(기획자)</div>
+  </a>
+  <a class="card cello" href="https://forms.gle/9h3y4DNPPfre9qNZ8" target="_blank" rel="noopener">
+    <h3>위성적 우려가 도착하기 전에</h3>
+    <div class="meta">9. 18(금) 18:00 · 반재하(작가) × 소피 연희 킴(정치학·국제관계 연구자)</div>
+  </a>
+  <a class="card cello" href="https://forms.gle/GDXfCvRxmWkD4iWG8" target="_blank" rel="noopener">
+    <h3>날아가는 골프공을 어떻게 볼 수 있을까?</h3>
+    <div class="meta">9. 19(토) 15:00 · 장영해(작가) × 양효실(미학자·비평가)</div>
+  </a>
+  <a class="card cello" href="https://forms.gle/dVYAckTt3bYA1cX89" target="_blank" rel="noopener">
+    <h3>엇갈리는 진술: 사물, 기술, 신체, 장소</h3>
+    <div class="meta">9. 19(토) 16:00 · 조영각(작가) × 김시흔(작가) × 최고은(작가)</div>
+  </a>
+  <a class="card cello" href="https://forms.gle/6ZtvSm4JzybAvKAJ9" target="_blank" rel="noopener">
+    <h3>연구를 연구하기</h3>
+    <div class="meta">9. 20(일) 18:00 · 조주리(기획자) × 이연지(에디터)</div>
+  </a>
+
+  <div class="card" style="background:var(--bg)">
+    <h3 style="font-size:14px">Notice</h3>
+    <p>모든 프로그램은 무료로 진행되나, 사전 신청자에게 먼저 좌석을 안내드리며, 상황에 따라 현장 관람객도 참여하실 수 있도록 안내할 예정입니다. 사전신청 후 부득이 참석이 어려울 경우 예약 취소를 부탁드립니다. 천재지변 및 주최측의 사정에 따라 프로그램의 일정과 내용에 변동이 있을 경우, 문화도시 영등포 공식 SNS(@cultural_city_ydp)를 통해 사전 고지하도록 하겠습니다.</p>
+  </div>
+</section>
+
+<section id="closing">
+  <h2>폐막식</h2>
+  <!-- 임시 폐쇄. RSVP 오픈 시 이 span을 아래 a로 교체하고 soon 클래스만 지우면 됨:
+       <a class="card cello" href="https://forms.gle/JLT7e61i46Gpqabp7" target="_blank" rel="noopener"> ... </a> -->
+  <span class="card cello soon">
+    <h3>폐막식 「D.C: 맨 처음으로 다시」</h3>
+    <div class="meta">9. 20(일) 19:00 · 전시장</div>
+    <span class="deadline">RSVP는 9월 15일 이후 오픈됩니다</span>
+  </span>
+</section>
+
+<section id="survey">
+  <a class="card cello survey" href="https://forms.gle/7tScAANZycqissXh6" target="_blank" rel="noopener">
+    <h3><span class="ex">《인류학 연습: 인간은 우리인가?》</span> 설문 참여</h3>
+    <p>전시를 관람하셨다면 3분만 내어 의견을 들려주세요.<br>참여해주시면 🇨🇭&nbsp;스위스&nbsp;메이드 <strong>PIGRA&nbsp;볼펜</strong>을 드립니다.</p>
+  </a>
+</section>
+
+<section id="contact">
+  <h2>문의</h2>
+  <div class="card">
+    <dl>
+      <dt>인스타그램</dt><dd><a href="https://instagram.com/cultural_city_ydp" target="_blank" rel="noopener" style="color:#f0604a">@cultural_city_ydp</a></dd>
+      <dt>단체 관람</dt><dd><a href="mailto:chae42@ydpcf.or.kr" style="color:#f0604a">chae42@ydpcf.or.kr</a> <span style="color:var(--sub)">·</span> <a href="tel:0226342217" style="color:#f0604a">02-2634-2217</a></dd>
+      <dt>프레스·홍보</dt><dd><a href="mailto:chwnyang@gmail.com" style="color:#f0604a">chwnyang@gmail.com</a> <span style="color:var(--sub)">·</span> <a href="posters.html" class="ul">보도자료 안내</a></dd>
+    </dl>
+  </div>
+</section>
+
+<section id="credit">
+  <details class="fold">
+    <summary><span class="tri">►</span>크레딧</summary>
+  <div class="card creditbox">
+    <div class="cgroup">
+      <h4>영등포문화재단</h4>
+      <p>대표이사 | 이건왕</p>
     </div>
-    <div class="fact">
-      <dt>관람</dt>
-      <dd>12:00 – 20:00<small>월요일 휴관 (9/7, 9/14)</small></dd>
+    <div class="cgroup">
+      <h4>영등포문화도시센터</h4>
+      <p>문화도시센터장 | 김지훈<br>문화도시기획팀 | 문유석<br>문화도시기획팀 | 변채린</p>
     </div>
-    <div class="fact">
-      <dt>장소</dt>
-      <dd>문래동2가 21-6 종도빌딩 1F<small>서울시 영등포구</small></dd>
+    <div class="cgroup">
+      <h4>기획</h4>
+      <p>큐레이터 | 조주리<br>에디터 | 이연지</p>
     </div>
-  </dl>
+    <div class="cgroup">
+      <h4>참여작가</h4>
+      <p>권희수, 김시흔, 김재민이, 듀킴, 반재하, 장영해, 장종완, 조영각, 주슬아, 최가영, 최고은, 최선, 종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]</p>
+    </div>
+    <div class="cgroup">
+      <h4>전시 운영</h4>
+      <p>대행사 | (주)프럼에이<br>운영 | 조아라<br>홍보 | 양채원</p>
+      <p>그래픽 디자인 | 물질과비물질<br>공간조성 | 띵크앤메이크<br>영상 촬영 및 편집 | 높이와넓이</p>
+    </div>
+    <div class="cgroup">
+      <p>주최·주관 | 영등포구, 영등포문화재단, 영등포문화도시센터<br>협력 | 종근당고촌재단, 종도빌딩</p>
+    </div>
+  </div>
+  </details>
+</section>
 
-  <footer class="colophon">
-    <span>anthroydp.site</span>
-  </footer>
+<footer>
+  <a href="https://www.ydp.go.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">영등포구</a> · <a href="https://www.ydpcf.or.kr" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">영등포문화재단</a> · <a href="https://www.ydpcf.or.kr/culture_city/culture_city.do" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">문화도시 영등포</a> <!-- TODO: 주최/주관/후원 역할 표기 최종 확인 --><br>
+  ©2026 예술기술도시 《인류학 연습: 인간은 우리인가?》<br>
+  by Workswork co., ltd.
+</footer>
 
-</main>
-
-<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="포스터 크게 보기">
-  <button type="button" class="viewer-close" id="viewerClose">닫기 ESC</button>
-  <img id="viewerImg" src="" alt="">
 </div>
+
+<dialog id="bio">
+  <button type="button" class="x" id="bioX" aria-label="닫기">✕</button>
+  <h3 id="bioName"></h3>
+  <div class="en" id="bioEn"></div>
+  <p class="tx" id="bioTx"></p>
+  <div class="foot">
+    <a class="booklink js-works" href="#">전시작품</a>
+    <a class="booklink js-archive" id="bioArchive" href="#">연구노트</a>
+  </div>
+</dialog>
 
 <script>
 (function(){
-  var viewer   = document.getElementById('viewer');
-  var viewerImg= document.getElementById('viewerImg');
-  var closeBtn = document.getElementById('viewerClose');
-  var lastFocus= null;
+  /* 주소 두 줄만 바꾸면 탭·버튼·팝업이 한꺼번에 연결됩니다 */
+  var ARCHIVE_URL = '#';   /* 연구노트 */
+  var WORKS_URL   = '#';   /* 작품 소개 (works.html 예정) */
 
-  // 이미지가 아직 없을 때 깨진 아이콘 대신 자리 표시
-  Array.prototype.forEach.call(document.querySelectorAll('.plate-btn img'), function(img){
-    img.addEventListener('error', function(){
-      img.parentNode.classList.add('is-missing');
+  var BIOS = {
+"권희수": {"en": "Heesoo Kwon", "tx": "권희수는 자신과 가족의 삶, 여성 계보, 한국 신화를 바탕으로 의례적이고 자기민족지적인 아카이브 작업 레이무숨을 이어가고 있다. 디지털 기술을 도구 삼아 조상의 기억을 따라가며 가부장적 서사를 낯설게 재해석한다. 2017년 시작된 이 프로젝트는 아날로그와 디지털 매체를 결합한 3D 애니메이션과 사진 아카이브로, 작가가 창안한 '자전적 페미니즘 종교'의 신전이자 여성 조상들이 공존하는 유토피아를 그린다."},
+"김시흔": {"en": "Siheun Kim", "tx": "김시흔은 타자화된 몸과 액체적 매개체의 조형 언어를 바탕으로, 기술이 세계를 감지하고 번역하는 동시대의 조건을 탐구한다. 실제 장소 리서치를 통하여 생태적, 역사적 흔적을 수집하고 게임엔진 기반 영상, 3D 프린팅, 센서와 키네틱 시스템을 통하여 재구성한다. 작가는 이러한 요소들이 결합된 영상-조형 복합 장치인 Dispositif 를 통하여 몸과 장소, 비인간의 시간이 하나의 이미지나 정보로 완전히 환원되지 않고 남는 상태를 감각화한다."},
+"김재민이": {"en": "Gemini Kim", "tx": "김재민이는 서울, 그 중에서도 수도의 일부 지역 중심 위주 사고 방식에 피해 의식을 가졌지만 누구보다 서울 중심에 살고 싶어하는 인천 출신 예술 창작자라고 스스로를 설명한다. 작가는 변두리라는 화두를 내세워 지역의 변화를 추적하는 프로젝트를 진행했고, 변두리 멘탈을 연구하는 대한소인협회를 만들어 활동중이다. 언제나 주변부의 이야기를 중심으로 끌어오고 싶어한다."},
+"듀킴": {"en": "Dew Kim", "tx": "듀킴은 종교와 퀴어성, 포스트휴먼적 정체성이 충돌하는 자리에서 신체를 탐구한다. 그는 몸을 고정된 형상이 아니라 믿음과 저항, 변형이 만나는 장소로 다루며, 취약성과 욕망, 그리고 스스로 선택하지 않은 역사를 몸이 어떻게 떠안는지를 묻는다. 조각, 설치, 퍼포먼스를 오가며 헌신과 규율, 갈망의 몸짓 속에서 권력이 어떻게 작동하는지를 살핀다. 샤먼 되기, 아이돌 되기와 같은 '되기'의 수행을 통해 대중문화의 미학과 의례적 상징을 엮어, 쾌락과 취약성이 맞닿는 연극적 공간을 만든다."},
+"반재하": {"en": "Jaeha Ban", "tx": "반재하는 시스템이 오작동하는 지점을 작업의 재료로 삼는다. 작업은 일상적 사물과 사건에 내재한 유통, 기술, 분단의 흔적을 발견하고 관찰하는 리서치를 동반한다. 유통과 기술이 만들어내는 동시적인 흐름과 한반도의 분단 체제가 만들어낸 비동시적인 조건을 교차시키는 퍼포먼스, 설치, 영상 작업을 해왔다. 시스템이 오작동하는 지점을 새로운 감각이 촉발되는 장으로 만들고자 한다."},
+"장영해": {"en": "Chang Younghae", "tx": "장영해는 폭력과 욕망이 어떤 기술을 통해 변형되고 왜곡되는가 하는 구조에 관심을 두고, 영상, 퍼포먼스, 설치 등의 작업을 한다. 그에게 몸은 기술을 통해 변형되고 재구성 되는 대상으로 존재하고, AI, 카메라, X-ray와 같은 매체적 장치를 활용해 신체를 이미지로 변환하거나, 그것을 분절하고 사물화하는 과정을 주목한다."},
+"장종완": {"en": "Jongwan Jang", "tx": "장종완은 이기적인 합리성을 강조하는 인간 중심의 사회와 현대 인류의 끝없는 불안함을 특유의 따뜻하지만, 냉소적인 시각으로 그려내고 있다. 고전적인 방식으로 그려진 그의 회화는 표면 위를 가로지르는 작가의 현대사회에 대한 시각과 뒤섞여 펼쳐진다. 아이러니한 풍경은 동물 가죽 뒷면에 그려짐으로써 그 키치함이 극대화되는데, 그가 그려낸 화면 속 세상에는 구원에 대한 인간의 바람, 외면당한 자연과 동물, 맹목적이며 광기 어린 믿음이 뒤섞여있다."},
+"조영각": {"en": "Youngkak Cho", "tx": "조영각은 미디어 아트, 인공지능, 디자인을 가로지르며 활동하는 작가다. 지난 10여 년에 걸쳐 인공지능을 작업의 도구가 아니라 조건으로 다루는 방법을 탐구해 왔으며, 최근에는 생성 중심의 작업에서 인공지능의 인프라적 조건 자체를 주제로 삼는 방향으로 작업을 이동시키고 있다."},
+"주슬아": {"en": "Sla Joo", "tx": "주슬아는 ‘분열’과 ‘변형’이라는 주제에 관심을 두고, 애니메이션과 문학에서 받은 영향을 작업으로 풀어낸다. 작가는 주로 몸을 변형하고 자아를 해체하며 새로운 정체성을 구축하는 이야기에 매료되어 왔다. 이러한 서사는 파편화된 자아와 혼란을 통해 현대 사회에서 개인의 정체성이 어떻게 균열되고 재구성되는지를 질문하게 한다. 주로 다양한 매체를 활용하여 매체 간의 전이를 실험하고, 이 과정에서 의도적 오류를 만들어낸다. 이를 통해 정체성의 붕괴와 재구성 과정에서 발생하는 공포와 변형을 시각적으로 탐구하며, 새로운 형태의 서사를 발생시킨다."},
+"최가영": {"en": "Kayoung Choi", "tx": "최가영은 지금 이곳에 실재하는 대상을 단서 삼아, 경험해본 적 없는 시간과 장소에 관한 기억과 상상을 추적한다. 대상을 수집하고, 본래 놓여 있던 자리를 찾아가고, 그에 얽힌 역사와 개인의 기억을 좇아 이동한다. 멀리 떨어진 좌표에 자신을 위치시키고 다시 이쪽을 바라보는 이 현장 리서치는, 서로 맞붙을 수 없던 시공간의 지도를 접고 말아서 새로운 궤적을 그린다. 타인과 자신, 과거와 현재 사이에 비례식을 세우며, 지금의 우리를 향한 질문을 회화·영상·설치·퍼포먼스로 표현한다."},
+"최고은": {"en": "Che Go Eun", "tx": "최고은은 한국화를 전공한 후 유럽으로 근거지를 옮겨 지난 10년간 주로 디지털 이미지를 생산하는 작업을 해왔다. 작가는 디지털 콜라주, 3D 모델링, 로봇 드로잉, VR, AI 이미지 등 컴퓨터 기술과 전통 회화를 결합함으로써 페인터가 이미지 생성장치기술과 형성하는 일종의 존재론적 연결과 분절을 고민하여 회화의 확장 가능성을 실험한다. 사랑, 비디오 게임, 뷰티, 설화, 종교 속에 등장하는 여성 서사로부터 영감을 얻고, 이로부터 출발하여 다양한 이미지를 만들어내는 작업을 해나가는 중이다."},
+"최선": {"en": "Sun Choi", "tx": "최선은 자신이 살아가는 사회에서 발생한 사건의 물질적 흔적을 미술의 재료로 전환한다. 거리 위에 남겨진 침, 살처분되어 매립된 돼지 사체에서 스며 나온 기름, 쓰레기 침전 오수의 거품, 경찰의 시위 진압용 캡사이신 등 사회적 사건을 통과한 물질들을 작품의 재료로 사용하며, 인위적인 붓질을 최대한 배제한 '그리지 않은 그림'을 구현한다. 물질의 변용을 통해 사회적 현실을 예술적 의미로 전환하는 그의 작업은 평면 회화를 넘어 영상, 사운드, 공간 설치 등 다양한 매체를 가로지르며 확장되고 있다."}
+  };
+
+  var dlg = document.getElementById('bio');
+
+  Array.prototype.forEach.call(document.querySelectorAll('.artist'), function(b){
+    b.addEventListener('click', function(){
+      var name = b.getAttribute('data-a');
+      /* 협력 기관은 소개글이 없으므로 이름 + 작품 소개 버튼만 */
+      var partner = b.classList.contains('partner');
+      var d = partner ? {en:'', tx:''} : BIOS[name];
+      if (!d) return;
+      document.getElementById('bioTx').style.display = partner ? 'none' : '';
+      document.getElementById('bioArchive').style.display = partner ? 'none' : '';
+      document.getElementById('bioName')[partner ? 'innerHTML' : 'textContent'] = name;
+      document.getElementById('bioEn').textContent   = d.en;
+      document.getElementById('bioTx').textContent   = d.tx;
+      dlg.showModal();
+    });
+    if (b.tagName === 'SPAN') b.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); }
     });
   });
 
-  function open(src, alt){
-    viewerImg.src = src;
-    viewerImg.alt = alt || '';
-    viewer.classList.add('is-open');
-    lastFocus = document.activeElement;
-    closeBtn.focus();
-    document.body.style.overflow = 'hidden';
-  }
+  document.getElementById('bioX').addEventListener('click', function(){ dlg.close(); });
+  /* 바깥쪽(어두운 배경)을 탭하면 닫기 */
+  dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
 
-  function close(){
-    viewer.classList.remove('is-open');
-    viewerImg.src = '';
-    document.body.style.overflow = '';
-    if (lastFocus) lastFocus.focus();
-  }
-
-  Array.prototype.forEach.call(document.querySelectorAll('.plate-btn'), function(btn){
-    btn.addEventListener('click', function(){
-      if (btn.classList.contains('is-missing')) return;
-      var img = btn.querySelector('img');
-      open(btn.getAttribute('data-full'), img ? img.alt : '');
+  [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL]].forEach(function(pair){
+    if (pair[1] === '#') { Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){ a.classList.add('soon'); }); return; }
+    Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
+      a.href = pair[1];
+      if (pair[1].indexOf('http') === 0) { a.target = '_blank'; a.rel = 'noopener'; }
     });
-  });
-
-  viewer.addEventListener('click', function(e){
-    if (e.target === viewer || e.target === closeBtn) close();
-  });
-
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && viewer.classList.contains('is-open')) close();
   });
 })();
 </script>
-
 </body>
 </html>
