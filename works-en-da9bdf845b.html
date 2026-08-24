@@ -1,0 +1,363 @@
+<!doctype html>
+<!-- 영문 작품 페이지: 작가명·작가 소개만 공식 영문(시트). 작품 제목은 원제 그대로, 캡션·해설은 공식 영문 번역 수신 전까지 비워둠(임의 번역 금지 — 클라라 지시 2026-08-22) -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 비공개 페이지: 주소를 아는 사람만. 검색 노출 차단 -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<title>Works — Doing Anthropology: Are Humans We?</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%233A7BF0'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0e0c17; --card:#17142a; --ink:#f2f0fa; --sub:#a7a1c9;
+    --accent:#7d6df2; --accent-soft:rgba(125,109,242,.14); --line:#2b2545;
+    --accent2:#3a7bf0; --accent2-soft:rgba(58,123,240,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px 80px}
+
+  header{position:relative;padding:56px 0 28px;border-bottom:1px solid var(--line)}
+  .langswitch{position:absolute;top:20px;right:20px;font-size:12px;font-weight:700;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--card)}
+  .eyebrow{font-size:13px;letter-spacing:.12em;color:var(--accent);font-weight:700;margin-bottom:10px}
+  h1{font-size:30px;line-height:1.55;font-weight:800;word-break:keep-all;text-decoration:underline dashed var(--accent) 3px;text-underline-offset:9px}
+  h1 .en{display:block;font-size:15px;font-weight:500;color:var(--sub);margin-top:6px;letter-spacing:.02em}
+  .keyinfo{margin-top:18px;font-size:15px;color:var(--sub)}
+  .keyinfo strong{color:var(--ink)}
+
+  /* 앵커 내비 — 안내 페이지와 동일 */
+  nav{position:sticky;top:0;background:rgba(14,12,23,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+  nav .row{max-width:640px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+  nav .row::-webkit-scrollbar{display:none}
+  nav a{flex:none;font-size:13px;font-weight:600;color:var(--sub);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+  nav a:active{color:var(--accent);border-color:var(--accent)}
+  /* 관람 설문 탭 — 포스터 빨강 강조 */
+  nav a.red{color:#f0604a;border-color:#f0604a;background:rgba(240,96,74,.15);font-weight:800}
+  nav a.red:active{color:#f0604a;border-color:#f0604a}
+  nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800;
+    min-width:74.4px;white-space:nowrap;text-align:center}
+
+  section{padding-top:44px}
+  h2{font-size:15px;font-weight:800;letter-spacing:.06em;margin-bottom:12px}
+
+  /* 플로어 플랜 — 도면 위 번호를 눌러 작품으로 이동 */
+  .planwrap{position:relative;border:1px solid var(--line);border-radius:14px;background:#000;overflow:hidden}
+  .plan{width:100%;display:block}
+  .pin{position:absolute;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:999px;
+    display:grid;place-items:center;font-size:10px;font-weight:800;text-decoration:none;
+    color:var(--accent);border:1px solid var(--accent);background:rgba(125,109,242,.18)}
+  .pin:active{color:var(--bg);background:var(--accent)}
+  /* 번호 아래 작가명 */
+  .pin::after{content:attr(data-name);position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    margin-top:2px;white-space:nowrap;font-size:10px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+  @media (max-width:420px){ .pin{width:16px;height:16px;font-size:9px} .pin::after{font-size:9px} }
+  .plannote{font-size:12.5px;color:var(--sub);margin-top:10px;text-align:center}
+
+  /* 작품 */
+  .work{padding-top:42px;scroll-margin-top:64px}
+  .work + .work{border-top:1px solid var(--line);margin-top:42px;padding-top:34px}
+  .wnum{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--accent)}
+  .work h3{font-size:17px;font-weight:800;margin-top:4px;word-break:keep-all}
+  .wtitle{font-size:14.5px;font-weight:700;color:var(--ink);margin-top:2px;word-break:keep-all}
+  .wcap{font-size:12.5px;color:var(--sub);margin-top:6px;word-break:keep-all;line-height:1.7}
+  figure{margin:16px 0 0}
+  figure img{width:100%;display:block;border-radius:12px;background:var(--card)}
+  figure img + img{margin-top:8px}
+  /* 세로로 긴 이미지는 높이 기준으로 줄여 가운데 정렬 */
+  figure.tall img{width:auto;max-width:100%;max-height:62vh;margin:0 auto}
+  /* 두 점을 좌우로 나란히 */
+  figure.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+  figure.pair img + img{margin-top:0}
+  figure.pair figcaption{grid-column:1 / -1}
+  figcaption{font-size:12px;color:var(--sub);margin-top:8px;text-align:center;word-break:keep-all}
+  .wtx{font-size:14.5px;line-height:1.9;color:#d6d2ea;margin-top:16px;word-break:keep-all}
+
+  /* 작가 소개 접기 */
+  details.bio{margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
+  details.bio summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:7px;
+    font-size:13px;font-weight:800;color:var(--ink)}
+  details.bio summary::-webkit-details-marker{display:none}
+  details.bio .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
+  details.bio[open] .tri{transform:rotate(90deg)}
+  details.bio p{font-size:13.5px;line-height:1.85;color:var(--sub);margin-top:10px;word-break:keep-all}
+
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
+  footer a{color:inherit;text-decoration:none}
+
+  /* 확대 보기 */
+  #zoom{max-width:none;width:100%;height:100%;max-height:100%;margin:0;border:0;padding:0;
+    background:rgba(0,0,0,.94)}
+  #zoom[open]{display:grid;place-items:center}
+  #zoom::backdrop{background:rgba(0,0,0,.94)}
+  #zoom img{max-width:96vw;max-height:92vh;object-fit:contain}
+  /* 맨 위로 */
+  #totop{position:fixed;right:16px;bottom:70px;width:44px;height:44px;border-radius:999px;
+    font-size:17px;font-weight:800;color:var(--bg);background:var(--accent);border:0;
+    cursor:pointer;opacity:0;pointer-events:none;transition:opacity .18s;z-index:20;
+    box-shadow:0 4px 14px rgba(0,0,0,.45)}
+  #totop.on{opacity:.92;pointer-events:auto}
+
+  #zoomX{position:fixed;top:14px;right:14px;width:34px;height:34px;font-size:15px;
+    color:#fff;background:none;border:1px solid rgba(255,255,255,.5);border-radius:999px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="langswitch" href="exhibition-works.html">한국어</a>
+  <div class="wrap" style="padding-bottom:0">
+    <div class="eyebrow">2026 ART &amp; TECHNOLOGY CITY</div>
+    <h1>Doing Anthropology:<br>Are Humans We?
+      <span class="en">인류학 연습: 인간은 우리인가?</span>
+    </h1>
+    <p class="keyinfo">
+      <strong>Sept 1 (Tue) – Sept 20 (Sun), 2026</strong> · 12:00–20:00<br>
+      Closed Mondays (9/7, 9/14) · Free admission<br>
+      1F, Jongdo Building, 21-6, Mullae-dong 2-ga, Yeongdeungpo-gu, Seoul
+    </p>
+  </div>
+</header>
+
+<nav>
+  <div class="row">
+    <a href="exhibition-guide-en.html#about">About</a>
+    <a class="book" href="#plan">Works</a>
+    <a href="exhibition-guide-en.html#visit">Visit</a>
+    <a href="exhibition-guide-en.html#opening">Opening</a>
+    <a href="exhibition-guide-en.html#program">Programs</a>
+    <!-- TODO: 아카이브북 페이지 URL -->
+    <a class="book" href="#">Archive Book</a>
+    <a href="exhibition-guide-en.html#closing">Closing</a>
+    <a class="red" href="exhibition-guide-en.html#survey">Survey</a>
+    <a href="exhibition-guide-en.html#contact">Contact</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="plan" style="scroll-margin-top:64px">
+  <h2>Floor Plan</h2>
+  <div class="planwrap">
+    <img class="plan" src="works-assets/floorplan.png" alt="Floor plan">
+      <a class="pin" href="#w1" data-name="Che Go Eun" style="left:23.7%;top:15.0%">1</a>
+      <a class="pin" href="#w2" data-name="Chang Younghae" style="left:72.0%;top:8.2%">2</a>
+      <a class="pin" href="#w3" data-name="Sla Joo" style="left:85.3%;top:23.1%">3</a>
+      <a class="pin" href="#w4" data-name="Youngkak Cho" style="left:64.8%;top:33.0%">4</a>
+      <a class="pin" href="#w5" data-name="Kayoung Choi" style="left:85.3%;top:57.4%">5</a>
+      <a class="pin" href="#w6" data-name="Siheun Kim" style="left:85.3%;top:77.7%">6</a>
+      <a class="pin" href="#w7" data-name="Heesoo Kwon" style="left:72.0%;top:88.3%">7</a>
+      <a class="pin" href="#w8" data-name="Jongwan Jang" style="left:32.6%;top:88.3%">8</a>
+      <a class="pin" href="#w9" data-name="[Bio Odyssey]" style="left:26.5%;top:77.7%">9</a>
+      <a class="pin" href="#w10" data-name="Jaeha Ban" style="left:40.3%;top:64.1%">10</a>
+      <a class="pin" href="#w11" data-name="Gemini Kim" style="left:19.5%;top:52.4%">11</a>
+      <a class="pin" href="#w12" data-name="Dew Kim" style="left:31.7%;top:40.8%">12</a>
+      <a class="pin" href="#w13" data-name="Sun Choi" style="left:42.7%;top:37.5%">13</a>
+  </div>
+  <p class="plannote">Tap a number to jump to the work.</p>
+</section>
+
+<article id="w1" class="work">
+  <div class="wnum">01</div>
+  <h3>Che Go Eun</h3>
+  <div class="wtitle">〈나는 전기양의 꿈을 꾸는가?〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure class="tall">
+    <img src="works-assets/w01.jpg" alt="Che Go Eun, Do I Dream of Electric Sheep?" loading="lazy" data-zoom>
+    <figcaption><!-- TODO: 공식 영문 캡션 --></figcaption>
+  </figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Che Go Eun</summary>
+    <p>After training in Korean painting, Che Go relocated to Europe, where she has spent the past decade working primarily with digital imagery. By combining traditional painting with computational technologies including digital collage, 3D modeling, robotic drawing, virtual reality, and AI-generated images, she investigates the ontological connections and ruptures that emerge between the painter and image-generating technologies, while exploring the expanded possibilities of painting as a medium. Drawing inspiration from female narratives found in love, video games, beauty culture, folklore, and religion, she develops works that generate new visual imaginaries from these diverse sources.</p>
+  </details>
+</article>
+
+<article id="w2" class="work">
+  <div class="wnum">02</div>
+  <h3>Chang Younghae</h3>
+  <div class="wtitle"><em>Grass, Oxygen, Light, Friends</em></div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure><img src="works-assets/w02.jpg" alt="Chang Younghae, Grass, Oxygen, Light, Friends" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Chang Younghae</summary>
+    <p>Younghae Chang works across video, performance, and installation, focusing on the structures through which violence and desire transform and distort the body. For the artist, the body exists as an entity that is reshaped and reconfigured through technology. Employing mediating apparatuses such as cameras, AI, and X-ray imaging, Chang examines processes that convert the body into images, fragment it, and render it objectified.</p>
+  </details>
+</article>
+
+<article id="w3" class="work">
+  <div class="wnum">03</div>
+  <h3>Sla Joo</h3>
+  <div class="wtitle"><em>displace - - -</em></div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure><img src="works-assets/w03.jpg" alt="Sla Joo, displace - - -" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Sla Joo</summary>
+    <p>Sla Joo's practice centers on themes of fragmentation and transformation, informed by influences from animation and literature. I am drawn to narratives in which bodies are altered, identities are dismantled, and new forms of subjectivity emerge. Such narratives offer a way to reflect on how identity is continuously fractured and reconfigured within contemporary society. Through the use of multiple media, I explore transitions between different material and representational forms, often introducing intentional glitches and errors into the process. These disruptions become a means of visualizing the anxiety, instability, and transformation that accompany the breakdown and reconstruction of identity, while opening up possibilities for new narrative structures.</p>
+  </details>
+</article>
+
+<article id="w4" class="work">
+  <div class="wnum">04</div>
+  <h3>Youngkak Cho</h3>
+  <div class="wtitle">〈아무도 가지지 못한 것들(無主之物)〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure><img src="works-assets/w04.jpg" alt="Youngkak Cho, What No One Could Own (無主之物)" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Youngkak Cho</summary>
+    <p>Youngkak Cho works across media art, artificial intelligence, and design. For more than a decade he has explored ways of treating AI not as a tool but as a condition of the work, recently shifting from generation-centered practice toward the infrastructural conditions of AI as subject matter.</p>
+  </details>
+</article>
+
+<article id="w5" class="work">
+  <div class="wnum">05</div>
+  <h3>Kayoung Choi</h3>
+  <div class="wtitle">〈우육면 트위스트〉 · 〈나의 우육면 다이어리〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure>
+    <img src="works-assets/w05-1.jpg" alt="Kayoung Choi, Beef Noodle Twist" loading="lazy" data-zoom>
+    <img src="works-assets/w05-2.jpg" alt="Kayoung Choi, My Beef Noodle Diary" loading="lazy" data-zoom>
+  </figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Kayoung Choi</summary>
+    <p>Kayoung Choi takes tangible objects present in the here and now as clues, tracing memories and imaginings of times and places she has never experienced. She collects these objects, travels to the sites where they originally belonged, and moves in pursuit of the histories and personal memories bound up in them. Positioning herself at a distant coordinate and then looking back toward this side, her fieldwork folds and rolls up the map of times and spaces that could never be joined, drawing a new trajectory across it. Setting up a proportional equation between others and the self, past and present, she gives form to questions addressed to who we are now through painting, video, installation, and performance.</p>
+  </details>
+</article>
+
+<article id="w6" class="work">
+  <div class="wnum">06</div>
+  <h3>Siheun Kim</h3>
+  <div class="wtitle">〈호흡하는 잔여들: 합성 생태의 규칙들〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure><img src="works-assets/w06.jpg" alt="Siheun Kim, Breathing Residues: Rules of a Synthetic Ecology" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Siheun Kim</summary>
+    <p>Siheun Kim explores the contemporary condition in which technology senses and translates the world, drawing on the sculptural languages of the othered body and fluid mediation. Through site-based research, she collects ecological and historical traces and reconfigures them through game-engine-based moving images, 3D printing, sensors, and kinetic systems. Through the Dispositif—a hybrid moving-image and sculptural apparatus that brings these elements together—Kim gives sensory form to the ways bodies, places, and nonhuman temporalities remain irreducible to any single image or informational form.</p>
+  </details>
+</article>
+
+<article id="w7" class="work">
+  <div class="wnum">07</div>
+  <h3>Heesoo Kwon</h3>
+  <div class="wtitle">〈오렌지 방〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure><img src="works-assets/w07.jpg" alt="Heesoo Kwon, Orange Room" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Heesoo Kwon</summary>
+    <p>Heesoo Kwon works on Leymusoom, a ritualistic and auto-ethnographic archive project rooted in her own and her family's life, matrilineal genealogies, and Korean mythology. Using digital technology as a tool of creation, she traces ancestral memories to reimagine patriarchal narratives. Begun in 2017, the project is an archive of 3D animation and photography combining analog and digital media—a shrine to Kwon's invented "autobiographical feminist religion," envisioning a utopia where her female ancestors coexist.</p>
+  </details>
+</article>
+
+<article id="w8" class="work">
+  <div class="wnum">08</div>
+  <h3>Jongwan Jang</h3>
+  <div class="wtitle">〈오메가 포인트〉 · 〈킬리만자로의 선물〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure class="pair">
+    <img src="works-assets/w08-1.jpg" alt="Jongwan Jang, Omega Point" loading="lazy" data-zoom>
+    <img src="works-assets/w08-2.jpg" alt="Jongwan Jang, Gift of Kilimanjaro" loading="lazy" data-zoom>
+    <figcaption><!-- TODO: 공식 영문 캡션 --></figcaption>
+  </figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Jongwan Jang</summary>
+    <p>Jongwan Jang portrays the endless anxiety of human-centered societies and modern humanity, which emphasizes selfish rationality, from a peculiarly warm but cynical perspective. The artist's works combine colorful and seemingly lighthearted images with his acute view of contemporary society. The ironic landscape maximizes its kitschiness through the use of animal hide, symbolizing the human desire for salvation, the neglect of nature and animals, and foolish, blind faith.</p>
+  </details>
+</article>
+
+<article id="w9" class="work">
+  <div class="wnum">09</div>
+  <h3>Haejung Jung, Psients (Mikael Hwang)</h3>
+  <div class="wtitle">〈바이오 오디세이: 유령효모를 찾아서〉 · 〈부풀어 오르는〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure><img src="works-assets/w09.jpg" alt="Haejung Jung, Psients (Mikael Hwang), Bio Odyssey: In Search of the Ghost Yeast" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Haejung Jung, Psients (Mikael Hwang)</summary>
+    <p>Haejung Jung and Psients collaborated to conceive and lead a bio-workshop and co-creation project with fifteen children and adolescents from the Yeongdeungpo district. Haejung Jung works primarily in 3D animation, video, and installation, exploring the entanglements of human and nonhuman entities across the boundaries of nature, culture, technology, and matter. Psients (Mikael Hwang) is a scientist-turned-artist and the Director of Critical Biology, an artistic research laboratory based in Seoul, whose practice investigates the intersections of biology, sound, and music.</p></details>
+</article>
+
+<article id="w10" class="work">
+  <div class="wnum">10</div>
+  <h3>Jaeha Ban</h3>
+  <div class="wtitle">〈머리 위를 지나 도착하는 곳〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure>
+    <img src="works-assets/w10.jpg" alt="Jaeha Ban, Where It Arrives, Passing Overhead" loading="lazy" data-zoom>
+    <figcaption>Contains modified Copernicus Sentinel data 2024 (Sentinel-2, acquired 27 August 2024) · Processing: Jaeha Ban · Road data © OpenStreetMap contributors</figcaption>
+  </figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Jaeha Ban</summary>
+    <p>Jaeha Ban takes moments in which systems malfunction as the primary material of her practice. Her work is grounded in research that observes and traces the marks of circulation, technology, and division embedded in everyday objects and events. Through performance, installation, and video, she juxtaposes the synchronous flows produced by systems of circulation and technological infrastructure with the asynchronous conditions generated by the division of the Korean Peninsula. Ban seeks to transform points of systemic malfunction into sites where new forms of perception are activated.</p>
+  </details>
+</article>
+
+<article id="w11" class="work">
+  <div class="wnum">11</div>
+  <h3>Gemini Kim</h3>
+  <div class="wtitle">〈테크노엇박과 낙서〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure><img src="works-assets/w11.jpg" alt="Gemini Kim, Techno Offbeat and Graffiti" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Gemini Kim</summary>
+    <p>Gemini Kim is an artist originally from Incheon. Although he carries a bit of a complex about how Korea focuses so heavily on central Seoul, he ironically desires to live in the heart of Seoul more than anyone else. Focusing on the concept of 'the periphery,' his projects track regional changes over time. He also founded the 'Korean Association of Subalterns' to study this peripheral mentality, aiming to bring hidden stories from outside the mainstream cultural world into the spotlight.</p>
+  </details>
+</article>
+
+<article id="w12" class="work">
+  <div class="wnum">12</div>
+  <h3>Dew Kim</h3>
+  <div class="wtitle"><em>Kissing Forever ∞ Kiss of Chaos ☆</em></div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure class="tall"><img src="works-assets/w12.jpg" alt="Dew Kim, Kissing Forever ∞ Kiss of Chaos ☆" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Dew Kim</summary>
+    <p>Dew Kim explores the body at the point where religion, queerness, and posthuman identity collide. He treats the body not as a fixed form but as a site where faith, resistance, and transformation meet, asking how it comes to carry vulnerability, desire, and histories it did not choose. Moving between sculpture, installation, and performance, he examines how power operates within gestures of devotion, discipline, and longing. Through performances of "becoming" - becoming a shaman, becoming an idol - he weaves the aesthetics of popular culture together with ritual symbolism, creating theatrical spaces where pleasure and vulnerability meet.</p>
+  </details>
+</article>
+
+<article id="w13" class="work">
+  <div class="wnum">13</div>
+  <h3>Sun Choi</h3>
+  <div class="wtitle">〈조용한 말〉</div>
+  <div class="wcap"><!-- TODO: 공식 영문 캡션(재료·크기) 받으면 입력 --></div>
+  <figure><img src="works-assets/w13.jpg" alt="Sun Choi, Quiet Words" loading="lazy" data-zoom></figure>
+  <p class="wtx"><!-- TODO: 공식 영문 작품 해설 받으면 입력 --></p>
+  <details class="bio"><summary><span class="tri">►</span>Sun Choi</summary>
+    <p>Sun Choi transforms the material traces of events unfolding within the society he inhabits into the substance of his artistic practice. Employing materials marked by social incidents including saliva left on the street, grease seeping from the carcasses of pigs buried after mass culling, foam collected from wastewater sediment, and capsaicin spray used by police for crowd control, he creates what he calls "unpainted paintings," minimizing deliberate brushwork wherever possible. Through the transformation of these materials, his practice converts social reality into artistic meaning. Extending beyond painting, his work encompasses video, sound, and spatial installations, expanding across diverse media while remaining grounded in the materiality of contemporary social experience.</p>
+  </details>
+</article>
+
+<footer>
+  Yeongdeungpo-gu · Yeongdeungpo Cultural Foundation · Culture City Yeongdeungpo<br>
+  ©2026 Art &amp; Technology City <em>Doing Anthropology: Are Humans We?</em><br>
+  by Workswork co., ltd.
+</footer>
+
+</div>
+
+<button type="button" id="totop" aria-label="Back to top">↑</button>
+
+<dialog id="zoom">
+  <button type="button" id="zoomX" aria-label="Close">✕</button>
+  <img id="zoomImg" src="" alt="">
+</dialog>
+
+<script>
+(function(){
+  var dlg=document.getElementById('zoom'), img=document.getElementById('zoomImg');
+  Array.prototype.forEach.call(document.querySelectorAll('img[data-zoom]'), function(el){
+    el.style.cursor='zoom-in';
+    el.addEventListener('click', function(){
+      img.src=el.currentSrc || el.src; img.alt=el.alt; dlg.showModal();
+    });
+  });
+  var top=document.getElementById('totop');
+  top.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  addEventListener('scroll', function(){ top.classList.toggle('on', scrollY > 400); }, {passive:true});
+
+  function close(){ dlg.close(); img.src=''; }
+  document.getElementById('zoomX').addEventListener('click', close);
+  dlg.addEventListener('click', function(e){ if(e.target!==document.getElementById('zoomX')) close(); });
+})();
+</script>
+</body>
+</html>
