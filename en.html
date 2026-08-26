@@ -56,7 +56,9 @@
   header h1 .en{margin-right:-93px}
   @media(max-width:430px){.ydpband{width:52px}
     header .eyebrow,header h1{padding-right:62px} header h1 .en{margin-right:-62px}}
-  .langswitch{display:inline-block;margin-left:9px;font-size:11px;font-weight:800;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:2px 9px;background:var(--accent-soft);vertical-align:2px}
+  /* 바깥 inline-block이 제목의 점선 밑줄을 통째로 막는다 — 알약 왼쪽 여백에 대시가 삐져나오던 문제 */
+  .langwrap{display:inline-block;padding-left:10px;vertical-align:3px}
+  .langswitch{display:inline-block;font-size:11px;font-weight:800;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:2px 9px;background:var(--accent-soft);line-height:1.45}
 
   /* 전시소개 */
   .credits{text-align:left;font-size:14px;color:var(--accent);margin-top:20px;word-break:keep-all}
@@ -161,7 +163,7 @@
   #bio::backdrop{background:rgba(0,0,0,.75)}
   #bio h3{font-size:19px;font-weight:800;word-break:keep-all;padding-right:34px}
   #bio .ko{font-size:13px;color:var(--accent);letter-spacing:.02em;margin-top:3px}
-  #bio .tx{font-size:14.5px;line-height:1.8;color:#d6d2ea;margin-top:16px;overflow:auto}
+  #bio .tx{font-size:14.5px;white-space:pre-line;line-height:1.8;color:#d6d2ea;margin-top:16px;overflow:auto}
   #bio .foot{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);text-align:center}
   #bio .foot .booklink{margin:0 4px}
   #bio .x{position:absolute;top:14px;right:14px;width:30px;height:30px;line-height:1;
@@ -203,7 +205,7 @@
   <div class="wrap" style="padding-bottom:0">
     <div class="eyebrow">2026 ART-TECHNOLOGY CITY</div>
     <h1>Doing Anthropology:<br>Are Humans We?
-      <span class="en">인류학 연습: 인간은 우리인가?<a class="langswitch" href="index.html">KO</a></span>
+      <span class="en">인류학 연습: 인간은 우리인가?<span class="langwrap"><a class="langswitch" href="index.html">KOR</a></span></span>
     </h1>
     <p class="keyinfo">
       <strong>Sep 1 (Tue) – Sep 20 (Sun), 2026</strong> · 12:00–20:00<br>
@@ -243,7 +245,7 @@
   </div>
   <!-- 영문 표기 = 포스터 기준 최종 확정 (2026-08-12 클라라) -->
   <p class="credits">
-    <strong>Curated by</strong> Juri Cho<br>
+    <strong>Curated by</strong> <button type="button" class="artist" data-a="Juri Cho">Juri Cho</button><br>
     <strong>Artists</strong> <button type="button" class="artist" data-a="Heesoo Kwon">Heesoo Kwon</button>, <button type="button" class="artist" data-a="Siheun Kim">Siheun Kim</button>, <button type="button" class="artist" data-a="Gemini Kim">Gemini Kim</button>, <button type="button" class="artist" data-a="Dew Kim">Dew Kim</button>, <button type="button" class="artist" data-a="Jaeha Ban">Jaeha Ban</button>, <button type="button" class="artist" data-a="Chang Younghae">Chang Younghae</button>, <button type="button" class="artist" data-a="Jongwan Jang">Jongwan Jang</button>, <button type="button" class="artist" data-a="Youngkak Cho">Youngkak Cho</button>, <button type="button" class="artist" data-a="Sla Joo">Sla Joo</button>, <button type="button" class="artist" data-a="Kayoung Choi">Kayoung Choi</button>, <button type="button" class="artist" data-a="Che Go Eun">Che Go Eun</button>, <button type="button" class="artist" data-a="Sun Choi">Sun Choi</button>
     <span class="partner-row">Chong Kun Dang Kochon Foundation, Life Sciences and Arts Education Program [Bio Odyssey: In Search of Phantom Yeast]</span>
   </p>
@@ -411,6 +413,7 @@
   var ARCHIVE_URL = '#';   /* Research Note */
   var WORKS_URL   = 'works-en.html';   /* 전시작품 — 2026-08-25 공개 */
 var BIOS = {
+"Juri Cho": {"ko": "조주리", "tx": "A curator and critic, Juri CHO works through exhibitions across critical writing, image and knowledge production, artistic practice, and social collaboration. She is interested in how the meanings of curating and artistic creation are articulated and brought into relation amid the shifting conditions of the world and the textures of everyday life. Through artistic research and collaboration, she has continued to explore the possibilities of curatorial practice.\n\nHer curatorial practice began with Republic of the Two (ARKO Art Center, 2013), followed by research- and exchange-based exhibitions including Research, re:researched (Post Territory Ujeongguk, 2016) and Mille-Feuille de Camellia (ARKO Art Center, 2016). Between exhibitions, she has also participated in research, planning, and policy projects at arts and cultural institutions, helping to articulate issues addressed in the public sphere and connect them to practices of everyday life.\n\nHer recent exhibitions include Shadow under the Mountain, Light upon the Water, Scent from the Moon (former NongHyup Hanaro Mart, Mullae-dong, 2025), Archaeology: Today was Today (Space Junghak and other venues, 2023), My Sleep (Culture Station Seoul 284, 2022), Triple Rings; (Culture Station Seoul 284, 2021), Festival GIHOEK (Oil Tank Culture Park, 2020), and Tenaciously, Tenacious (d/p, Nagwon Music Arcade, 2019). Following her participation last year, she continues this year as curator of Doing Anthropology: Are Humans We?, as part of “Art - Tech City,” a Culture City initiative of the Yeongdeungpo Cultural Foundation."},
 "Heesoo Kwon": {"ko": "권희수", "tx": "Heesoo Kwon works on Leymusoom, a ritualistic and auto-ethnographic archive project rooted in her own and her family's life, matrilineal genealogies, and Korean mythology. Using digital technology as a tool of creation, she traces ancestral memories to reimagine patriarchal narratives. Begun in 2017, the project is an archive of 3D animation and photography combining analog and digital media—a shrine to Kwon's invented \"autobiographical feminist religion,\" envisioning a utopia where her female ancestors coexist."},
 "Siheun Kim": {"ko": "김시흔", "tx": "Siheun Kim explores the contemporary condition in which technology senses and translates the world, drawing on the sculptural languages of the othered body and fluid mediation. Through site-based research, she collects ecological and historical traces and reconfigures them through game-engine-based moving images, 3D printing, sensors, and kinetic systems. Through the Dispositif—a hybrid moving-image and sculptural apparatus that brings these elements together—Kim gives sensory form to the ways bodies, places, and nonhuman temporalities remain irreducible to any single image or informational form."},
 "Gemini Kim": {"ko": "김재민이", "tx": "Gemini Kim is an artist originally from Incheon. Although he carries a bit of a complex about how Korea focuses so heavily on central Seoul, he ironically desires to live in the heart of Seoul more than anyone else. Focusing on the concept of 'the periphery,' his projects track regional changes over time. He also founded the 'Korean Association of Subalterns' to study this peripheral mentality, aiming to bring hidden stories from outside the mainstream cultural world into the spotlight."},
