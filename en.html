@@ -51,8 +51,11 @@
 
   /* 문화도시 영등포 띠지 — 폭 하나만 바꾸면 비례 조정됨(원본 230x549) */
   .ydpband{position:absolute;top:0;right:20px;width:65px;height:auto;display:block;z-index:1}
-  header .wrap{padding-right:93px}
-  @media(max-width:430px){.ydpband{width:52px} header .wrap{padding-right:68px}}
+  /* 띠지 옆을 비우는 건 눈높이가 겹치는 아이브로·제목뿐 — 부제는 띠지 아래라 폭을 되돌린다 */
+  header .eyebrow,header h1{padding-right:93px}
+  header h1 .en{margin-right:-93px}
+  @media(max-width:430px){.ydpband{width:52px}
+    header .eyebrow,header h1{padding-right:62px} header h1 .en{margin-right:-62px}}
   .langswitch{display:inline-block;margin-left:9px;font-size:11px;font-weight:800;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:2px 9px;background:var(--accent-soft);vertical-align:2px}
 
   /* 전시소개 */
