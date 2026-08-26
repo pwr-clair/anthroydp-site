@@ -51,7 +51,8 @@
 
   /* 문화도시 영등포 띠지 — 폭 하나만 바꾸면 비례 조정됨(원본 230x549) */
   .ydpband{position:absolute;top:0;right:20px;width:65px;height:auto;display:block;z-index:1}
-  @media(max-width:430px){.ydpband{width:52px}}
+  header .wrap{padding-right:93px}
+  @media(max-width:430px){.ydpband{width:52px} header .wrap{padding-right:68px}}
   .langswitch{display:inline-block;margin-left:9px;font-size:11px;font-weight:800;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:2px 9px;background:var(--accent-soft);vertical-align:2px}
 
   /* 전시소개 */
@@ -196,7 +197,7 @@
 
 <header style="position:relative">
   <img class="ydpband" src="works-assets/ydp-band-en.png" alt="문화도시 영등포">
-  <div class="wrap" style="padding-bottom:0;padding-right:93px">
+  <div class="wrap" style="padding-bottom:0">
     <div class="eyebrow">2026 ART-TECHNOLOGY CITY</div>
     <h1>Doing Anthropology:<br>Are Humans We?
       <span class="en">인류학 연습: 인간은 우리인가?<a class="langswitch" href="index.html">KO</a></span>
