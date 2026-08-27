@@ -36,17 +36,13 @@
   .books li{font-size:13px;color:var(--sub);line-height:1.9;word-break:keep-all;list-style:none;padding-left:14px;text-indent:-14px}
   .books li::before{content:"·";color:var(--accent);font-weight:800;margin-right:8px}
 
-  /* ── 일정 달력 ── */
-  .cals{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
-  .mon{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 12px}
-  .mon h4{font-size:12.5px;font-weight:800;color:var(--accent);letter-spacing:.08em;margin-bottom:8px;text-align:center}
-  .mon table{width:100%;border-collapse:collapse;table-layout:fixed}
-  .mon th{font-size:9px;color:var(--sub);font-weight:700;padding-bottom:4px}
-  .mon th:last-child{color:#f0604a99}
-  .mon td{text-align:center;font-size:11px;color:var(--sub);padding:3px 0;height:30px;vertical-align:top}
-  .mon td a{display:inline-block;width:24px;text-decoration:none;color:#fff;font-weight:800;
-    background:var(--accent);border-radius:8px;padding:2px 0 0;line-height:1.1;font-size:11px}
-  .mon td a small{display:block;font-size:7.5px;font-weight:800;letter-spacing:.03em;opacity:.85;padding-bottom:2px}
+  /* ── 일정 스트립 ── */
+  .dstrip{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+  .dstrip a{flex:1 1 0;min-width:86px;max-width:120px;text-decoration:none;text-align:center;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 6px 9px}
+  .dstrip a b{display:block;font-size:17px;font-weight:800;color:var(--accent);letter-spacing:.02em}
+  .dstrip a small{display:block;font-size:10.5px;color:var(--sub);margin-top:3px;letter-spacing:.04em}
+  .dstrip a:active{border-color:var(--accent)}
   .sem{scroll-margin-top:16px}
   .caltip{font-size:11.5px;color:var(--sub);margin-top:10px;text-align:center}
   footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
@@ -64,8 +60,14 @@
 
 <section>
   <h2>일정</h2>
-  <div class="cals" id="cals"></div>
-  <p class="caltip">파란 날짜를 누르면 해당 세미나로 이동합니다</p>
+  <div class="dstrip">
+    <a href="#s1"><b>5.14</b><small>목 · 01+02</small></a>
+    <a href="#s3"><b>5.21</b><small>목 · 03</small></a>
+    <a href="#s4"><b>6.4</b><small>목 · 04</small></a>
+    <a href="#s5"><b>6.26</b><small>금 · 05</small></a>
+    <a href="#s6"><b>7.16</b><small>목 · 06</small></a>
+  </div>
+  <p class="caltip">날짜를 누르면 해당 세미나로 이동합니다</p>
 </section>
 
 <section class="intro">
@@ -153,28 +155,5 @@
 </footer>
 
 </div>
-<script>
-(function(){
-  var marks={'5-14':['01','02'],'5-21':['03'],'6-4':['04'],'6-26':['05'],'7-16':['06']};
-  var target={'5-14':'s1','5-21':'s3','6-4':'s4','6-26':'s5','7-16':'s6'};
-  var wrap=document.getElementById('cals'), dows=['월','화','수','목','금','토','일'];
-  [5,6,7].forEach(function(m){
-    var first=new Date(2026,m-1,1), days=new Date(2026,m,0).getDate();
-    var lead=(first.getDay()+6)%7; /* 월요일 시작 */
-    var h='<div class="mon"><h4>2026. '+m+'</h4><table><tr>';
-    dows.forEach(function(d){h+='<th>'+d+'</th>';});
-    h+='</tr><tr>';
-    for(var i=0;i<lead;i++)h+='<td></td>';
-    for(var d=1;d<=days;d++){
-      var col=(lead+d-1)%7, k=m+'-'+d;
-      if(marks[k]) h+='<td><a href="#'+target[k]+'">'+d+'<small>'+marks[k].join('·')+'</small></a></td>';
-      else h+='<td>'+d+'</td>';
-      if(col===6&&d<days)h+='</tr><tr>';
-    }
-    h+='</tr></table></div>';
-    wrap.insertAdjacentHTML('beforeend',h);
-  });
-})();
-</script>
 </body>
 </html>
