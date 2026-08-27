@@ -245,7 +245,7 @@
   </div>
   <!-- 영문 표기 = 포스터 기준 최종 확정 (2026-08-12 클라라) -->
   <p class="credits">
-    <strong>Curated by</strong> <button type="button" class="artist" data-a="Juri Cho">Juri Cho</button><br>
+    <strong>Curated by</strong> <button type="button" class="artist curator" data-a="Juri Cho">Juri Cho</button><br>
     <strong>Artists</strong> <button type="button" class="artist" data-a="Heesoo Kwon">Heesoo Kwon</button>, <button type="button" class="artist" data-a="Siheun Kim">Siheun Kim</button>, <button type="button" class="artist" data-a="Gemini Kim">Gemini Kim</button>, <button type="button" class="artist" data-a="Dew Kim">Dew Kim</button>, <button type="button" class="artist" data-a="Jaeha Ban">Jaeha Ban</button>, <button type="button" class="artist" data-a="Chang Younghae">Chang Younghae</button>, <button type="button" class="artist" data-a="Jongwan Jang">Jongwan Jang</button>, <button type="button" class="artist" data-a="Youngkak Cho">Youngkak Cho</button>, <button type="button" class="artist" data-a="Sla Joo">Sla Joo</button>, <button type="button" class="artist" data-a="Kayoung Choi">Kayoung Choi</button>, <button type="button" class="artist" data-a="Che Go Eun">Che Go Eun</button>, <button type="button" class="artist" data-a="Sun Choi">Sun Choi</button>
     <span class="partner-row">Chong Kun Dang Kochon Foundation, Life Sciences and Arts Education Program [Bio Odyssey: In Search of Phantom Yeast]</span>
   </p>
@@ -434,6 +434,7 @@ var BIOS = {
       document.getElementById('bioName').textContent = name;
       document.getElementById('bioKo').textContent   = d.ko;
       document.getElementById('bioTx').textContent   = d.tx;
+      dlg.querySelector('.foot').style.display = b.classList.contains('curator') ? 'none' : '';
       dlg.showModal();
     });
   });

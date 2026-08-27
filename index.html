@@ -262,7 +262,7 @@
     </details>
   </div>
   <p class="credits">
-    <strong>기획</strong> <button type="button" class="artist" data-a="조주리">조주리</button><br>
+    <strong>기획</strong> <button type="button" class="artist curator" data-a="조주리">조주리</button><br>
     <strong>참여작가</strong> <button type="button" class="artist" data-a="권희수">권희수</button>, <button type="button" class="artist" data-a="김시흔">김시흔</button>, <button type="button" class="artist" data-a="김재민이">김재민이</button>, <button type="button" class="artist" data-a="듀킴">듀킴</button>, <button type="button" class="artist" data-a="반재하">반재하</button>, <button type="button" class="artist" data-a="장영해">장영해</button>, <button type="button" class="artist" data-a="장종완">장종완</button>, <button type="button" class="artist" data-a="조영각">조영각</button>, <button type="button" class="artist" data-a="주슬아">주슬아</button>, <button type="button" class="artist" data-a="최가영">최가영</button>, <button type="button" class="artist" data-a="최고은">최고은</button>, <button type="button" class="artist" data-a="최선">최선</button>
     <!-- span이지 button이 아님: button은 inline-block이라 긴 문구가 통째로 줄바꿈된다 -->
     <span class="partner-row"><span class="artist partner" role="button" tabindex="0" data-a="종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]">종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]</span></span>
@@ -457,6 +457,7 @@
       document.getElementById('bioName')[partner ? 'innerHTML' : 'textContent'] = name;
       document.getElementById('bioEn').textContent   = d.en;
       document.getElementById('bioTx').textContent   = d.tx;
+      dlg.querySelector('.foot').style.display = b.classList.contains('curator') ? 'none' : '';
       dlg.showModal();
     });
     if (b.tagName === 'SPAN') b.addEventListener('keydown', function(e){
