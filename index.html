@@ -59,7 +59,8 @@
     header .eyebrow,header h1{padding-right:62px} header h1 .en{margin-right:-62px}
     header h1{font-size:25px;line-height:1.5}}
   /* 바깥 inline-block이 제목의 점선 밑줄을 통째로 막는다 — 알약 왼쪽 여백에 대시가 삐져나오던 문제 */
-  .langwrap{display:inline-block;padding-left:10px;vertical-align:3px}
+  /* 알약 세로 위치: 부제 글자 윗선~아래 점선의 한가운데(브라우저 실측으로 맞춘 값) */
+  .langwrap{display:inline-block;padding-left:10px;vertical-align:-3.5px}
   .langswitch{display:inline-block;font-size:11px;font-weight:800;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:2px 9px;background:var(--accent-soft);line-height:1.45}
 
   /* 전시소개 — 가운데 정렬 타이틀 블록 */
