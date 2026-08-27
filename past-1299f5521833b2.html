@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>지난 예술기술도시 — 예술기술도시 영등포</title>
+<!-- 비공개 검토 페이지: 주소를 아는 사람만. 검색 노출 차단 -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23FFF033'/%3E%3C/svg%3E">
+<style>
+  /* 2025 키비주얼에서 추출한 스트라이프 6색 — 흰 바탕·검정 활자의 지면 감각 */
+  :root{
+    --paper:#FAF8F2; --ink:#111111; --sub:#5c5a55; --line:#DEDACE; --card:#FFFFFF;
+    --c23:#BBE8FF; --c24:#FFCC9A; --c25:#52FF57; --c26:#EEC5EF;
+    --khaki:#CAC6A1; --yellow:#FFF033;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px 90px}
+
+  /* ── 상단 스트라이프 띠 (2025 지면 요소) ── */
+  .stripes{display:flex;height:12px}
+  .stripes i{flex:1}
+  .stripes i:nth-child(1){background:var(--c23)}
+  .stripes i:nth-child(2){background:var(--c24)}
+  .stripes i:nth-child(3){background:var(--c25)}
+  .stripes i:nth-child(4){background:var(--khaki)}
+  .stripes i:nth-child(5){background:var(--yellow)}
+  .stripes i:nth-child(6){background:var(--c26)}
+
+  header{padding:44px 0 26px;border-bottom:2px solid var(--ink)}
+  .eyebrow{font-size:11.5px;letter-spacing:.18em;font-weight:800;color:var(--ink);margin-bottom:12px}
+  h1{font-size:32px;line-height:1.3;font-weight:800;letter-spacing:-.01em}
+  h1 .en{display:block;font-size:14px;font-weight:600;color:var(--sub);margin-top:8px;letter-spacing:.04em}
+  .range{margin-top:16px;font-size:14px;font-weight:700}
+  .range b{background:var(--yellow);padding:1px 6px}
+  .back{display:inline-block;margin-top:18px;font-size:12.5px;font-weight:700;color:var(--ink);
+    text-decoration:none;border:1.5px solid var(--ink);border-radius:999px;padding:5px 14px;background:var(--card)}
+  .back:active{background:var(--ink);color:var(--paper)}
+
+  section{padding-top:46px}
+  h2{font-size:14px;font-weight:800;letter-spacing:.1em;padding-bottom:7px;
+    border-bottom:2px solid var(--ink);margin-bottom:18px}
+  .intro p{font-size:14.5px;line-height:1.95;color:#2e2c28;word-break:keep-all;margin-bottom:15px}
+  .intro p:last-child{margin-bottom:0}
+
+  /* ── 연도 카드 ── */
+  .yr{background:var(--card);border:1.5px solid var(--ink);margin-bottom:20px;position:relative}
+  .yr .bar{height:9px}
+  .yr[data-y="2023"] .bar{background:var(--c23)}
+  .yr[data-y="2024"] .bar{background:var(--c24)}
+  .yr[data-y="2025"] .bar{background:var(--c25)}
+  .yr[data-y="2026"] .bar{background:var(--c26)}
+  .yr .in{padding:18px 18px 20px}
+  .yr .num{font-size:30px;font-weight:800;line-height:1;letter-spacing:-.02em}
+  .yr .now{font-size:10px;font-weight:800;letter-spacing:.1em;border:1.5px solid var(--ink);
+    border-radius:999px;padding:2px 8px;margin-left:9px;vertical-align:5px;background:var(--yellow)}
+  .yr h3{font-size:18px;font-weight:800;margin-top:9px;word-break:keep-all;line-height:1.45}
+  .yr .sub{font-size:12.5px;color:var(--sub);font-weight:600;margin-top:3px}
+  .yr dl{margin-top:14px;display:grid;grid-template-columns:60px 1fr;gap:6px 10px;font-size:13px}
+  .yr dt{font-weight:800;color:var(--ink)}
+  .yr dd{color:#33312d;word-break:keep-all;line-height:1.7}
+  .yr ul{margin-top:14px;padding-top:13px;border-top:1px dashed var(--line);list-style:none}
+  .yr li{font-size:12.5px;color:var(--sub);line-height:1.75;word-break:keep-all;
+    padding-left:13px;text-indent:-13px;margin-bottom:6px}
+  .yr li::before{content:"—";margin-right:6px}
+  .yr li:last-child{margin-bottom:0}
+  .yr .golink{display:inline-block;margin-top:15px;font-size:12.5px;font-weight:800;
+    text-decoration:none;color:var(--ink);border-bottom:2px solid var(--yellow);padding-bottom:1px}
+
+  /* ── 부록(2025 공모·타임라인) ── */
+  details.ap{border-top:1px dashed var(--line);margin-top:14px;padding-top:12px}
+  details.ap summary{list-style:none;cursor:pointer;font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:7px}
+  details.ap summary::-webkit-details-marker{display:none}
+  details.ap .tri{font-size:9px;transition:transform .15s;display:inline-block}
+  details.ap[open] .tri{transform:rotate(90deg)}
+  details.ap .body{padding-top:11px;font-size:12.5px;color:var(--sub);line-height:1.85;word-break:keep-all}
+  details.ap .body p{margin-bottom:10px}
+  details.ap .tl{display:grid;grid-template-columns:76px 1fr;gap:3px 10px;font-size:12px}
+  details.ap .tl b{color:var(--ink);font-weight:700}
+
+  footer{margin-top:52px;padding-top:22px;border-top:2px solid var(--ink);font-size:12px;color:var(--sub);line-height:1.85}
+  .foot-back{text-align:center;margin-top:44px}
+</style>
+</head>
+<body>
+
+<div class="stripes"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">ART-TECHNOLOGY CITY YEONGDEUNGPO</div>
+  <h1>지난 예술기술도시
+    <span class="en">Trajectory of the Art-Technology City Exhibitions</span>
+  </h1>
+  <p class="range"><b>2023 – 2026</b> · 전시의 궤적</p>
+  <a class="back" href="index.html">← 전시 안내로</a>
+</header>
+
+<section class="intro">
+  <h2>예술기술도시 영등포</h2>
+  <p>‘예술기술도시’는 문화도시 영등포의 정체성을 대변하는 행정사업명이자, 영등포문화재단이 지난 6년간 견인해 온 예술기술융복합문화사업의 포괄적 지시어다. 2019년 영등포문화재단은 지역의 쇠퇴지역과 공공 공간을 활용하여 지역의 문화적 가치를 창출하는 사업을 진행해 왔다. 문래창작존을 구심점으로 한 초기의 〈문화생산도시리빙랩〉은 점진적인 과정을 거쳐 술술랩(현 술술센터)의 리모델링과 무수한 술술랩 프로그램으로 변화, 발전해 왔다.</p>
+  <p>2021년에 개관한 영등포문화재단의 ‘술술센터’는 지역의 문화예술 거점으로, 특히 예술가와 기술가 사이의 교류를 진작하고, 실제적인 협업을 통한 창·제작 프로젝트를 다수 선보이며 시민들의 피드백 속에서 성장해왔다. 이러한 과정은 2022년 영등포가 법정 문화도시로 지정되는 결과로 이어졌고, 사업의 지리적 범주가 문래동뿐만 아니라 영등포 전역으로 확대되는 계기가 되었다.</p>
+  <p>공공 문화예술 생태계가 공유해온 과업 중 하나인 예술과 기술의 융복합 기치가 상투적 결합에 그치지 않고, 지역이 마주한 일상의 변화와 사회적 변동을 반영하는 동시에, 작가와 지역민, 소상공인, 다양한 매개인력 등이 공동의 과제를 걸머쥐며 과거의 흔적을 보존하는 한편 향후 도시의 비전을 모색하는 방향으로 나아가고 있다.</p>
+  <p>현재의 ‘예술기술도시’ 전시는 지역 작가뿐만 아니라 다양한 층위의 창작자들을 흡수하고, 급변하는 기술 담론을 지역의 사회문화적 맥락 안에서 담론화하는 기획 의도를 유지하면서도 전시의 외연을 단계적으로 확장해 나가고 있다.</p>
+</section>
+
+<section>
+  <h2>전시의 궤적 2023 – 2026</h2>
+
+  <article class="yr" data-y="2023">
+    <div class="bar"></div>
+    <div class="in">
+      <div class="num">2023</div>
+      <h3>Station Y — 2401240204</h3>
+      <dl>
+        <dt>기간</dt><dd>2024. 1. 24. – 2. 4.</dd>
+        <dt>장소</dt><dd>서울 영등포구 경인로 77가길 7 (옛 문래동 폐공장)</dd>
+        <dt>참여작가</dt><dd>러봇랩, 엄아롱, 윤장호, 한재석</dd>
+        <dt>기획</dt><dd>심혜화, 박희영</dd>
+      </dl>
+      <ul>
+        <li>〈우주여행장치〉를 주제로 공모를 통해 선정된 4팀의 창·제작 결과 전시</li>
+        <li>폐공장에 새로운 시공의 좌표를 부여하고 영등포와 우주의 도킹을 시도</li>
+        <li>문화도시로서의 첫 특성화 사업 기획 및 실행</li>
+        <li>문래동과 산업 공간 바탕의 융복합 예술 창작 모델 정립</li>
+        <li>지역 유휴공간의 문화적 쓰임 모색</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="yr" data-y="2024">
+    <div class="bar"></div>
+    <div class="in">
+      <div class="num">2024</div>
+      <h3>Time and Narrative — 시간과 이야기</h3>
+      <dl>
+        <dt>기간</dt><dd>2024. 10. 24. – 11. 4.</dd>
+        <dt>장소</dt><dd>서울 영등포구 경인로 719 (옛 농협 하나로마트)</dd>
+        <dt>참여작가</dt><dd>김동현, 소수빈, L.A.B(유장우·장영원·한솔), Attendant(이은정·조혜정), 초현실미디어, 네비게이터(손세희·김정은·이수진), 김재익, 비홉, 이진, 진향기, 팀3342(김영비·신보경·김다경·최한슬), 강현아, 크사베리 컴퓨터리, 김신일, 박근호(참새), 최종운, 이지연, 티슈오피스</dd>
+        <dt>기획</dt><dd>최윤정, 김세연</dd>
+      </dl>
+      <ul>
+        <li>〈도시와 로컬, 친숙과 이색, 과거와 미래를 보여주는 영등포〉를 주제로 공모하여 선정된 12팀의 창·제작 결과 전시</li>
+        <li>근현대의 물리적 환경들이 공존하는 영등포 역사 속에서 도시 생성과 발전의 내러티브를 재발견</li>
+        <li>영등포의 도시성과 생태 및 기술적 주제 강화</li>
+        <li>지역성과 장소성의 연결 모색, 주민과의 직접적 상호작용 및 담론 촉진</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="yr" data-y="2025">
+    <div class="bar"></div>
+    <div class="in">
+      <div class="num">2025</div>
+      <h3>산 그림자 물 볕 달 내음<br>— 밀어도 지지 않고, 쓸어도 차오른다</h3>
+      <div class="sub">Shadow Light Scent, under the Mountain Water Moon</div>
+      <dl>
+        <dt>기간</dt><dd>2025. 10. 17.(금) – 11. 2.(일)</dd>
+        <dt>장소</dt><dd>서울 영등포구 경인로 719 (옛 농협 하나로마트)</dd>
+        <dt>참여작가</dt><dd>김태희&amp;김수빈, 김현석, 박심정훈, 박은영, 배진선, 백종관, 손수민, 우주여행자 언해피, 이해련, 임승균, 전보경, 정아람, 조말, 차지량, NULL(김윤하·김혜원·남민오), 박근호(참새), 신미정, 최찬숙, 추미림, 홍범, 종근당고촌재단 협력 청소년 프로젝트 [바이오 오디세이]</dd>
+        <dt>기획</dt><dd>조주리, 이슬비</dd>
+      </dl>
+      <ul>
+        <li>지역의 주변화된 존재들과 잊혀진 감각들을 시와 음악을 경유한 기술 언어로 복원하고 재해석하는 집단적 실천</li>
+        <li>2025년 4월 “시처럼, 음악처럼”을 주제로 공모, 선정된 15팀의 아이디어를 창·제작 과정으로 전환하고 리서치 아카이브 축적을 강화</li>
+        <li>영등포의 사회문화적 서사와 지역적 특수성에 관한 예술적 탐구 과정</li>
+      </ul>
+
+      <details class="ap">
+        <summary><span class="tri">►</span>공모 주제 — “시처럼, 음악처럼”, 기술로 도시 읽기/쓰기</summary>
+        <div class="body">
+          <p>오늘날 기술 문화가 향하는 최후의 종착지는 어디일까요? 그 출발이 나의 행복과 우리의 번영이었던 것처럼 테크놀로지가 도달해야 할 곳 또한 먼 미래가 아닌, 오늘 하루의 삶입니다. 올해의 연구 및 창작 주제는 기술이 매개하는 지역 문화와 그 속에서 진취적인 삶을 일구어가는 이들의 호흡에 집중합니다. 풍부한 지역 서사와 문화적 층위를 겹겹이 품고 있는 영등포 지역을 배경으로 기술과 예술, 그리고 사람의 이야기를 함께 읽고 써나갑니다. 예술적 상상과 실천을 더해, 나의 영토 안에 타자의 자리를 내어주고, 우리의 범주를 재조정하고자 합니다.</p>
+          <p>※ 시와 음악은 예술적 접근에 대한 제유적 표현이며, 기술문화의 다양한 면모를 지역 리서치의 쟁점으로 연결하거나 예술적 리서치를 통해 지역의 기술문화에 접근하는 방식 모두를 포괄합니다.</p>
+        </div>
+      </details>
+
+      <details class="ap">
+        <summary><span class="tri">►</span>추진 타임라인</summary>
+        <div class="body">
+          <div class="tl">
+            <b>2025. 3.</b><span>예술기술융복합문화 기본계획 수립</span>
+            <b>2025. 4.</b><span>총괄큐레이터 위촉(4/1) · 예술기술플레이어 사업설명회(4/24)</span>
+            <b>2025. 5.</b><span>큐레이터 위촉(5/1) · 서류심사 26팀(5/15) → 인터뷰 최종 15팀(5/22) <i>※ 총 81팀 지원</i></span>
+            <b>2025. 6–7.</b><span>예술기술플레이어 워크숍 5회 — 영등포 식문화(스몰바치 스튜디오) / 데이터셋-팅과 기계의 우화(언메이크랩) / 지역연구, 천 개의 태도와 실천을 더해(이정은) / 내부 발표·연구심화 피어리뷰(허대찬, 전유진)</span>
+            <b>2025. 7.</b><span>리서치 연계 프로젝트 최종 결과 발표(7/10) · 옛 하나로마트 공간 사용 협력 결정(7/23)</span>
+            <b>2025. 8.</b><span>운영협력사(프럼에이) 결정 및 계약체결(8/21)</span>
+            <b>2025. 10–11.</b><span>〈산 그림자 물 볕 달 내음〉 개막 및 프로그램 운영</span>
+          </div>
+        </div>
+      </details>
+    </div>
+  </article>
+
+  <article class="yr" data-y="2026">
+    <div class="bar"></div>
+    <div class="in">
+      <div class="num">2026<span class="now">NOW</span></div>
+      <h3>인류학 연습 : 인간은 우리인가?</h3>
+      <div class="sub">Doing Anthropology: Are Humans We?</div>
+      <dl>
+        <dt>기간</dt><dd>2026. 9. 1.(화) – 9. 20.(일)</dd>
+        <dt>장소</dt><dd>서울시 영등포구 문래동2가 21-6 (종도빌딩 1층)</dd>
+        <dt>참여작가</dt><dd>권희수, 김시흔, 김재민이, 듀킴, 반재하, 장영해, 장종완, 조영각, 주슬아, 최가영, 최고은, 최선, 종근당고촌재단 생명과학융합예술교육 [바이오 오디세이]</dd>
+        <dt>기획</dt><dd>조주리</dd>
+      </dl>
+      <ul>
+        <li>기존의 공모 시스템에서 벗어나 전시 주제를 우선 수립하고, 이에 부합하는 작업 태도와 연구 역량을 갖춘 작가들을 초대하는 방식으로 전환</li>
+        <li>‘영등포’와 ‘문래’가 표상하는 지역성과 로컬 기술문화에 대한 관심을 지속하면서, 국내외에서 활동하는 다층적 작가군으로 창작자 풀을 확대</li>
+        <li>문화인류학적 관점을 예술적 실천으로 전환하는 방법론을 모색하며 전시가 다루는 의제와 실천의 외연을 확장</li>
+      </ul>
+      <a class="golink" href="index.html">이번 전시 안내 보기 →</a>
+    </div>
+  </article>
+</section>
+
+<p class="foot-back"><a class="back" href="index.html">← 전시 안내로</a></p>
+
+<footer>
+  영등포구 · 영등포문화재단 · 문화도시 영등포<br>
+  ©2026 예술기술도시 《인류학 연습: 인간은 우리인가?》
+</footer>
+
+</div>
+</body>
+</html>
