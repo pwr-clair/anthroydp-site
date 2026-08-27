@@ -31,7 +31,7 @@
   header{padding:56px 0 28px;border-bottom:1px solid var(--line)}
   .eyebrow{font-size:13px;letter-spacing:.12em;color:var(--accent);font-weight:700;margin-bottom:10px}
   h1{font-size:30px;line-height:1.55;font-weight:800;word-break:keep-all;text-decoration:underline dashed var(--accent) 3px;text-underline-offset:9px}
-  h1 .en{display:block;font-size:15px;font-weight:500;color:var(--sub);margin-top:6px;letter-spacing:.02em}
+  h1 .en{display:block;font-size:15px;font-weight:500;color:var(--sub);margin-top:9px;letter-spacing:.02em}
   .keyinfo{margin-top:18px;font-size:15px;color:var(--sub)}
   .keyinfo strong{color:var(--ink)}
 
@@ -59,8 +59,9 @@
     header .eyebrow,header h1{padding-right:62px} header h1 .en{margin-right:-62px}
     header h1{font-size:25px;line-height:1.5}}
   /* 바깥 inline-block이 제목의 점선 밑줄을 통째로 막는다 — 알약 왼쪽 여백에 대시가 삐져나오던 문제 */
-  /* 알약 세로 위치: 부제 글자 윗선~아래 점선의 한가운데(브라우저 실측으로 맞춘 값) */
-  .langwrap{display:inline-block;padding-left:10px;vertical-align:-3.5px}
+  /* 알약 세로 위치: 부제 글자 윗선~아래 점선의 한가운데(브라우저 실측).
+     vertical-align은 줄 상자를 늘려 부제를 위로 끌어올리므로 금지 — relative/top으로 레이아웃 무영향 이동 */
+  .langwrap{display:inline-block;padding-left:10px;position:relative;top:3.25px}
   .langswitch{display:inline-block;font-size:11px;font-weight:800;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:2px 9px;background:var(--accent-soft);line-height:1.45}
 
   /* 전시소개 — 가운데 정렬 타이틀 블록 */
