@@ -253,7 +253,7 @@
     <span class="partner-row">Chong Kun Dang Kochon Foundation, Life Sciences and Arts Education Program [Bio Odyssey: In Search of Phantom Yeast]</span>
   </p>
   <div class="booklink-wrap">
-    <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
+    <a class="booklink js-preprogram" href="#">Pre-Program</a>
     <a class="booklink js-works" href="#">Works</a>
     <a class="booklink js-archive" href="#">Research Note</a>
   </div>
@@ -414,6 +414,7 @@
 (function(){
   /* 주소 두 줄만 바꾸면 탭·버튼이 한꺼번에 연결됩니다 */
   var ARCHIVE_URL = '#';   /* Research Note */
+  var PREPROGRAM_URL = '#';   /* Pre-Program — 클라라 검토 후 비밀 주소로 점등 */
   var WORKS_URL   = 'works-en.html';   /* 전시작품 — 2026-08-25 공개 */
 var BIOS = {
 "Juri Cho": {"ko": "조주리", "tx": "A curator and critic, Juri Cho works through exhibitions across critical writing, image and knowledge production, artistic practice, and social collaboration. She is interested in how the meanings of curating and artistic creation are articulated and brought into relation amid the shifting conditions of the world and the textures of everyday life. Through artistic research and collaboration, she has continued to explore the possibilities of curatorial practice.\n\nHer curatorial practice began with Republic of the Two (ARKO Art Center, 2013), followed by research- and exchange-based exhibitions including Research, re:researched (Post Territory Ujeongguk, 2016) and Mille-Feuille de Camellia (ARKO Art Center, 2016). Between exhibitions, she has also participated in research, planning, and policy projects at arts and cultural institutions, helping to articulate issues addressed in the public sphere and connect them to practices of everyday life.\n\nHer recent exhibitions include Shadow under the Mountain, Light upon the Water, Scent from the Moon (former NongHyup Hanaro Mart, Mullae-dong, 2025), Archaeology: Today was Today (Space Junghak and other venues, 2023), My Sleep (Culture Station Seoul 284, 2022), Triple Rings; (Culture Station Seoul 284, 2021), Festival GIHOEK (Oil Tank Culture Park, 2020), and Tenaciously, Tenacious (d/p, Nagwon Music Arcade, 2019). Following her participation last year, she continues this year as curator of Doing Anthropology: Are Humans We?, as part of “Art - Tech City,” a Culture City initiative of the Yeongdeungpo Cultural Foundation."},
@@ -444,7 +445,7 @@ var BIOS = {
   document.getElementById('bioX').addEventListener('click', function(){ dlg.close(); });
   dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
 
-  [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL]].forEach(function(pair){
+  [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL], ['.js-preprogram', PREPROGRAM_URL]].forEach(function(pair){
     if (pair[1] === '#') { Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){ a.classList.add('soon'); }); return; }
     Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
       a.href = pair[1];

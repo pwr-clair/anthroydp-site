@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Art-Technology Player — Doing Anthropology: Are Humans We?</title>
+<!-- 비공개 페이지: 주소를 아는 사람만. 검색 노출 차단 -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%233A7BF0'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0d0f15; --card:#151a26; --ink:#f0f2f7; --sub:#a0a9c6;
+    --accent:#3a7bf0; --accent-soft:rgba(58,123,240,.14); --line:#27304a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px 80px}
+  header{padding:48px 0 24px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:13px;letter-spacing:.12em;color:var(--accent);font-weight:700;margin-bottom:10px}
+  h1{font-size:26px;line-height:1.4;font-weight:800;word-break:keep-all;text-decoration:underline dashed var(--accent) 3px;text-underline-offset:9px}
+  .keyinfo{margin-top:16px;font-size:14px;color:var(--sub)}
+  .keyinfo strong{color:var(--ink)}
+  .back{display:inline-block;margin-top:14px;font-size:12.5px;font-weight:700;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--card)}
+
+  section{padding-top:44px}
+  h2{font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px dashed var(--accent)}
+
+  .intro p{font-size:14.5px;line-height:1.9;color:#d0d6ea;word-break:keep-all;margin-bottom:16px;text-align:left}
+
+  .sem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:12px}
+  .sem .no{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--accent);margin-bottom:6px}
+  .sem h3{font-size:15px;font-weight:800;word-break:keep-all;margin-bottom:4px}
+  .sem .meta{font-size:12.5px;color:var(--sub);margin-bottom:2px}
+  .sem .lect{font-size:13px;color:var(--ink);margin-top:8px;font-weight:600}
+  .sem p.desc{font-size:13px;color:var(--sub);margin-top:8px;word-break:keep-all;line-height:1.75}
+
+  .books li{font-size:13px;color:var(--sub);line-height:1.9;word-break:keep-all;list-style:none;padding-left:14px;text-indent:-14px}
+  .books li::before{content:"·";color:var(--accent);font-weight:800;margin-right:8px}
+
+  /* ── 일정 달력 ── */
+  .cals{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+  .mon{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 12px}
+  .mon h4{font-size:12.5px;font-weight:800;color:var(--accent);letter-spacing:.08em;margin-bottom:8px;text-align:center}
+  .mon table{width:100%;border-collapse:collapse;table-layout:fixed}
+  .mon th{font-size:9px;color:var(--sub);font-weight:700;padding-bottom:4px}
+  .mon th:last-child{color:#f0604a99}
+  .mon td{text-align:center;font-size:11px;color:var(--sub);padding:3px 0;height:30px;vertical-align:top}
+  .mon td a{display:inline-block;width:24px;text-decoration:none;color:#fff;font-weight:800;
+    background:var(--accent);border-radius:8px;padding:2px 0 0;line-height:1.1;font-size:11px}
+  .mon td a small{display:block;font-size:7.5px;font-weight:800;letter-spacing:.03em;opacity:.85;padding-bottom:2px}
+  .sem{scroll-margin-top:16px}
+  .caltip{font-size:11.5px;color:var(--sub);margin-top:10px;text-align:center}
+  footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">2026 ART &amp; TECHNOLOGY CITY · PRE-PROGRAM</div>
+  <!-- TODO: 프로그램명 공식 영문 확정 시 교체 -->
+  <h1>Art-Technology Player</h1>
+  <p class="keyinfo"><strong>May – July 2026 · 6 Sessions</strong></p>
+  <a class="back" href="en.html">← Back to Exhibition Guide</a>
+</header>
+
+<section>
+  <h2>Schedule</h2>
+  <div class="cals" id="cals"></div>
+  <p class="caltip">Tap a highlighted date to jump to that seminar</p>
+</section>
+
+<!-- ⚠️ TODO: 아래 소개·세미나·참고도서 본문은 공식 영문본 대기 — 임의 번역 금지 원칙(2026-08-22)으로 한글 유지 중 -->
+<section class="intro">
+  <h2>Introduction</h2>
+  <p>기술문화 및 미디어 연구, 문화인류학을 기반으로 활동하는 연구자와 기획자, 패널을 초청한 특강을 포함해 총 6회의 세미나를 진행하였다. 사전 세미나는 전시 주제에 대한 작가들의 이해를 심화하는 동시에, 각자의 관심사를 다양한 의제로 확장하고 연구의 관점과 방법론을 함께 탐색하기 위해 마련되었다.</p>
+  <p>특강과 함께 작가들은 각자의 리서치 과정과 진행 상황을 단계적으로 공유하며 서로의 연구를 살펴보았다. 자신의 연구를 점검하는 한편, 동료 작가들의 문제의식과 관심사를 청취하고 서로 다른 관점이 교차하는 지점에서 새로운 질문과 연구의 단서를 발견해 나갔다. 이 과정에서 도출된 질문과 생각의 변화, 주요 논의는 각자의 연구노트에 지속적으로 기록하였다. 이러한 일련의 과정은 개별 작업을 구체화하는 것을 넘어, 서로 다른 연구의 접점을 발견하고 전시를 둘러싼 의제를 함께 확장해 나가는 공동의 연구 과정으로 이어졌다.</p>
+  <p>이 과정에서 문화인류학은 전통적인 학제의 경계 안에서 다루기보다, 급속하게 변화하는 동시대의 인문사회적 쟁점을 횡단하며 삶과 세계의 변화를 살피는 관점이자 방법으로 접근하고자 하였다. 세계 보편의 문제와 로컬의 지형, 생태와 기술철학, 식민주의와 신자유주의의 잔재를 비롯해 페미니즘과 퀴어 담론, 데이터 공학과 인공지능 기술의 발전이 촉발하는 인식과 삶의 변화 등을 폭넓게 살펴보았다. 이를 통해 서로 다른 역사적·사회적·기술적 조건이 교차하는 지점을 탐색하고, 그 안에서 각 작가의 연구가 지닌 구체성과 특수성을 발견하고자 하였다.</p>
+</section>
+
+<section>
+  <h2>Seminars</h2>
+
+  <div class="sem" id="s1">
+    <div class="no">SEMINAR 01</div>
+    <h3>발족 및 큐레이토리얼 소개</h3>
+    <div class="meta">5. 14(목) 14:00–16:00 · 술술센터</div>
+    <p class="desc">2026 YDP 예술기술도시 발족 및 올해의 전시 주제에 관한 큐레이토리얼 인식과 접근 소개, 연구 및 제작 협업 방식에 관한 안내. 작가별 릴레이 소개와 전시와 연결되는 관심사 공유.</p>
+  </div>
+
+  <div class="sem" id="s2">
+    <div class="no">SEMINAR 02 · 특강</div>
+    <h3>인간을 닮은 기계, 인간 외부의 존재</h3>
+    <div class="meta">5. 14(목) 14:00–16:00 · 라운지 영</div>
+    <div class="lect">박승일 (기술문화연구자, 캣츠랩 연구소 소장)</div>
+    <p class="desc">인공지능은 어떤 존재일까? 단지 기계일 뿐일까? 아니면 인간과 관계 맺는 비인간 존재일까? 이 강의는 인공지능 기술사를 통해 그 경계의 변화 양상을 살피고, 기술적 비인간의 존재론과 인간중심주의 비판의 가능성을 묻는다.</p>
+  </div>
+
+  <div class="sem" id="s3">
+    <div class="no">SEMINAR 03 · 특강</div>
+    <h3>동사로서의 인간</h3>
+    <div class="meta">5. 21(목) 14:00–16:00 · 라운지 영</div>
+    <div class="lect">차은정 (문화인류학자, 원광대 연구교수)</div>
+    <p class="desc">인간은 고정된 존재가 아니라 세계와의 관계 속에서 끊임없이 생성, 변화하는 ‘동사적 존재’라는 것을 밝히고, 그러한 인간의 삶은 지배나 통제가 아닌 조응과 응답의 과정임을 논한다.</p>
+  </div>
+
+  <div class="sem" id="s4">
+    <div class="no">SEMINAR 04 · 특강</div>
+    <h3>예술가(와/의) 포틀래치</h3>
+    <div class="meta">6. 4(목) 14:00–16:00 · 라운지 영</div>
+    <div class="lect">김현주 (독립큐레이터, 평론가)</div>
+    <p class="desc">인류학의 ‘선물’ 개념의 급진적 발현 형식 포틀래치(Potlatch)를 중심으로 질서를 위협하고 교란하며 위반하는 미술의 실천을 사고한다. 극단적으로 무용함이나 잉여, 여분으로 간주되는 예술은 사회에 편입되면서 급진성의 빛을 소진하지만, 제도의 질서를 무너뜨리기 위해 새롭게 등장하는 또 다른 예술적 분투가 있기에 체제에 격랑이 일어난다. 예술가와 포틀래치를, 그리고 예술가의 포틀래치를 궁리해 본다.</p>
+  </div>
+
+  <div class="sem" id="s5">
+    <div class="no">SEMINAR 05 · 연구발표</div>
+    <h3>Research in Progress</h3>
+    <div class="meta">6. 26(금) 10:00–18:00 · 술술센터</div>
+    <div class="lect">패널리스트: 강보라 (미디어 연구자), 김현주 (큐레이터·평론가)</div>
+    <p class="desc">1차 작업 계획안 발표 및 연구노트 진행 경과 공유.</p>
+  </div>
+
+  <div class="sem" id="s6">
+    <div class="no">SEMINAR 06 · 연구발표</div>
+    <h3>Research, re:researched</h3>
+    <div class="meta">7. 16(목) 13:00–18:00 · 술술센터</div>
+    <p class="desc">최종 연구노트 및 작업 계획안 발표, 종합 토론.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Reading List</h2>
+  <ul class="books">
+    <li>김상민 외, 『비인간: 사물, 생명, 기계, 행성과 함께 사유하기』, 사월의책, 2025</li>
+    <li>박승일, 『기술은 우리를 구원하지 않는다』, 사월의 책, 2025</li>
+    <li>세드릭 뒤랑, 『기술 봉건주의』, 여문책, 2020/2025</li>
+    <li>마크 그레이엄 외, 『AI는 인간을 먹고 자란다』, 김두완 옮김, 2024/2025, 흐름출판</li>
+    <li>닉 다이어-위데포드 외, 『비인간 권력』, 2019/2026, 안호성 옮김, 도서출판 갈무리</li>
+    <li>스벤 뉘홀름, 『이것이 기술윤리다』, 그린비, 2023/2025</li>
+    <li>애나 칭, 『세계 끝의 버섯』, 현실문화, 2023</li>
+    <li>에두아르도 콘, 『숲은 생각한다』, 차은정 옮김, 사월의 책, 2018</li>
+    <li>이현진, 『스크리놀로지: 우리의 세계는 스크린으로 연결되었다』, 을유문화사, 2026</li>
+    <li>김현경, 『사람, 장소, 환대』, 문학과 지성사, 2025</li>
+    <li>조르주 페렉, 『공간의 종류들』, 김호영 옮김, 문학동네, 2019</li>
+    <li>팀 잉골드, 『만들기: 인류학, 고고학, 예술, 건축』, 포도밭출판사, 2025</li>
+    <li>팀 잉골드, 『모든 것은 선을 만든다』, 이비, 2024</li>
+    <li>김현주, 「비누 거품 아래 죄와 부채」, 『한편』, 민음사, 2022</li>
+  </ul>
+</section>
+
+<p style="margin-top:44px;text-align:center"><a class="back" style="margin-top:0" href="en.html">← Back to Exhibition Guide</a></p>
+
+<footer>
+  영등포구 · 영등포문화재단 · 문화도시 영등포<br>
+  ©2026 예술기술도시 《인류학 연습: 인간은 우리인가?》
+</footer>
+
+</div>
+<script>
+(function(){
+  var marks={'5-14':['01','02'],'5-21':['03'],'6-4':['04'],'6-26':['05'],'7-16':['06']};
+  var target={'5-14':'s1','5-21':'s3','6-4':'s4','6-26':'s5','7-16':'s6'};
+  var wrap=document.getElementById('cals'), dows=['M','T','W','T','F','S','S'];
+  [5,6,7].forEach(function(m){
+    var first=new Date(2026,m-1,1), days=new Date(2026,m,0).getDate();
+    var lead=(first.getDay()+6)%7; /* 월요일 시작 */
+    var h='<div class="mon"><h4>'+['','','','','','MAY','JUN','JUL'][m]+' 2026</h4><table><tr>';
+    dows.forEach(function(d){h+='<th>'+d+'</th>';});
+    h+='</tr><tr>';
+    for(var i=0;i<lead;i++)h+='<td></td>';
+    for(var d=1;d<=days;d++){
+      var col=(lead+d-1)%7, k=m+'-'+d;
+      if(marks[k]) h+='<td><a href="#'+target[k]+'">'+d+'<small>'+marks[k].join('·')+'</small></a></td>';
+      else h+='<td>'+d+'</td>';
+      if(col===6&&d<days)h+='</tr><tr>';
+    }
+    h+='</tr></table></div>';
+    wrap.insertAdjacentHTML('beforeend',h);
+  });
+})();
+</script>
+</body>
+</html>
