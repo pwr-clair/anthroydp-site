@@ -107,6 +107,12 @@
   #credit summary::-webkit-details-marker{display:none}
   #credit .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
   #credit details[open] .tri{transform:rotate(90deg)}
+  /* 지난 예술기술도시 — 크레딧 제목과 같은 결, 펼침 없이 바로 이동 */
+  #past{padding-top:18px}
+  #past a{display:flex;align-items:center;gap:8px;text-decoration:none;
+    font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink)}
+  #past a .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1}
+  #past a.soon{opacity:.45;pointer-events:none}
   #credit{padding-top:18px}
   #contact .card{margin-bottom:0}
   #credit .card{margin-top:14px;margin-bottom:0}
@@ -374,6 +380,10 @@
   </div>
 </section>
 
+<section id="past">
+  <a class="js-past" href="#"><span class="tri">►</span>지난 예술기술도시</a>
+</section>
+
 <section id="credit">
   <details class="fold">
     <summary><span class="tri">►</span>크레딧</summary>
@@ -430,6 +440,7 @@
   /* 주소 두 줄만 바꾸면 탭·버튼·팝업이 한꺼번에 연결됩니다 */
   var ARCHIVE_URL = '#';   /* 연구노트 */
   var PREPROGRAM_URL = 'preprogram.html';   /* 사전 프로그램 — 2026-08-28 공개 */
+  var PAST_URL = '#';   /* 지난 예술기술도시(3개년 아카이브) — 페이지 준비되면 'past.html'로 점등 */
   var WORKS_URL   = 'works.html';   /* 전시작품 — 2026-08-25 공개 */
 
   var BIOS = {
@@ -474,7 +485,7 @@
   /* 바깥쪽(어두운 배경)을 탭하면 닫기 */
   dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
 
-  [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL], ['.js-preprogram', PREPROGRAM_URL]].forEach(function(pair){
+  [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL], ['.js-preprogram', PREPROGRAM_URL], ['.js-past', PAST_URL]].forEach(function(pair){
     if (pair[1] === '#') { Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){ a.classList.add('soon'); }); return; }
     Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
       a.href = pair[1];
