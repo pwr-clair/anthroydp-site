@@ -274,6 +274,7 @@
     <!-- TODO: 왼쪽 버튼 이름 미정 — 작품 소개 페이지로 연결 예정 -->
     <a class="booklink js-works" href="#">전시작품</a>
     <a class="booklink js-archive" href="#">연구노트</a>
+    <a class="booklink js-preprogram" href="#">사전 프로그램</a>
   </div>
 </section>
 
@@ -428,6 +429,7 @@
 (function(){
   /* 주소 두 줄만 바꾸면 탭·버튼·팝업이 한꺼번에 연결됩니다 */
   var ARCHIVE_URL = '#';   /* 연구노트 */
+  var PREPROGRAM_URL = '#';   /* 사전 프로그램 — 클라라 검토 후 비밀 주소로 점등 */
   var WORKS_URL   = 'works.html';   /* 전시작품 — 2026-08-25 공개 */
 
   var BIOS = {
@@ -472,7 +474,7 @@
   /* 바깥쪽(어두운 배경)을 탭하면 닫기 */
   dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
 
-  [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL]].forEach(function(pair){
+  [['.js-archive', ARCHIVE_URL], ['.js-works', WORKS_URL], ['.js-preprogram', PREPROGRAM_URL]].forEach(function(pair){
     if (pair[1] === '#') { Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){ a.classList.add('soon'); }); return; }
     Array.prototype.forEach.call(document.querySelectorAll(pair[0]), function(a){
       a.href = pair[1];
