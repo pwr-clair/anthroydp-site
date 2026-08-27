@@ -453,6 +453,25 @@ var BIOS = {
     });
   });
 })();
+
+/* 운영자 뒷문 — 헤더 책갈피(띠지) 더블탭으로 3초 잠금 해제 → 언어 알약 탭 = 지킴이 캘린더.
+   단일 탭은 평소처럼 인스타그램(더블탭 판별용 0.35초 지연, 같은 탭 이동), 일반 언어 전환은 그대로. */
+(function(){
+  var band=document.querySelector('a[aria-label="문화도시 영등포 인스타그램"]');
+  var lang=document.querySelector('.langswitch');
+  if(!band||!lang) return;
+  var lastTap=0, igTimer=null, armedUntil=0;
+  band.addEventListener('click',function(e){
+    e.preventDefault();
+    var now=Date.now();
+    if(now-lastTap<350){ clearTimeout(igTimer); igTimer=null; armedUntil=now+3000; }
+    else{ igTimer=setTimeout(function(){ location.href='https://www.instagram.com/cultural_city_ydp/'; },360); }
+    lastTap=now;
+  });
+  lang.addEventListener('click',function(e){
+    if(Date.now()<armedUntil){ e.preventDefault(); armedUntil=0; location.href='https://pwr-clair.github.io/atc-board/cal.html'; }
+  });
+})();
 </script>
 </body>
 </html>
