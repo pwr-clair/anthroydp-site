@@ -26,7 +26,6 @@
   section{padding-top:44px}
   h2{font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px dashed var(--accent)}
 
-  .intro{padding-top:28px} /* 달력→소개 체감 여백을 세미나→참고도서(56px)와 동일하게 */
   .intro p{font-size:14.5px;line-height:1.9;color:#d0d6ea;word-break:keep-all;margin-bottom:16px;text-align:left}
 
   .sem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:12px}
@@ -39,15 +38,6 @@
   .books li{font-size:13px;color:var(--sub);line-height:1.9;word-break:keep-all;list-style:none;padding-left:14px;text-indent:-14px}
   .books li::before{content:"·";color:var(--accent);font-weight:800;margin-right:8px}
 
-  /* ── 일정 스트립 ── */
-  .dstrip{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
-  .dstrip a{flex:1 1 0;min-width:86px;max-width:120px;text-decoration:none;text-align:center;
-    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 6px 9px}
-  .dstrip a b{display:block;font-size:17px;font-weight:800;color:var(--accent);letter-spacing:.02em}
-  .dstrip a small{display:block;font-size:10.5px;color:var(--sub);margin-top:3px;letter-spacing:.04em}
-  .dstrip a:active{border-color:var(--accent)}
-  .sem{scroll-margin-top:16px}
-  .caltip{font-size:11.5px;color:var(--sub);margin-top:10px;text-align:center}
   footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
 </style>
 </head>
@@ -61,18 +51,6 @@
   <p class="keyinfo"><strong>May – July 2026 · 6 Sessions</strong></p>
   <a class="back" href="en.html">← Back to Exhibition Guide</a>
 </header>
-
-<section>
-  <h2>Schedule</h2>
-  <div class="dstrip">
-    <a href="#s1"><b>5.14</b><small>Thu · 01+02</small></a>
-    <a href="#s3"><b>5.21</b><small>Thu · 03</small></a>
-    <a href="#s4"><b>6.4</b><small>Thu · 04</small></a>
-    <a href="#s5"><b>6.26</b><small>Fri · 05</small></a>
-    <a href="#s6"><b>7.16</b><small>Thu · 06</small></a>
-  </div>
-  <p class="caltip">Tap a date to jump to that seminar</p>
-</section>
 
 <!-- ⚠️ TODO: 소개·세미나·참고도서 본문은 공식 영문본 대기 — 임의 번역 금지 원칙(2026-08-22)으로 한글 유지 중 -->
 <section class="intro">
