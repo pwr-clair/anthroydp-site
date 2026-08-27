@@ -108,7 +108,7 @@
   #credit .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
   #credit details[open] .tri{transform:rotate(90deg)}
   /* 지난 예술기술도시 — 크레딧 제목과 같은 결, 펼침 없이 바로 이동 */
-  #past{padding-top:18px}
+  #past{padding-top:18px}   /* 크레딧과 동일 간격 */
   #past a{display:flex;align-items:center;gap:8px;text-decoration:none;
     font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink)}
   #past a .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1}
@@ -129,7 +129,7 @@
   a.soon{opacity:.45;pointer-events:none}
 
   .sectionnote{font-size:12.5px;color:var(--sub);margin-bottom:14px;word-break:keep-all}
-  footer{margin-top:24px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
+  footer{margin-top:18px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
   .map{width:100%;height:220px;border:1px solid var(--line);border-radius:14px;margin-top:12px}
 
   /* 서문 */
@@ -380,10 +380,6 @@
   </div>
 </section>
 
-<section id="past">
-  <a class="js-past" href="#"><span class="tri">►</span>지난 예술기술도시</a>
-</section>
-
 <section id="credit">
   <details class="fold">
     <summary><span class="tri">►</span>크레딧</summary>
@@ -414,6 +410,10 @@
     </div>
   </div>
   </details>
+</section>
+
+<section id="past">
+  <a class="js-past" href="#"><span class="tri">►</span>지난 예술기술도시</a>
 </section>
 
 <footer>
