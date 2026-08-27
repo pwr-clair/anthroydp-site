@@ -38,6 +38,19 @@
   .books li{font-size:13px;color:var(--sub);line-height:1.9;word-break:keep-all;list-style:none;padding-left:14px;text-indent:-14px}
   .books li::before{content:"·";color:var(--accent);font-weight:800;margin-right:8px}
 
+  /* ── 일정 달력 ── */
+  .cals{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+  .mon{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 12px}
+  .mon h4{font-size:12.5px;font-weight:800;color:var(--accent);letter-spacing:.08em;margin-bottom:8px;text-align:center}
+  .mon table{width:100%;border-collapse:collapse;table-layout:fixed}
+  .mon th{font-size:9px;color:var(--sub);font-weight:700;padding-bottom:4px}
+  .mon th:last-child{color:#f0604a99}
+  .mon td{text-align:center;font-size:11px;color:var(--sub);padding:3px 0;height:30px;vertical-align:top}
+  .mon td a{display:inline-block;width:24px;text-decoration:none;color:#fff;font-weight:800;
+    background:var(--accent);border-radius:8px;padding:2px 0 0;line-height:1.1;font-size:11px}
+  .mon td a small{display:block;font-size:7.5px;font-weight:800;letter-spacing:.03em;opacity:.85;padding-bottom:2px}
+  .sem{scroll-margin-top:16px}
+  .caltip{font-size:11.5px;color:var(--sub);margin-top:10px;text-align:center}
   footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
 </style>
 </head>
@@ -47,10 +60,15 @@
 <header>
   <div class="eyebrow">2026 예술기술도시 · 사전 프로그램</div>
   <h1>예술기술플레이어 프로그램</h1>
-  <p class="keyinfo"><strong>2026. 5월 – 7월 · 총 6회</strong><br>
-  강사 박승일, 차은정, 김현주, 강보라, 조주리</p>
+  <p class="keyinfo"><strong>2026. 5월 – 7월 · 총 6회</strong></p>
   <a class="back" href="index.html">← 전시 안내로</a>
 </header>
+
+<section>
+  <h2>일정</h2>
+  <div class="cals" id="cals"></div>
+  <p class="caltip">파란 날짜를 누르면 해당 세미나로 이동합니다</p>
+</section>
 
 <section class="intro">
   <h2>소개</h2>
@@ -62,14 +80,14 @@
 <section>
   <h2>세미나</h2>
 
-  <div class="sem">
+  <div class="sem" id="s1">
     <div class="no">SEMINAR 01</div>
     <h3>발족 및 큐레이토리얼 소개</h3>
     <div class="meta">5. 14(목) 14:00–16:00 · 술술센터</div>
     <p class="desc">2026 YDP 예술기술도시 발족 및 올해의 전시 주제에 관한 큐레이토리얼 인식과 접근 소개, 연구 및 제작 협업 방식에 관한 안내. 작가별 릴레이 소개와 전시와 연결되는 관심사 공유.</p>
   </div>
 
-  <div class="sem">
+  <div class="sem" id="s2">
     <div class="no">SEMINAR 02 · 특강</div>
     <h3>인간을 닮은 기계, 인간 외부의 존재</h3>
     <div class="meta">5. 14(목) 14:00–16:00 · 라운지 영</div>
@@ -77,7 +95,7 @@
     <p class="desc">인공지능은 어떤 존재일까? 단지 기계일 뿐일까? 아니면 인간과 관계 맺는 비인간 존재일까? 이 강의는 인공지능 기술사를 통해 그 경계의 변화 양상을 살피고, 기술적 비인간의 존재론과 인간중심주의 비판의 가능성을 묻는다.</p>
   </div>
 
-  <div class="sem">
+  <div class="sem" id="s3">
     <div class="no">SEMINAR 03 · 특강</div>
     <h3>동사로서의 인간</h3>
     <div class="meta">5. 21(목) 14:00–16:00 · 라운지 영</div>
@@ -85,7 +103,7 @@
     <p class="desc">인간은 고정된 존재가 아니라 세계와의 관계 속에서 끊임없이 생성, 변화하는 ‘동사적 존재’라는 것을 밝히고, 그러한 인간의 삶은 지배나 통제가 아닌 조응과 응답의 과정임을 논한다.</p>
   </div>
 
-  <div class="sem">
+  <div class="sem" id="s4">
     <div class="no">SEMINAR 04 · 특강</div>
     <h3>예술가(와/의) 포틀래치</h3>
     <div class="meta">6. 4(목) 14:00–16:00 · 라운지 영</div>
@@ -93,7 +111,7 @@
     <p class="desc">인류학의 ‘선물’ 개념의 급진적 발현 형식 포틀래치(Potlatch)를 중심으로 질서를 위협하고 교란하며 위반하는 미술의 실천을 사고한다. 극단적으로 무용함이나 잉여, 여분으로 간주되는 예술은 사회에 편입되면서 급진성의 빛을 소진하지만, 제도의 질서를 무너뜨리기 위해 새롭게 등장하는 또 다른 예술적 분투가 있기에 체제에 격랑이 일어난다. 예술가와 포틀래치를, 그리고 예술가의 포틀래치를 궁리해 본다.</p>
   </div>
 
-  <div class="sem">
+  <div class="sem" id="s5">
     <div class="no">SEMINAR 05 · 연구발표</div>
     <h3>Research in Progress</h3>
     <div class="meta">6. 26(금) 10:00–18:00 · 술술센터</div>
@@ -101,7 +119,7 @@
     <p class="desc">1차 작업 계획안 발표 및 연구노트 진행 경과 공유.</p>
   </div>
 
-  <div class="sem">
+  <div class="sem" id="s6">
     <div class="no">SEMINAR 06 · 연구발표</div>
     <h3>Research, re:researched</h3>
     <div class="meta">7. 16(목) 13:00–18:00 · 술술센터</div>
@@ -135,5 +153,28 @@
 </footer>
 
 </div>
+<script>
+(function(){
+  var marks={'5-14':['01','02'],'5-21':['03'],'6-4':['04'],'6-26':['05'],'7-16':['06']};
+  var target={'5-14':'s1','5-21':'s3','6-4':'s4','6-26':'s5','7-16':'s6'};
+  var wrap=document.getElementById('cals'), dows=['월','화','수','목','금','토','일'];
+  [5,6,7].forEach(function(m){
+    var first=new Date(2026,m-1,1), days=new Date(2026,m,0).getDate();
+    var lead=(first.getDay()+6)%7; /* 월요일 시작 */
+    var h='<div class="mon"><h4>2026. '+m+'</h4><table><tr>';
+    dows.forEach(function(d){h+='<th>'+d+'</th>';});
+    h+='</tr><tr>';
+    for(var i=0;i<lead;i++)h+='<td></td>';
+    for(var d=1;d<=days;d++){
+      var col=(lead+d-1)%7, k=m+'-'+d;
+      if(marks[k]) h+='<td><a href="#'+target[k]+'">'+d+'<small>'+marks[k].join('·')+'</small></a></td>';
+      else h+='<td>'+d+'</td>';
+      if(col===6&&d<days)h+='</tr><tr>';
+    }
+    h+='</tr></table></div>';
+    wrap.insertAdjacentHTML('beforeend',h);
+  });
+})();
+</script>
 </body>
 </html>
