@@ -663,6 +663,7 @@ const DEFAULT_TEAM = [
 
 /* ── 기간·고정 일정 (정본 = anthroydp.site 2026-08-27 실측) ── */
 const MIN='2026-08-31', MAX='2026-09-30';
+const ATT_FROM='2026-09-01';   // 출결 탭 노출 시작일 — 8/31 리허설 날엔 안 씀
 const EX_START='2026-09-01', EX_END='2026-09-20';
 const CLOSED = {'2026-09-07':1,'2026-09-14':1};           // 휴관(월)
 const FIXED = {
@@ -676,7 +677,7 @@ const FIXED = {
 };
 /* 개장·폐장 체크리스트 — 운영보드(index.html)와 동일 항목·동일 DB 경로(atc/ex*, 상호 동기화) */
 const EX_FIXED = {
-  open:['운영인력 출근 확인','출입문 잠금 해제 · 전기·조명 점등','냉난방 상태 확인',
+  open:['운영인력 출근도장','출입문 잠금 해제 · 전기·조명 점등','냉난방 상태 확인',
         '미디어 기기(작품) ON · 작동 확인','전시 작품 상태 점검','당일 일정 확인 (단체·연계·이벤트)'],
   run: ['관람객 계수 기록','미디어 작품 정상 작동 수시 점검','민원·특이사항 기록',
         '사람 많을 때 · 도슨트 · 연계 프로그램 사진 촬영','작품 눈으로 감상 안내'],
@@ -775,6 +776,7 @@ function enterApp(){
     const n=prompt('본인 이름을 선택하세요: '+STAFF_NAMES.join(' / '), STAFF_NAMES[0]);
     if(n){staffSel=n.trim(); localStorage.setItem('atc-cal-staff',staffSel);}
   }
+  document.querySelector('.views button[data-v=att]').style.display = todayKey<ATT_FROM ? 'none':'';
   startListeners();
   switchView('day'); // 기본 = 오늘 (기간 밖이면 가장 가까운 날로 클램프)
   setInterval(function(){ if(keyOf(new Date())!==todayKey) location.reload(); }, 60000); // 자정 넘김 — 오늘 기준 전부 갱신
