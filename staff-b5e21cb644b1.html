@@ -324,7 +324,7 @@
   <input id="pw-inp" type="password" placeholder="전달받은 4자리 번호" autocomplete="current-password" inputmode="numeric">
   <button id="login-btn">입장</button>
   <div id="login-err"></div>
-  <div class="hint">첫 로그인 때 입력한 비밀번호가 그대로 등록됩니다.<br>비밀번호를 모르면 관리자(클라라)에게 문의하세요.</div>
+  <div class="hint">첫 로그인 때 입력한 비밀번호가 그대로 등록됩니다.<br>비밀번호를 모르면 조아라에게 문의하세요.</div>
 </div>
 
 <div class="app" id="app">
@@ -637,7 +637,6 @@ setPersistence(auth, browserLocalPersistence).catch(()=>{});
 
 /* ── 사용자 ── */
 const USERS = {
-  clara:   {name:'클라라', role:'admin', av:'클', avCls:'av-admin'},
   joara:   {name:'조아라', role:'admin', av:'조', avCls:'av-admin'},
   chaewon: {name:'양채원', role:'admin', av:'양', avCls:'av-admin'},
   juri:    {name:'조주리', role:'lead',  av:'주', avCls:'av-lead'},
@@ -646,7 +645,7 @@ const USERS = {
   haeun:   {name:'박하은', role:'lead',  av:'하', avCls:'av-lead'},
   staff:   {name:'지킴이', role:'staff', av:'지', avCls:'av-staff'}, // 예비 공용(알바 등) — 공유·체크만
 };
-const NAME_TO_ID = {'클라라':'clara','조아라':'joara','양채원':'chaewon','조주리':'juri','변채린':'chaerin',
+const NAME_TO_ID = {'조아라':'joara','양채원':'chaewon','조주리':'juri','변채린':'chaerin',
   '박진선':'jinsun','진선':'jinsun','박하은':'haeun','하은':'haeun','staff':'staff','지킴이':'staff'};
 const SUFFIX = '@atc.local';
 /* 출결 대상 3인 — 인력 확정되면 tbd 줄의 {id,name}만 교체 */
@@ -656,9 +655,10 @@ const STAFF_NAMES = ['박하은'];
 const DEFAULT_TEAM = [
   {name:'조아라', role:'전시운영 매니저', phone:'010-7226-1725'},
   {name:'변채린', role:'영등포문화재단',   phone:'010-2172-5352'},
+  {name:'조주리', role:'큐레이터',        phone:''},
+  {name:'양채원', role:'',               phone:''},
   {name:'박진선', role:'운영팀장',        phone:''},
   {name:'박하은', role:'운영인력',        phone:''},
-  {name:'클라라', role:'관리자',          phone:''},
 ];
 
 /* ── 기간·고정 일정 (정본 = anthroydp.site 2026-08-27 실측) ── */
@@ -718,8 +718,8 @@ let selDay = clampKey(todayKey);
 let curView = 'month';
 let staffSel = localStorage.getItem('atc-cal-staff') || '';
 const myName = ()=> meId==='staff' ? (staffSel||me.name) : me.name; // 공용 계정만 이름 선택
-/* 2026-08-30 클라라: 수정·삭제·출결 대리 입력·기간 전체 열람은 조아라만 (clara는 세팅용) */
-const ADMINS = ['joara','clara'];
+/* 수정·삭제·출결 대리 입력·기간 전체 열람은 조아라만 */
+const ADMINS = ['joara'];
 const isAdmin = ()=> ADMINS.includes(meId);
 /* 공인 IP — 브라우저는 SSID를 못 읽으므로 전시장 와이파이 판정은 공인 IP 대조로 대신한다 */
 fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(j=>{myIp=j.ip;renderAtt();}).catch(()=>{});
@@ -727,7 +727,7 @@ const venueIp = ()=> venueCache && venueCache.ip;
 /* ponytail: IP 조회가 실패하면(myIp=null) 잠그지 않고 통과시킨 뒤 기록에 ⚠만 남긴다 — 외부 서비스 장애로 출퇴근이 막히는 편이 더 나쁘다 */
 const atVenue = ()=> !venueIp() || !myIp || myIp===venueIp();
 /* 작성자별 글색 — 조아라·클라라 빨강 / 조주리 파랑 / 변채린 보라 / 양채원 초록 / 나머지 블랙 */
-const inkOf = n => ({'조아라':'var(--red)','클라라':'var(--red)','조주리':'var(--blu)','변채린':'var(--pur)','양채원':'var(--grn-ink)'}[n]||'inherit');
+const inkOf = n => n==='조아라' ? 'var(--red)' : 'inherit';
 
 /* ── 로그인 ── */
 $('login-btn').addEventListener('click', doLogin);
@@ -1287,7 +1287,7 @@ $('team-logout').addEventListener('click',()=>{ if(confirm('로그아웃할까�
 
 /* 데모 진입 (스크립트 전부 초기화된 뒤) */
 if(demo){
-  meId={admin:'clara',lead:'jinsun'}[location.hash.split('-')[1]]||'staff';
+  meId={admin:'joara',lead:'jinsun'}[location.hash.split('-')[1]]||'staff';
   me=USERS[meId]; staffSel=staffSel||'하은'; enterApp();
 }
 </script>
