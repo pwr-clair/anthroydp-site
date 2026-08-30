@@ -21,6 +21,7 @@
     --red:#F0604A; --red-soft:rgba(240,96,74,.15);
     --pur:var(--red); --pur-soft:var(--red-soft);
     --vio:#7D6DF2; --vio-soft:rgba(125,109,242,.16); /* 출결 탭 전용 — 여기 말고는 쓰지 않는다 */
+    --gr:#1ED21E;  --gr-soft:rgba(30,210,30,.15);    /* 특이·요청·공유 전용 */
     --grn:var(--red); --grn-ink:var(--red); --grn-soft:var(--red-soft);
     --blu:var(--red); --blu-soft:var(--red-soft);
     --num:ui-monospace,"SF Mono",Menlo,monospace;
@@ -124,7 +125,7 @@
   .tag.cl{background:var(--well);color:var(--ink3)}
   .dots{margin-top:auto;display:flex;gap:3px;flex-wrap:wrap}
   .dot{width:5px;height:5px;border-radius:50%}
-  .dot.ev{background:var(--pur)} .dot.is{background:var(--red)}
+  .dot.ev{background:var(--red)} .dot.is{background:var(--gr)}
   .legend{display:flex;gap:14px;margin-top:10px;font-size:10px;color:var(--ink2);align-items:center}
   .legend .dot{width:7px;height:7px}
 
@@ -155,6 +156,8 @@
   .sec.fold.open .sec-t .tri{transform:rotate(90deg)}
   /* 당일 공지 — 유일하게 박스로 띄워 하루의 머리글 노릇 */
   .sec.box{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px 13px 11px}
+  .sec.box .sub-l{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--ink3);margin:6px 0 2px}
+  .sec.box .box-div{border-top:1px solid var(--line);margin:16px -13px 0}
   .rp-grid{display:grid;grid-template-columns:76px 1fr;gap:7px 9px;align-items:center}
   .rp-grid label{font-size:11.5px;font-weight:800;color:var(--ink2)}
   .rp-grid input{border:1px solid var(--line);border-radius:4px;padding:8px 10px;font-size:14px;min-width:0}
@@ -168,8 +171,7 @@
   .item .by{flex:none;font-size:9.5px;color:var(--ink3);font-family:var(--num);padding-top:3px}
   .item .del{flex:none;border:0;background:none;color:var(--ink3);font-size:13px;padding:0 2px}
   .item .chip{flex:none;font-size:9.5px;font-weight:800;border-radius:2px;padding:1px 6px;margin-top:3px}
-  .chip.i1{background:var(--red-soft);color:var(--red)}
-  .chip.i2{background:var(--blu-soft);color:var(--blu)}
+  .chip.i1,.chip.i2{background:var(--gr-soft);color:var(--gr)}
   /* 기본 체크박스는 체크가 뭉툭해서 직접 그린다 */
   .item input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:none;position:relative;
     width:15px;height:15px;margin:2px 0 0;border:1px solid var(--line);border-radius:3px;background:transparent}
@@ -581,10 +583,18 @@
 
     <div class="sec box">
       <div class="sec-t">당일 주요일정 · 공지</div>
+      <div class="sub-l">공지</div>
+      <div id="nc-list"></div>
+      <div class="add">
+        <input type="text" id="nc-inp" placeholder="+ 오늘의 공지">
+        <button id="nc-btn">추가</button>
+      </div>
+      <div class="box-div"></div>
+      <div class="sub-l">주요 일정</div>
       <div id="ev-list"></div>
       <div class="add" id="ev-add">
         <input class="tm-in" id="ev-tm" type="text" placeholder="14:00" inputmode="numeric" style="display:none">
-        <input type="text" id="ev-inp" placeholder="+ 일정 · 공지">
+        <input type="text" id="ev-inp" placeholder="+ 일정">
         <button class="tmbtn" id="ev-tmtog">시간</button>
         <button id="ev-btn">추가</button>
       </div>
@@ -723,7 +733,7 @@ const todayKey = keyOf(new Date());
 /* ── 상태 ── */
 let me=null, meId=null;
 let evCache={}, isCache={}, shCache={}, rpCache={};
-let attCache={}, venueCache=null, teamCache=null, myIp=null, evxCache={}, rosterCache=null, ckCache={};
+let attCache={}, venueCache=null, teamCache=null, myIp=null, evxCache={}, rosterCache=null, ckCache={}, ncCache={};
 let exDoneCache={}, exDate=null, exUnsub=[];
 let selDay = clampKey(todayKey);
 let curView = 'month';
@@ -797,6 +807,7 @@ function startListeners(){
   onValue(ref(db,'.info/connected'),s=>{const on=!!s.val();$('live').classList.toggle('off',!on);$('live-t').textContent=on?'실시간 연결됨':'연결 끊김';});
   onValue(ref(db,'atc/cal/events'),s=>{evCache=s.val()||{};renderAll();});
   onValue(ref(db,'atc/cal/evx'),   s=>{evxCache=s.val()||{};renderAll();}); // 고정 일정의 체크·삭제·수정 흔적
+  onValue(ref(db,'atc/cal/notice'),s=>{ncCache=s.val()||{};renderAll();});
   onValue(ref(db,'atc/cal/issues'),s=>{isCache=s.val()||{};renderAll();});
   onValue(ref(db,'atc/cal/share'), s=>{shCache=s.val()||{};renderAll();});
   onValue(ref(db,'atc/cal/att'),   s=>{attCache=s.val()||{};renderAtt();renderRp();});
@@ -851,7 +862,7 @@ function renderMonth(){
       else if(k===MIN) tags='<span class="tag fx">리허설·교육</span>';
       const dots=[];
       if(fixedCnt(k)+cnt(evCache,k)>0&&!FIXED[k]) dots.push('<i class="dot ev"></i>');
-      if(cnt(evCache,k)>0&&FIXED[k]) dots.push('<i class="dot ev"></i>');
+      if((cnt(evCache,k)>0&&FIXED[k])||cnt(ncCache,k)>0) dots.push('<i class="dot ev"></i>');
       if(cnt(isCache,k)+cnt(shCache,k)>0) dots.push('<i class="dot is"></i>');
       c.innerHTML='<span class="d">'+(d.getDate()===1?(d.getMonth()+1)+'/1':d.getDate())+'</span>'+tags+'<div class="dots">'+dots.join('')+'</div>';
       const kk=k; // k는 루프에서 계속 바뀌므로 고정 캡처
@@ -883,7 +894,7 @@ function renderWeek(){
     const shNames=workersOf(k).join('·');
     card.innerHTML='<div class="h"><span class="dt'+(d.getDay()===0?' sun':'')+'">'+ (d.getMonth()+1)+'.'+d.getDate()+' '+DOW[d.getDay()]+'</span>'
       +'<span class="bdg '+dt.cls+'">'+dt.label+'</span>'
-      +'<span class="cnts">'+(shNames?'👤'+shNames+' ':'')+(nIs?'<b style="color:var(--red)">기록 '+nIs+'</b>':'')+'</span></div>'
+      +'<span class="cnts">'+(shNames?'👤'+shNames+' ':'')+(nIs?'<b style="color:var(--gr)">기록 '+nIs+'</b>':'')+'</span></div>'
       +lines;
     card.addEventListener('click',()=>{selDay=k;switchView('day');});
     list.appendChild(card);
@@ -910,7 +921,7 @@ function renderDay(){
 
   renderAtt();
 
-  renderEvents();
+  renderEvents(); renderNotice();
   renderNotes();
   renderCk();
 }
@@ -947,6 +958,33 @@ function renderEvents(){
     toast('순서 저장');
   });
 }
+/* 공지 — 일정과 같은 박스, 선 위쪽. 시간 개념 없음 */
+function renderNotice(){
+  const k=selDay;
+  const items=Object.entries(ncCache[k]||{}).map(([id,e])=>({id,...e})).sort((a,b)=>{
+    if(!!a.done!==!!b.done) return a.done?1:-1;
+    const ao=a.o==null?999:a.o, bo=b.o==null?999:b.o;
+    return ao!==bo ? ao-bo : (a.ts||0)-(b.ts||0);
+  });
+  $('nc-list').innerHTML = items.length ? items.map(e=>
+    '<div class="item'+(e.done?' done':'')+'" data-id="'+e.id+'">'
+    +'<input type="checkbox" data-ncck="'+e.id+'"'+(e.done?' checked':'')+'>'
+    +'<span class="txt">'+esc(e.text)+'</span>'
+    +(e.by?'<span class="by">'+esc(e.by)+'</span>':'')
+    +(isAdmin()?'<button class="del" data-nced="'+e.id+'">✎</button>'
+               +'<button class="del" data-ncdel="'+e.id+'">✕</button><span class="grip">≡</span>':'')
+    +'</div>').join('') : '<div class="empty">공지 없음</div>';
+  if(isAdmin()) makeSortable($('nc-list'),order=>{
+    const upd={}; order.forEach((id,i)=>upd[id+'/o']=i);
+    update(ref(db,'atc/cal/notice/'+k),upd); toast('순서 저장');
+  });
+}
+$('nc-btn').addEventListener('click',()=>{
+  const v=$('nc-inp').value.trim(); if(!v)return;
+  push(ref(db,'atc/cal/notice/'+selDay),{text:v,by:myName(),ts:Date.now()});
+  $('nc-inp').value='';
+});
+
 const normTm = t => (t&&/^\d{3,4}$/.test(t)) ? t.padStart(4,'0').replace(/(\d\d)(\d\d)/,'$1:$2') : (t||'');
 function editEvent(src,id){
   const k=selDay;
@@ -1248,6 +1286,11 @@ document.addEventListener('keydown',e=>{
 /* 삭제·체크 위임 */
 document.addEventListener('click',e=>{
   const d=e.target.dataset||{};
+  if(d.nced){ const cur=(ncCache[selDay]||{})[d.nced]||{};
+    const v=prompt('공지 내용 (비우면 삭제)', cur.text||'');
+    if(v!==null){ if(v.trim()) update(ref(db,'atc/cal/notice/'+selDay+'/'+d.nced),{text:v.trim()});
+                  else remove(ref(db,'atc/cal/notice/'+selDay+'/'+d.nced)); toast('저장'); } }
+  if(d.ncdel){ if(confirm('삭제할까요?')) remove(ref(db,'atc/cal/notice/'+selDay+'/'+d.ncdel)); }
   if(d.eved){ const [src,id]=d.eved.split('|'); editEvent(src,id); }
   if(d.evdel){ const [src,id]=d.evdel.split('|');
     if(confirm('삭제할까요?')){
@@ -1260,6 +1303,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{
   const t=e.target; if(t.type!=='checkbox')return;
   const stamp=myName()+' '+hhmm();
+  if(t.dataset.ncck) update(ref(db,'atc/cal/notice/'+selDay+'/'+t.dataset.ncck),{done:t.checked});
   if(t.dataset.evck){ const [src,id]=t.dataset.evck.split('|');
     update(ref(db, src==='ev' ? 'atc/cal/events/'+selDay+'/'+id : 'atc/cal/evx/'+selDay+'/'+id), {done:t.checked}); }
   if(t.dataset.sh) update(ref(db,'atc/cal/share/'+selDay+'/'+t.dataset.sh),{done:t.checked,doneBy:t.checked?stamp:null});
