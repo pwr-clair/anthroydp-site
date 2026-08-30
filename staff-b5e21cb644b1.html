@@ -619,15 +619,16 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDatabase, ref, onValue, set, update, push, remove } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-/* ── Firebase: PWR 프로젝트 재사용, 네임스페이스 atc/* (운영보드와 동일 규칙으로 개통) ── */
+/* ── Firebase: 전시 전용 프로젝트 anthroydp (2026-08-30 신설).
+   PWR 프로젝트 재사용을 그만둔 이유 = 규칙·계정·데이터 분리, 전시 종료 후 프로젝트째 폐기 ── */
 const firebaseConfig = {
-  apiKey: "AIzaSyCHGeD4GBYeatmrsNFaMLJ7rradXnzbSE8",
-  authDomain: "paradise-walk-residence.firebaseapp.com",
-  projectId: "paradise-walk-residence",
-  storageBucket: "paradise-walk-residence.firebasestorage.app",
-  messagingSenderId: "539327839432",
-  appId: "1:539327839432:web:40a824be8e420c9fa8b9fd",
-  databaseURL: "https://paradise-walk-residence-default-rtdb.asia-southeast1.firebasedatabase.app"
+  apiKey: "AIzaSyCof5VFNkmh82Whp0EVRV8cVlsyuc7T8nw",
+  authDomain: "anthroydp.firebaseapp.com",
+  databaseURL: "https://anthroydp-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "anthroydp",
+  storageBucket: "anthroydp.firebasestorage.app",
+  messagingSenderId: "386459513562",
+  appId: "1:386459513562:web:5230fff18fa4c43ec4ebe3"
 };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
