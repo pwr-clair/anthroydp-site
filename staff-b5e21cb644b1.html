@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="지킴이">
+<meta name="theme-color" content="#0d0f15">
+<link rel="apple-touch-icon" href="app-icons/app-180.png">
+<link rel="manifest" href="app-icons/manifest.json">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23F0604A'/%3E%3C/svg%3E">
 <title>예술기술도시 지킴이 캘린더</title>
@@ -298,6 +303,9 @@
   .ck-wrap.open .ck-body{display:block}
   .ck-g{font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--ink3);margin:9px 0 2px}
   .ck-body .item{font-size:12.5px;padding:5px 0}
+  .ck-add{margin:8px 0 4px;border:1px dashed var(--line);background:none;color:var(--ink3);
+    border-radius:5px;padding:7px 12px;font-size:11.5px;font-weight:700}
+  .att .del{flex:none;border:0;background:none;color:var(--ink3);font-size:12px;padding:0 2px}
 
   /* contacts modal */
   dialog{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:0;max-width:88vw;width:340px;max-height:84vh;overflow:auto}
@@ -648,8 +656,9 @@ const USERS = {
 const NAME_TO_ID = {'조아라':'joara','양채원':'chaewon','조주리':'juri','변채린':'chaerin',
   '박진선':'jinsun','진선':'jinsun','박하은':'haeun','하은':'haeun','staff':'staff','지킴이':'staff'};
 const SUFFIX = '@atc.local';
-/* 출결 대상 3인 — 인력 확정되면 tbd 줄의 {id,name}만 교체 */
-const ATT_ROSTER = [{id:'jinsun',name:'박진선'},{id:'haeun',name:'박하은'},{id:'tbd',name:'추가 예정'}];
+/* 출결 명단 — DB(atc/cal/roster)가 정본. 비어 있으면 아래 기본값을 쓰고, 조아라가 처음 편집할 때 DB로 옮겨 담는다.
+   본인 판정은 계정 id가 아니라 '이름'이라, 명단에 이름만 넣으면 그 사람이 자기 칸을 찍을 수 있다. */
+const DEFAULT_ROSTER = ['박진선','박하은','추가 예정'];
 const STAFF_NAMES = ['박하은'];
 /* 팀원 연락처 기본값 — 관리자가 처음 열 때 DB(atc/cal/team)에 1회 시딩되고, 그 뒤로는 DB가 정본 */
 const DEFAULT_TEAM = [
@@ -675,7 +684,8 @@ const FIXED = {
   '2026-09-19':[{tm:'15:00',t:'크로스토크'},{tm:'16:00',t:'크로스토크'}],
   '2026-09-20':[{tm:'18:00',t:'크로스토크'},{tm:'19:00',t:'폐막식 「D.C: 맨 처음으로 다시」'},{tm:'',t:'전시 마지막 날'}],
 };
-/* 개장·폐장 체크리스트 — 운영보드(index.html)와 동일 항목·동일 DB 경로(atc/ex*, 상호 동기화) */
+/* 운영 체크리스트 기본값 — DB(atc/cal/ck)가 정본. 조아라가 처음 편집하는 순간 이 값이 DB로 옮겨진다.
+   키를 f0..fn으로 유지하므로 이미 찍힌 체크 기록이 끊기지 않는다. */
 const EX_FIXED = {
   open:['운영인력 출근도장','출입문 잠금 해제 · 전기·조명 점등','냉난방 상태 확인',
         '미디어 기기(작품) ON · 작동 확인','전시 작품 상태 점검','당일 일정 확인 (단체·연계·이벤트)'],
@@ -713,8 +723,8 @@ const todayKey = keyOf(new Date());
 /* ── 상태 ── */
 let me=null, meId=null;
 let evCache={}, isCache={}, shCache={}, rpCache={};
-let attCache={}, venueCache=null, teamCache=null, myIp=null, evxCache={};
-let exCache={}, exDoneCache={}, exDate=null, exUnsub=[];
+let attCache={}, venueCache=null, teamCache=null, myIp=null, evxCache={}, rosterCache=null, ckCache={};
+let exDoneCache={}, exDate=null, exUnsub=[];
 let selDay = clampKey(todayKey);
 let curView = 'month';
 let staffSel = localStorage.getItem('atc-cal-staff') || '';
@@ -790,14 +800,15 @@ function startListeners(){
   onValue(ref(db,'atc/cal/issues'),s=>{isCache=s.val()||{};renderAll();});
   onValue(ref(db,'atc/cal/share'), s=>{shCache=s.val()||{};renderAll();});
   onValue(ref(db,'atc/cal/att'),   s=>{attCache=s.val()||{};renderAtt();renderRp();});
+  onValue(ref(db,'atc/cal/roster'),s=>{rosterCache=s.val();renderAtt();renderRp();});
+  onValue(ref(db,'atc/cal/ck'),    s=>{ckCache=s.val()||{};renderCk();});
   onValue(ref(db,'atc/cal/venue'), s=>{venueCache=s.val();renderAtt();});
   onValue(ref(db,'atc/cal/team'),  s=>{teamCache=s.val();renderTeam();});
   onValue(ref(db,'atc/cal/report'),s=>{rpCache=s.val()||{};renderRp();if(curView==='month')renderMonth();});
 }
 function listenEx(dateKey){
   if(exDate===dateKey) return;
-  exUnsub.forEach(u=>u()); exUnsub=[]; exDate=dateKey; exCache={}; exDoneCache={};
-  exUnsub.push(onValue(ref(db,'atc/ex/'+dateKey),s=>{exCache=s.val()||{};renderCk();}));
+  exUnsub.forEach(u=>u()); exUnsub=[]; exDate=dateKey; exDoneCache={};
   exUnsub.push(onValue(ref(db,'atc/exDone/'+dateKey),s=>{exDoneCache=s.val()||{};renderCk();}));
 }
 
@@ -923,9 +934,9 @@ function renderEvents(){
     +'<input type="checkbox" data-evck="'+key+'"'+(e.done?' checked':'')+'>'
     +'<span class="txt">'+(e.tm?'<i class="tm">'+esc(e.tm)+'</i>':'')+esc(e.text)+'</span>'
     +(e.by?'<span class="by">'+esc(e.by)+'</span>':'')
-    +'<button class="del" data-eved="'+key+'">✎</button>'
-    +'<button class="del" data-evdel="'+key+'">✕</button>'
-    +'<span class="grip">≡</span></div>';
+    +(isAdmin()?'<button class="del" data-eved="'+key+'">✎</button>'
+               +'<button class="del" data-evdel="'+key+'">✕</button>'
+               +'<span class="grip">≡</span>':'')+'</div>';
   }).join('') : '<div class="empty">등록된 일정 · 공지 없음</div>';
   makeSortable($('ev-list'),order=>{
     const upd={}, ux={};
@@ -969,32 +980,39 @@ function renderNotes(){
 }
 /* ── 출결 (전시장 와이파이 = 공인 IP 대조) ── */
 const attOf = k => attCache[k]||{};
-const workersOf = k => ATT_ROSTER.filter(p=>attOf(k)[p.id]&&attOf(k)[p.id].in).map(p=>p.name);
-$('a-prev').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,-1));renderAll();});
-$('a-next').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,1));renderAll();});
-$('a-today').addEventListener('click',()=>{selDay=clampKey(todayKey);renderAll();});
+/* 명단: DB가 있으면 DB, 없으면 기본값(키를 r0..rn으로 맞춰 두어 나중에 DB로 옮겨도 기록이 안 끊긴다) */
+function roster(){
+  if(rosterCache){
+    return Object.entries(rosterCache).map(([key,v])=>({key,name:v.name,o:v.o==null?999:v.o}))
+      .sort((a,b)=>a.o-b.o);
+  }
+  return DEFAULT_ROSTER.map((name,i)=>({key:'r'+i,name,o:i}));
+}
+function rosterSeed(mut){            // DB에 아직 없으면 기본 명단을 통째로 올리면서 변경분을 반영
+  const cur=roster(), next=mut(cur.map(p=>({...p})));
+  const out={}; next.forEach((p,i)=>{ if(p.name) out[p.key]={name:p.name,o:i}; });
+  return set(ref(db,'atc/cal/roster'),out);
+}
+const workersOf = k => roster().filter(p=>attOf(k)[p.key]&&attOf(k)[p.key].in).map(p=>p.name);
 
 function renderAtt(){
-  const k=selDay, rec=attOf(k), today=(k===todayKey);
-  const mine = ATT_ROSTER.filter(p=>p.id===meId);
-  const rows = isAdmin() ? ATT_ROSTER : mine;
-  $('att-sum').textContent = isAdmin()
-    ? workersOf(k).length+'/'+ATT_ROSTER.length+' 출근'
-    : (mine.length?'':'본인 기록 없음');
+  const k=selDay, rec=attOf(k), today=(k===todayKey), all=roster();
+  const rows = isAdmin() ? all : all.filter(p=>p.name===myName());
+  $('att-sum').textContent = isAdmin() ? workersOf(k).length+'/'+all.length+' 출근' : '';
 
   $('att-list').innerHTML = rows.length ? rows.map(p=>{
-    const r=rec[p.id]||{};
-    const noAcct = p.id==='tbd';
+    const r=rec[p.key]||{};
     const tms = (r.in?'<b>출근 '+esc(r.in)+'</b>':'<span>출근 —</span>')
               + (r.out?' · <u>퇴근 '+esc(r.out)+'</u>':' · 퇴근 —')
               + ((r.inOff||r.outOff)?' <span class="warn">⚠ 외부망</span>':'');
     let btn='';
-    if(!noAcct && today && (p.id===meId || isAdmin()))
-      btn = !r.in ? '<button class="btn" data-punch="in" data-p="'+p.id+'">출근</button>'
-          : (!r.out ? '<button class="btn out" data-punch="out" data-p="'+p.id+'">퇴근</button>' : '');
-    if(!noAcct && isAdmin()) btn+='<button class="btn fix" data-fix="'+p.id+'">수정</button>';
-    return '<div class="att"><span class="nm">'+esc(p.name)+'</span><span class="tms">'+tms+'</span>'+btn+'</div>';
-  }).join('') : '<div class="empty">출결 대상이 아닙니다. 관리자만 전체 출결을 볼 수 있습니다.</div>';
+    if(today && (p.name===myName() || isAdmin()))
+      btn = !r.in ? '<button class="btn" data-punch="in" data-p="'+p.key+'">출근</button>'
+          : (!r.out ? '<button class="btn out" data-punch="out" data-p="'+p.key+'">퇴근</button>' : '');
+    if(isAdmin()) btn+='<button class="btn fix" data-fix="'+p.key+'">수정</button>'
+                     +'<button class="del" data-rname="'+p.key+'">✎</button><span class="grip">≡</span>';
+    return '<div class="att" data-id="'+p.key+'"><span class="nm">'+esc(p.name)+'</span><span class="tms">'+tms+'</span>'+btn+'</div>';
+  }).join('') : '<div class="empty">'+(isAdmin()?'명단이 비어 있습니다':'출결 명단에 없습니다. 조아라에게 문의하세요.')+'</div>';
 
   const note=[];
   if(!today) note.push('오늘이 아닌 날짜는 기록할 수 없습니다'+(isAdmin()?' — 관리자는 [수정]으로 입력':''));
@@ -1002,36 +1020,53 @@ function renderAtt(){
       ? '<b>전시장 와이파이 확인됨</b>'+(myIp?'':' (IP 조회 실패 — 기록에 ⚠ 표시)')
       : '<s>전시장 와이파이가 아닙니다</s> — 전시장 와이파이에 연결해야 출퇴근이 열립니다');
   else note.push('전시장 와이파이 미등록 — 지금은 어디서나 기록됩니다');
-  if(isAdmin()) note.push('<button id="att-wifi">'+(venueIp()?'전시장 IP 재등록 (현재 '+esc(venueIp())+')':'현재 IP를 전시장 와이파이로 등록')+'</button>');
+  if(isAdmin()) note.push('<button id="att-add">+ 인원 추가</button> '
+      +'<button id="att-wifi">'+(venueIp()?'전시장 IP 재등록 (현재 '+esc(venueIp())+')':'현재 IP를 전시장 와이파이로 등록')+'</button>');
   $('att-note').innerHTML=note.join('<br>');
+
   const wb=$('att-wifi');
   if(wb) wb.addEventListener('click',()=>{
     if(!myIp){toast('현재 IP를 확인하지 못했습니다');return;}
     if(confirm('현재 접속 IP '+myIp+' 를 전시장 와이파이로 등록할까요?\n(전시장에서 눌러야 합니다)'))
       set(ref(db,'atc/cal/venue'),{ip:myIp,by:myName(),ts:Date.now()});
   });
-  // 본인 버튼: 전시장 와이파이가 아니면 잠금
+  const ab=$('att-add');
+  if(ab) ab.addEventListener('click',()=>{
+    const n=prompt('추가할 인원 이름'); if(!n||!n.trim()) return;
+    rosterSeed(list=>[...list,{key:'r'+Date.now().toString(36),name:n.trim()}]); toast('추가');
+  });
   $('att-list').querySelectorAll('[data-punch]').forEach(b=>{
     if(!atVenue()){b.disabled=true;b.textContent='전시장 와이파이 필요';}
     else b.addEventListener('click',()=>punch(b.dataset.punch,b.dataset.p));
   });
   $('att-list').querySelectorAll('[data-fix]').forEach(b=>b.addEventListener('click',()=>fixAtt(b.dataset.fix)));
+  $('att-list').querySelectorAll('[data-rname]').forEach(b=>b.addEventListener('click',()=>{
+    const cur=roster().find(x=>x.key===b.dataset.rname);
+    const v=prompt('이름 (비우면 명단에서 삭제)', cur.name);
+    if(v===null) return;
+    rosterSeed(list=>list.map(x=>x.key===cur.key?{...x,name:v.trim()}:x).filter(x=>x.name));
+    toast(v.trim()?'저장':'삭제');
+  }));
+  if(isAdmin()) makeSortable($('att-list'),order=>{
+    rosterSeed(list=>order.map(key=>list.find(x=>x.key===key)).filter(Boolean));
+    toast('순서 저장');
+  });
 }
 /* ponytail: 시각은 누른 기기의 시계. 서버 시각이 필요해지면 serverTimestamp()로 올리고 표시만 읽어오면 된다 */
-function punch(kind,pid){
-  const p=ATT_ROSTER.find(x=>x.id===pid), off=!!(venueIp() && myIp && myIp!==venueIp()), now=hhmm();
+function punch(kind,pkey){
+  const p=roster().find(x=>x.key===pkey), off=!!(venueIp() && myIp && myIp!==venueIp()), now=hhmm();
   if(!confirm(p.name+' '+(kind==='in'?'출근':'퇴근')+' '+now+' 으로 기록할까요?')) return;
-  update(ref(db,'atc/cal/att/'+selDay+'/'+pid),
+  update(ref(db,'atc/cal/att/'+selDay+'/'+pkey),
     kind==='in' ? {in:now,inTs:Date.now(),inIp:myIp||null,inOff:off||null,inBy:myName(),name:p.name}
                 : {out:now,outTs:Date.now(),outIp:myIp||null,outOff:off||null,outBy:myName()});
   toast(p.name+' '+(kind==='in'?'출근':'퇴근')+' '+now);
 }
-function fixAtt(pid){
-  const r=(attOf(selDay))[pid]||{};
+function fixAtt(pkey){
+  const r=(attOf(selDay))[pkey]||{};
   const v=prompt('출근-퇴근 시각 (예: 12:00-20:00, 빈칸이면 삭제)', (r.in||'')+'-'+(r.out||''));
   if(v===null) return;
   const [i,o]=v.split('-').map(x=>x.trim());
-  const path=ref(db,'atc/cal/att/'+selDay+'/'+pid);
+  const path=ref(db,'atc/cal/att/'+selDay+'/'+pkey);
   if(!i&&!o){ remove(path); toast('삭제'); return; }
   update(path,{in:i||null,out:o||null,fixBy:myName(),fixAt:Date.now()});
   toast('수정 완료');
@@ -1119,33 +1154,58 @@ $('rp-send').addEventListener('click',async ()=>{
   finally{ $('rp-send').disabled=false; $('rp-send').textContent='저장 + 시트 전송'; }
 });
 const ckOpen={}; // 펼침 상태를 밖에 둔다 — renderCk가 매번 다시 그리면서 접히던 버그
+/* 항목 목록: DB가 있으면 DB, 없으면 기본값 */
+function ckItems(sec){
+  const d=ckCache[sec];
+  if(d) return Object.entries(d).map(([key,v])=>({key,text:v.text,o:v.o==null?999:v.o}))
+                  .sort((a,b)=>a.o-b.o);
+  return EX_FIXED[sec].map((text,i)=>({key:'f'+i,text,o:i}));
+}
+function ckSeed(sec,mut){        // DB에 없으면 기본값을 통째로 올리면서 변경분 반영
+  const next=mut(ckItems(sec).map(x=>({...x})));
+  const out={}; next.forEach((x,i)=>{ if(x.text) out[x.key]={text:x.text,o:i}; });
+  return set(ref(db,'atc/cal/ck/'+sec),out);
+}
 function renderCk(){
-  const k=selDay; const dt=dayType(k);
-  const wrap=$('ck-secs');
+  const k=selDay, dt=dayType(k), wrap=$('ck-secs');
   if(dt.cls==='closed'||dt.cls==='wrap'){ $('sec-ck').style.display='none'; return; }
   $('sec-ck').style.display='';
   wrap.innerHTML='';
   ['open','run','close'].forEach(sec=>{
-    const fixedItems=EX_FIXED[sec];
-    const extra=exCache[sec]||{};
-    const doneMap=exDoneCache[sec]||{};
-    let done=0, total=fixedItems.length;
-    const rows=fixedItems.map((t,i)=>{
-      const st=doneMap['f'+i]; if(st&&st.done)done++;
-      return '<div class="item'+(st&&st.done?' done':'')+'"><input type="checkbox" data-ck="'+sec+'|f'+i+'"'+(st&&st.done?' checked':'')+'>'
-        +'<span class="txt">'+esc(t)+'</span><span class="by">'+(st&&st.done?esc(st.by||''):'')+'</span></div>';
-    }).join('')
-    + Object.entries(extra).map(([id,e])=>{
-      total++; if(e.done)done++;
-      return '<div class="item'+(e.done?' done':'')+'"><input type="checkbox" data-ckx="'+sec+'|'+id+'"'+(e.done?' checked':'')+'>'
-        +'<span class="txt">'+esc(e.text)+'</span><span class="by">'+esc(e.by||'')+'</span></div>';
+    const items=ckItems(sec), doneMap=exDoneCache[sec]||{};
+    const done=items.filter(x=>(doneMap[x.key]||{}).done).length;
+    const rows=items.map(x=>{
+      const st=doneMap[x.key];
+      return '<div class="item'+(st&&st.done?' done':'')+'" data-id="'+x.key+'">'
+        +'<input type="checkbox" data-ck="'+sec+'|'+x.key+'"'+(st&&st.done?' checked':'')+'>'
+        +'<span class="txt">'+esc(x.text)+'</span><span class="by">'+(st&&st.done?esc(st.by||''):'')+'</span>'
+        +(isAdmin()?'<button class="del" data-cked="'+sec+'|'+x.key+'">✎</button><span class="grip">≡</span>':'')+'</div>';
     }).join('');
     const box=document.createElement('div');
     box.className='ck-wrap'+((ckOpen[sec]!==undefined?ckOpen[sec]:k===todayKey)?' open':'');
-    box.innerHTML='<div class="ck-h"><i class="tri">▶</i>'+EX_SEC_NAMES[sec]+'<span class="pr">'+done+'/'+total+'</span></div><div class="ck-body">'+rows+'</div>';
+    box.innerHTML='<div class="ck-h"><i class="tri">▶</i>'+EX_SEC_NAMES[sec]+'<span class="pr">'+done+'/'+items.length+'</span></div>'
+      +'<div class="ck-body"><div class="ck-list">'+rows+'</div>'
+      +(isAdmin()?'<button class="ck-add" data-ckadd="'+sec+'">+ 항목 추가</button>':'')+'</div>';
     box.querySelector('.ck-h').addEventListener('click',()=>{ckOpen[sec]=!box.classList.contains('open');box.classList.toggle('open');});
     wrap.appendChild(box);
+    if(isAdmin()) makeSortable(box.querySelector('.ck-list'),order=>{
+      ckSeed(sec,list=>order.map(key=>list.find(x=>x.key===key)).filter(Boolean)); toast('순서 저장');
+    });
   });
+  wrap.querySelectorAll('[data-cked]').forEach(b=>b.addEventListener('click',()=>{
+    const [sec,key]=b.dataset.cked.split('|');
+    const cur=ckItems(sec).find(x=>x.key===key);
+    const v=prompt('항목 내용 (비우면 삭제)', cur.text);
+    if(v===null) return;
+    ckSeed(sec,list=>list.map(x=>x.key===key?{...x,text:v.trim()}:x).filter(x=>x.text));
+    toast(v.trim()?'저장':'삭제');
+  }));
+  wrap.querySelectorAll('[data-ckadd]').forEach(b=>b.addEventListener('click',()=>{
+    const sec=b.dataset.ckadd;
+    const v=prompt(EX_SEC_NAMES[sec]+' — 추가할 항목');
+    if(!v||!v.trim()) return;
+    ckSeed(sec,list=>[...list,{key:'c'+Date.now().toString(36),text:v.trim()}]); toast('추가');
+  }));
 }
 $('d-prev').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,-1));renderDay();});
 $('d-next').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,1));renderDay();});
@@ -1201,8 +1261,6 @@ document.addEventListener('change',e=>{
   if(t.dataset.sh) update(ref(db,'atc/cal/share/'+selDay+'/'+t.dataset.sh),{done:t.checked,doneBy:t.checked?stamp:null});
   if(t.dataset.ck){ const [sec,id]=t.dataset.ck.split('|');
     set(ref(db,'atc/exDone/'+selDay+'/'+sec+'/'+id), t.checked?{done:true,by:stamp}:null); }
-  if(t.dataset.ckx){ const [sec,id]=t.dataset.ckx.split('|');
-    update(ref(db,'atc/ex/'+selDay+'/'+sec+'/'+id),{done:t.checked,by:t.checked?stamp:null}); }
 });
 
 /* ── 작품 매뉴얼 ── */
