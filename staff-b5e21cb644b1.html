@@ -70,8 +70,10 @@
   .av-admin,.av-lead,.av-staff{background:#2b3247}
 
   /* ===== view switcher ===== */
-  .views{display:flex;align-items:center;padding:6px 20px 14px;gap:7px;
+  .views{display:flex;align-items:center;padding:6px 20px 14px;gap:7px;overflow-x:auto;scrollbar-width:none;
     position:sticky;top:0;background:var(--paper);z-index:10;border-bottom:1px solid var(--hair)}
+  .views::-webkit-scrollbar{display:none}
+  .views button{flex:none}
   .views button{border:1px solid var(--line);background:var(--card);border-radius:999px;
     padding:7px 14px;font-size:13px;font-weight:800;color:var(--ink2)}
   .views button.on{border-color:var(--red);background:var(--red-soft);color:var(--red)}
@@ -226,6 +228,46 @@
   .stt.saved{background:var(--well);color:var(--ink2)}
   .stt.none{background:var(--well);color:var(--ink3)}
 
+  /* 작품 매뉴얼 */
+  .mn{border-bottom:1px solid var(--line)}
+  .mn-h{display:flex;align-items:baseline;gap:8px;padding:15px 2px;cursor:pointer}
+  .mn-h .tri{flex:none;color:var(--red);font-size:10px;transition:transform .15s;align-self:center}
+  .mn.open .mn-h .tri{transform:rotate(90deg)}
+  .mn-h b{font-size:15px;font-weight:800}
+  .mn-h span{font-size:11.5px;color:var(--ink3);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mn-b{display:none;padding:0 2px 20px}
+  .mn.open .mn-b{display:block}
+  .mn-b h4{font-size:12.5px;font-weight:800;letter-spacing:.02em;color:var(--red);margin:20px 0 7px;
+    border-bottom:1px dashed var(--line);padding-bottom:6px}
+  .mn-b h4:first-child{margin-top:4px}
+  .mn-b h5{font-size:13px;font-weight:800;margin:14px 0 5px;color:var(--ink)}
+  .mn-b p,.mn-b li{font-size:13.5px;line-height:1.75;color:var(--ink2);margin:0 0 5px}
+  .mn-b ol,.mn-b ul{margin:0 0 8px;padding-left:19px}
+  .mn-b b{color:var(--ink);font-weight:700}
+  .mn-b kbd{font-family:var(--num);font-size:12px;background:var(--well);border:1px solid var(--line);
+    border-radius:3px;padding:1px 5px;color:var(--ink)}
+  .mn-warn{border-left:2px solid var(--red);background:var(--red-soft);border-radius:0 5px 5px 0;
+    padding:9px 11px;margin:9px 0;font-size:13px;line-height:1.7;color:var(--ink)}
+  .mn-ok{border-left:2px solid var(--line);background:var(--card);border-radius:0 5px 5px 0;
+    padding:9px 11px;margin:9px 0;font-size:13px;line-height:1.7;color:var(--ink2)}
+  .mn-b figure{margin:10px 0}
+  .mn-b img{width:100%;display:block;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+  .mn-b figcaption{font-size:10.5px;color:var(--ink3);margin-top:4px}
+  .mn-call{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px 13px;
+    border:1px solid var(--line);border-radius:9px;background:var(--card)}
+  .mn-call .i{flex:1;min-width:0;font-size:12.5px;color:var(--ink2)}
+  .mn-call .i b{display:block;font-size:14px;color:var(--ink)}
+  .mn-call a{flex:none;border:1px solid var(--red);background:var(--red-soft);color:var(--red);
+    border-radius:14px;padding:7px 15px;font-size:12.5px;font-weight:800;text-decoration:none}
+  .mn-note{font-size:11.5px;color:var(--ink3);line-height:1.8;margin-top:16px}
+
+  /* 매뉴얼 사진 확대 — 슬라이드는 폰 폭에서 글자가 안 읽혀 전체화면이 필요하다 */
+  #lb{position:fixed;inset:0;background:#000;z-index:200;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+  #lb.on{display:block}
+  #lb img{min-width:100%;width:190%;max-width:none;display:block;margin:auto}
+  #lb .x{position:fixed;top:12px;right:14px;z-index:2;border:0;background:rgba(0,0,0,.62);color:#fff;
+    border-radius:50%;width:38px;height:38px;font-size:19px;line-height:1}
+
   /* 팀원 연락처 다이얼로그 */
   .tm-row{display:flex;align-items:center;gap:9px;padding:11px 0;border-bottom:1px solid var(--hair)}
   .tm-row .i{flex:1;min-width:0}
@@ -303,6 +345,7 @@
     <button data-v="month">월</button>
     <button data-v="att">출결</button>
     <button data-v="sheet">근무일지</button>
+    <button data-v="man">매뉴얼</button>
   </div>
 
   <!-- 출결 -->
@@ -319,6 +362,134 @@
       <div class="sec-t">출결 확인<span class="r" id="att-sum"></span></div>
       <div id="att-list"></div>
       <div class="att-note" id="att-note"></div>
+    </div>
+  </div>
+
+  <!-- 작품 매뉴얼 (작가 전달본) -->
+  <div class="page" data-page="man">
+    <div class="sec">
+      <div class="sec-t">작품 매뉴얼</div>
+      <div class="empty">작가가 전달한 운영 매뉴얼입니다. 작품에 문제가 생기면 여기부터 보고, 해결되지 않으면 아래 [전화]로 작가에게 바로 연락하세요.</div>
+
+      <div class="mn" id="mn-cky">
+        <div class="mn-h"><i class="tri">▶</i><b>최가영</b><span>나의 우육면 다이어리 · 우육면 트위스트</span></div>
+        <div class="mn-b">
+          <h4>작품 · 기기 목록</h4>
+          <ul>
+            <li>〈나의 우육면 다이어리〉 : 27인치 터치 일체형 PC 1대</li>
+            <li>〈우육면 트위스트〉 : TV 2대 + 라즈베리파이 2대 (2채널 동기화)</li>
+          </ul>
+          <ul>
+            <li><b>멀티탭 1개</b> — 두 작품 전원 ON/OFF. 커튼 뒤로 가려놓기</li>
+            <li><b>키보드 1개</b> — 〈나의 우육면 다이어리〉 ON/OFF 및 비상용. 기둥 뒤에 보이지 않게 보관</li>
+            <li><b>리모콘 1개</b> — 〈우육면 트위스트〉 TV 2대 ON/OFF. 기둥 뒤에 보이지 않게 보관</li>
+            <li><b>의자 2개</b> — 〈우육면 트위스트〉 TV 앞에 간격을 두고 나란히 배치</li>
+          </ul>
+          <figure><img loading="lazy" src="manual-assets/ckyimg-01.jpg" alt="멀티탭 위치"><figcaption>멀티탭 — 커튼 뒤</figcaption></figure>
+          <figure><img loading="lazy" src="manual-assets/ckyimg-02.jpg" alt="키보드 보관 위치"><figcaption>키보드 — 기둥 뒤</figcaption></figure>
+
+          <h4>개장 — ON</h4>
+          <p><b>0. 멀티탭 전원 먼저 ON</b> — [최가영 전원] 견출지를 붙인 가장 아래 버튼을 켠 뒤, 커튼으로 멀티탭 가려놓기</p>
+          <h5>〈나의 우육면 다이어리〉 ON</h5>
+          <ol>
+            <li>PC 모니터 좌측 옆면의 전원 버튼 누르기</li>
+            <li>화면이 켜지면서 자동으로 ‘YDP’ 계정에 로그인되고 게임이 구동됨<br>
+                게임이 안 뜨고 바탕화면이 나오면 → <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> → 사용자 전환 → <b>YDP</b> 로그인(비밀번호 없음) → 게임 자동 구동</li>
+            <li>게임 화면을 한 번 터치하고 배경음악이 나오면 ON 완료. 키보드는 기둥 뒤에 보관.</li>
+          </ol>
+          <figure><img loading="lazy" src="manual-assets/ckyimg-03.jpg" alt="나의 우육면 다이어리 화면"></figure>
+          <h5>〈우육면 트위스트〉 ON</h5>
+          <ol>
+            <li>리모콘으로 TV 2대의 전원 ON (리모콘은 TV 모니터 <b>중앙 하단</b>을 겨누어 조작)</li>
+            <li>리모콘 외부입력 버튼 → <b>HDMI 1</b> (TV 2대 모두 동일하게)</li>
+            <li>음량 볼륨 각 <b>30</b>으로 맞추기</li>
+          </ol>
+          <div class="mn-warn">영상이 켜지는 도중(2분 이내)에 전원을 껐다 켜지 마세요. 두 채널이 동기화되는 중입니다.</div>
+          <figure><img loading="lazy" src="manual-assets/ckyimg-04.jpg" alt="우육면 트위스트 TV"></figure>
+
+          <h4>폐장 — OFF</h4>
+          <h5>〈나의 우육면 다이어리〉 OFF</h5>
+          <p><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> → 사용자 전환 → 오른쪽 하단 전원 아이콘 터치 → 시스템 종료<br>(‘다른 사용자가 사용 중…’ 메시지가 나와도 종료 진행)</p>
+          <div class="mn-warn">전원 코드를 뽑거나 멀티탭을 내려서 강제 종료하면 안 됩니다. 윈도우가 손상될 수 있습니다.</div>
+          <h5>〈우육면 트위스트〉 OFF</h5>
+          <p>리모콘으로 TV 2대의 전원 OFF → 마지막에 멀티탭 [최가영 전원] 버튼 OFF</p>
+
+          <h4>관람객 응대 — 조작 안내</h4>
+          <p><b>〈나의 우육면 다이어리〉</b></p>
+          <ul>
+            <li>손가락으로 화면을 직접 만지면 됩니다. 마우스·키보드는 필요 없습니다.</li>
+            <li>오른쪽 위 <kbd>한 / 繁 / EN</kbd> 버튼으로 언어를 바꿀 수 있습니다.</li>
+            <li>오른쪽 위 <kbd>다시 시작</kbd> 버튼을 누르면 처음부터 시작합니다.</li>
+            <li>화면 오른쪽 <kbd>?</kbd> 버튼에 게임 설명이 있습니다.</li>
+          </ul>
+
+          <h4>일일 점검 · 이상 시 대처</h4>
+          <h5>〈나의 우육면 다이어리〉</h5>
+          <div class="mn-warn">작품(터치모니터 PC) 외에는 책상 위에 아무것도 올리지 않도록 해주세요. 특히 가방 · 음료 · 쓰레기. 기기 손상 우려가 있습니다.</div>
+          <ol>
+            <li>화면이 멈췄다 / 반응이 없다 → <b>왼쪽 위 모서리 5초</b> → 전체화면 해제 → 재시작</li>
+            <li>관람객이 이상한 화면에 빠졌다 → 위와 동일</li>
+            <li>영상이 안 나온다 / 지도가 검다 → 위와 동일</li>
+            <li>소리가 안 나온다 → 오른쪽 위 <kbd>♪</kbd> 버튼이 <kbd>🔇</kbd>로 되어 있는지 확인하고 눌러서 켜기. 그래도 안 되면 윈도우 볼륨 확인.</li>
+            <li>소리를 꺼야 한다 → 오른쪽 위 <kbd>♪</kbd> 버튼 한 번 → 즉시 무음</li>
+          </ol>
+          <p><b>무엇을 해도 안 된다</b> → 전원 버튼을 5초 이상 눌러 강제 종료 후 다시 켜기. 자동 로그인이라 알아서 복구됩니다.</p>
+          <h5>〈우육면 트위스트〉</h5>
+          <div class="mn-warn">감상용 의자 2개가 제자리에 있도록 해주세요. 자리를 옮기거나 의자 위에 물건을 올리지 않도록 주의 부탁드립니다.</div>
+          <ol>
+            <li>2분 이상 기다려도 <b>오른쪽 화면</b>에 아무것도 안 나온다 → TV 뒤쪽 두 컴퓨터를 잇는 <b>랜선</b> 확인. 양쪽 끝을 뽑았다 “딸깍” 소리가 날 때까지 다시 꽂기. 구멍 옆 작은 불이 켜지면 정상.</li>
+            <li>2분 이상 기다려도 <b>양쪽 화면</b>에 아무것도 안 나온다 → TV 입력이 <b>HDMI 1</b>인지 확인</li>
+            <li>영상이 자꾸 끊기거나 튄다 → 전원 어댑터가 헐겁지 않은지 확인. 계속되면 작가에게 연락.</li>
+          </ol>
+          <p><b>위 방법으로 안 된다</b> → ① 두 컴퓨터 전원 모두 뽑기 → ② 10초 기다리기 → ③ 다시 꽂기 → ④ 2분 기다리기</p>
+
+          <h4>★ 이건 고장이 아닙니다</h4>
+          <div class="mn-ok"><b>〈우육면 트위스트〉</b><br>· 영상 중간중간 검은 화면에 글자만 나오는 장면이 있습니다.<br>· TV를 켠 직후 화면이 잠깐씩 멈췄다 움직입니다 — 두 화면의 시간을 맞추는 과정으로, 처음 30초 안에 한 번만 일어납니다.<br><br><b>〈나의 우육면 다이어리〉</b><br>· 터치 조작 없이 90초가 지나면 자동으로 리셋됩니다.</div>
+
+          <div class="mn-call"><span class="i"><b>최가영</b>작가</span><a href="tel:01027908610">전화</a></div>
+          <p class="mn-note">연락 주실 때 알려주시면 도움이 됩니다.<br>
+            〈나의 우육면 다이어리〉 — 어느 화면에서 멈췄는지 / 터치에 반응하는지 / 소리는 나오는지<br>
+            〈우육면 트위스트〉 — 왼쪽·오른쪽 중 어느 화면인지 / 화면에 무엇이 보이는지(캄캄함·글자·정지화면) / 전원을 켠 뒤 얼마나 지났는지 / 소리는 나오는지</p>
+        </div>
+      </div>
+
+      <div class="mn" id="mn-jyg">
+        <div class="mn-h"><i class="tri">▶</i><b>조영각</b><span>아무도 가지지 못한 것들</span></div>
+        <div class="mn-b">
+          <div class="mn-ok">작가가 전달한 매뉴얼 원본(12쪽)입니다. <b>ON</b> — 전원 → 블로 → 드 / <b>OFF</b> — 드 → 블로 → 전원 순서. PC는 자동 동작(오전 11:55 전원·렌더 시작 / 오후 19:50 렌더 종료 / 오후 20:00 PC 종료).<br>사진을 눌러 확대해서 보세요.</div>
+          <figure><img loading="lazy" src="manual-assets/jyg-01.jpg" alt="조영각 매뉴얼 1쪽"><figcaption>1 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-02.jpg" alt="조영각 매뉴얼 2쪽"><figcaption>2 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-03.jpg" alt="조영각 매뉴얼 3쪽"><figcaption>3 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-04.jpg" alt="조영각 매뉴얼 4쪽"><figcaption>4 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-05.jpg" alt="조영각 매뉴얼 5쪽"><figcaption>5 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-06.jpg" alt="조영각 매뉴얼 6쪽"><figcaption>6 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-07.jpg" alt="조영각 매뉴얼 7쪽"><figcaption>7 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-08.jpg" alt="조영각 매뉴얼 8쪽"><figcaption>8 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-09.jpg" alt="조영각 매뉴얼 9쪽"><figcaption>9 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-10.jpg" alt="조영각 매뉴얼 10쪽"><figcaption>10 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-11.jpg" alt="조영각 매뉴얼 11쪽"><figcaption>11 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-12.jpg" alt="조영각 매뉴얼 12쪽"><figcaption>12 / 12</figcaption></figure>
+        
+          <div class="mn-call"><span class="i"><b>조영각</b>작가</span><a href="tel:01092098121">전화</a></div>
+        </div>
+      </div>
+
+      <div class="mn" id="mn-jsa">
+        <div class="mn-h"><i class="tri">▶</i><b>주슬아</b><span>영사기</span></div>
+        <div class="mn-b">
+          <h4>영사기 조작 — 두 대 모두 동일</h4>
+          <ul>
+            <li><b>검은색 튀어나온 부분</b>을 위로 올리면 ON, 내리면 OFF</li>
+            <li>개장 때 ON, 마감 때 OFF</li>
+            <li>왼쪽 핸들을 돌리면서 관람할 수 있습니다 (관람객 안내)</li>
+          </ul>
+          <figure><img loading="lazy" src="manual-assets/jsaimg-01.jpg" alt="영사기 1"></figure>
+          <figure><img loading="lazy" src="manual-assets/jsaimg-02.jpg" alt="영사기 2"></figure>
+          <figure><img loading="lazy" src="manual-assets/jsaimg-03.jpg" alt="전원 스위치 — 위로 올리면 ON"><figcaption>전원 스위치 — 위로 올리면 ON</figcaption></figure>
+          <div class="mn-call"><span class="i"><b>주슬아</b>작가</span><a href="tel:01065801151">전화</a></div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -432,6 +603,8 @@
     <button class="tm-lo" id="team-logout">로그아웃</button>
   </div>
 </dialog>
+
+<div id="lb"><button class="x" id="lb-x">✕</button><img id="lb-img" alt=""></div>
 
 <div class="toast" id="toast"></div>
 
@@ -1022,6 +1195,17 @@ document.addEventListener('change',e=>{
   if(t.dataset.ckx){ const [sec,id]=t.dataset.ckx.split('|');
     update(ref(db,'atc/ex/'+selDay+'/'+sec+'/'+id),{done:t.checked,by:t.checked?stamp:null}); }
 });
+
+/* ── 작품 매뉴얼 ── */
+document.querySelectorAll('.mn-h').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('open')));
+/* 사진 탭 → 전체화면(가로 스크롤·핀치 확대). 다운로드가 아니라 그 자리에서 크게 보는 용도 */
+document.querySelectorAll('.mn-b img').forEach(im=>im.addEventListener('click',()=>{
+  $('lb-img').src=im.src; $('lb-img').alt=im.alt; $('lb').classList.add('on'); $('lb').scrollTop=0;
+}));
+const lbClose=()=>{$('lb').classList.remove('on'); $('lb-img').removeAttribute('src');};
+$('lb-x').addEventListener('click',lbClose);
+$('lb').addEventListener('click',e=>{ if(e.target.id==='lb') lbClose(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') lbClose(); });
 
 /* ── 팀원 연락처 (아바타) ── */
 const teamRows = ()=> teamCache
