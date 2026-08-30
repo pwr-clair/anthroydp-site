@@ -12,7 +12,7 @@
     /* 전시 홈페이지(anthroydp.site) 다크 톤앤매너 · 주조색 빨강 */
     --paper:#0d0f15; --card:#151a26; --well:#1a2130;
     --ink:#f0f2f7; --ink2:#a0a9c6; --ink3:#6d7694; --line:#27304a; --hair:#1f2740;
-    /* 2026-08-30 클라라: 단색(빨강). 포스터 나머지 색 변수는 빨강으로 접어 사용처를 일괄 전환 */
+    /* 단색(빨강). 포스터 나머지 색 변수는 빨강으로 접어 사용처를 일괄 전환 */
     --red:#F0604A; --red-soft:rgba(240,96,74,.15);
     --pur:var(--red); --pur-soft:var(--red-soft);
     --vio:#7D6DF2; --vio-soft:rgba(125,109,242,.16); /* 출결 탭 전용 — 여기 말고는 쓰지 않는다 */
@@ -726,7 +726,7 @@ fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(j=>{myIp=j.ip;
 const venueIp = ()=> venueCache && venueCache.ip;
 /* ponytail: IP 조회가 실패하면(myIp=null) 잠그지 않고 통과시킨 뒤 기록에 ⚠만 남긴다 — 외부 서비스 장애로 출퇴근이 막히는 편이 더 나쁘다 */
 const atVenue = ()=> !venueIp() || !myIp || myIp===venueIp();
-/* 작성자별 글색 — 조아라·클라라 빨강 / 조주리 파랑 / 변채린 보라 / 양채원 초록 / 나머지 블랙 */
+/* 작성자 글색 — 단색 원칙에 따라 조아라(관리자)만 빨강, 나머지는 기본색 */
 const inkOf = n => n==='조아라' ? 'var(--red)' : 'inherit';
 
 /* ── 로그인 ── */
