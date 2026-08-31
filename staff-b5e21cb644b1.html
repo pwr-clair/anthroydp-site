@@ -952,8 +952,12 @@ function renderWeek(){
     const card=document.createElement('div');
     card.className='wday'+(CLOSED[k]?' closed':'')+(k===todayKey?' today':'');
     const ovw=evxCache[k]||{};
+    /* 일 뷰와 같은 규칙 — 고정·등록 일정을 합친 뒤 시간 없는 항목 맨 위, 나머지 시간순 */
     const evs=[...(FIXED[k]||[]).map((f,i)=>({tm:f.tm,t:f.t,fi:'f'+i})).filter(f=>!(ovw[f.fi]||{}).del),
-      ...Object.values(evCache[k]||{}).sort((a,b)=>{const at=normTm(a.tm)||'',bt=normTm(b.tm)||'';return at<bt?-1:at>bt?1:0;})];
+      ...Object.values(evCache[k]||{})]
+      .sort((a,b)=>{const at=normTm(a.tm)||'',bt=normTm(b.tm)||'';
+        if(!at!==!bt) return at?1:-1;
+        return at<bt?-1:at>bt?1:0;});
     const lines=evs.map(e=>'<div class="ln">'+(e.tm?'<span class="t">'+esc(fmtTm(e.tm))+'</span>':'')+esc(e.t||e.text)+'</div>').join('');
     const nIs=cnt(isCache,k)+cnt(shCache,k);
     const shNames=workersOf(k).join('·');
