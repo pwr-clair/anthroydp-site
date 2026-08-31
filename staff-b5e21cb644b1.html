@@ -174,10 +174,10 @@
   .item .chip{flex:none;font-size:9.5px;font-weight:800;border-radius:2px;padding:1px 6px;margin-top:3px}
   .chip.i1,.chip.i2{background:var(--gr-soft);color:var(--gr)}
   /* 기본 체크박스는 체크가 뭉툭해서 직접 그린다 */
-  .item input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:none;position:relative;
+  .item input[type=checkbox],.wl-note input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:none;position:relative;
     width:15px;height:15px;margin:2px 0 0;border:1px solid var(--line);border-radius:3px;background:transparent}
-  .item input[type=checkbox]:checked{border-color:var(--red)}
-  .item input[type=checkbox]:checked::after{content:'';position:absolute;left:4.5px;top:1px;
+  .item input[type=checkbox]:checked,.wl-note input[type=checkbox]:checked{border-color:var(--red)}
+  .item input[type=checkbox]:checked::after,.wl-note input[type=checkbox]:checked::after{content:'';position:absolute;left:4.5px;top:1px;
     width:4px;height:8px;border:solid var(--red);border-width:0 1.4px 1.4px 0;transform:rotate(43deg)}
   .item.done .txt{color:var(--ink3);text-decoration:line-through}
   .empty{font-size:12px;color:var(--ink3);padding:6px 2px}
@@ -223,8 +223,14 @@
   .wl-grid input,.wl-grid textarea{border:1px solid var(--line);border-radius:4px;padding:8px 10px;
     font-size:14px;min-width:0;width:100%;font-family:inherit}
   .wl-grid textarea{min-height:52px;resize:vertical;line-height:1.5}
-  .wl-auto{margin-top:12px;border-top:1px dashed var(--line);padding-top:11px;font-size:12px;color:var(--ink2);line-height:1.7}
-  .wl-auto b{font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--ink3);margin-right:7px}
+  .wl-auto{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;font-size:13.5px;color:var(--ink);line-height:1.6}
+  .wl-auto b{font-size:11.5px;font-weight:800;color:var(--ink2);margin-right:8px}
+  .wl-hint{font-size:11px;font-weight:700;color:var(--red);margin-left:2px}
+  label.wl-note{display:flex;gap:9px;align-items:flex-start;padding:8px 2px;border-bottom:1px solid var(--hair);font-size:13.5px}
+  .wl-auto label.wl-note:last-of-type{border-bottom:0}
+  .wl-note input{margin-top:2px}
+  .wl-tag{font-style:normal;font-weight:800;color:var(--red);font-size:12px;flex:none;padding-top:1px}
+  .wl-none{font-size:12.5px;color:var(--ink3)}
   .wl-row{display:flex;align-items:center;gap:8px;padding:8px 2px;border-bottom:1px solid var(--hair);
     font-size:12.5px;cursor:pointer}
   .wl-row:last-child{border-bottom:0}
@@ -614,14 +620,15 @@
         <label>참가자수<small>현장참여</small></label><input type="text" inputmode="numeric" id="rp-po" placeholder="연계행사 있을 때">
       </div>
       <div class="wl-auto">
-        <div><b>근무자</b><span id="wl-workers"></span></div>
-        <div><b>특이사항</b><span id="wl-notes"></span></div>
+        <div style="margin-bottom:6px"><b>근무자</b><span id="wl-workers"></span></div>
+        <div><b>특이사항</b><span class="wl-hint">시트로 보낼 항목만 체크</span></div>
+        <div id="wl-notes"></div>
       </div>
       <div class="add big" style="margin-top:14px">
         <button id="rp-save" style="flex:1;background:var(--card);color:var(--ink);border:1px solid var(--line)">앱에 저장</button>
         <button id="rp-send" style="flex:1">저장 + 시트 전송</button>
       </div>
-      <div class="empty" id="rp-note">근무자·특이사항은 출결과 ‘특이사항·요청’에서 자동으로 채워 전송합니다.</div>
+      <div class="empty" id="rp-note">근무자는 출결에서 자동으로 채워지고, 특이사항은 위에서 체크한 항목만 시트로 전송됩니다.</div>
     </div>
     <div class="sec" id="rp-off" style="display:none"><div class="empty" id="rp-off-t"></div></div>
 
@@ -782,11 +789,11 @@ const CLOSED = {'2026-09-07':1,'2026-09-14':1};           // 휴관(월)
 const FIXED = {
   '2026-08-31':[{tm:'',t:'리허설 · 운영인력 교육'}],
   '2026-09-01':[{tm:'12:00',t:'전시 오픈 첫날'},{tm:'',t:'개막식 RSVP 명단 (실시간) ↗',u:'https://docs.google.com/spreadsheets/d/1fXfaVtt7PdBTmf-Ve3exykA3y23y6v-0in9PJuQkYLk/edit?usp=sharing'},{tm:'16:00',t:'개막식 「질문을 질문하기」 — 식순 보기 ↗',u:'https://docs.google.com/spreadsheets/d/1z_U9qagsatxZnPw5kh56WK0JLeeLL0MsWz-DF3QB-sk/edit?gid=69424019#gid=69424019'}],
-  '2026-09-16':[{tm:'18:00',t:'크로스토크'},{tm:'19:00',t:'크로스토크'}],
-  '2026-09-17':[{tm:'12:00',t:'크로스토크'}],
-  '2026-09-18':[{tm:'17:00',t:'크로스토크'},{tm:'18:00',t:'크로스토크'}],
-  '2026-09-19':[{tm:'15:00',t:'크로스토크'},{tm:'16:00',t:'크로스토크'}],
-  '2026-09-20':[{tm:'18:00',t:'크로스토크'},{tm:'19:00',t:'폐막식 「D.C: 맨 처음으로 다시」'},{tm:'',t:'전시 마지막 날'}],
+  '2026-09-16':[{tm:'18:00',t:'크로스토크: 클릭! 영등포 테크노 엇박자와 낙서의 영혼'},{tm:'19:00',t:'크로스토크: 온 보드 — 불러보지 못한 이름과 열어보지 못한 기억을 항해하기'}],
+  '2026-09-17':[{tm:'12:00',t:'크로스토크: 버추얼 퍼포먼스 — 오렌지 방과 함께 일하기 (ZOOM)'}],
+  '2026-09-18':[{tm:'17:00',t:'크로스토크: 장소는 몇 번이나 읽힐 수 있을까?'},{tm:'18:00',t:'크로스토크: 위성적 우려가 도착하기 전에'}],
+  '2026-09-19':[{tm:'15:00',t:'크로스토크: 날아가는 골프공을 어떻게 볼 수 있을까?'},{tm:'16:00',t:'크로스토크: 엇갈리는 진술 — 사물, 기술, 신체, 장소'}],
+  '2026-09-20':[{tm:'18:00',t:'크로스토크: 연구를 연구하기'},{tm:'19:00',t:'폐막식 「D.C: 맨 처음으로 다시」'},{tm:'',t:'전시 마지막 날'}],
 };
 /* 운영 체크리스트 기본값 — DB(atc/cal/ck)가 정본. 조아라가 처음 편집하는 순간 이 값이 DB로 옮겨진다.
    키를 f0..fn으로 유지하므로 이미 찍힌 체크 기록이 끊기지 않는다. */
@@ -1247,8 +1254,13 @@ $('s-next').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,1));ren
 $('s-today').addEventListener('click',()=>{selDay=clampKey(todayKey);renderAll();});
 const RP_FIELDS=['rp-va','rp-vr','rp-gr','rp-ev','rp-pp','rp-po'];
 let rpDirtyFor=null; // 입력 중인 날짜 — 그 날짜의 원격 갱신으로 입력을 덮지 않음
+const rpNoteSel={}; // 날짜별 {항목id:true} — 체크한 특이사항만 시트로 (기본 미체크, 클라라 08-31)
+function dayNotes(k){
+  return Object.entries(isCache[k]||{}).map(([id,e])=>({id,...e})).sort((a,b)=>a.ts-b.ts);
+}
 function notesOf(k){
-  return Object.values(isCache[k]||{}).sort((a,b)=>a.ts-b.ts).map(e=>'['+(e.type||'특이')+'] '+e.text).join('\n');
+  const sel=rpNoteSel[k]||{};
+  return dayNotes(k).filter(e=>sel[e.id]).map(e=>'['+(e.type||'특이')+'] '+e.text).join('\n');
 }
 function renderWorklog(){
   selDay=clampKey(selDay);
@@ -1277,7 +1289,12 @@ function renderRp(){
   const k=selDay, dt=dayType(k);
   if(rpDirtyFor && rpDirtyFor!==k) rpDirtyFor=null; // 날짜 이동 시 입력 보호 해제
   $('wl-workers').textContent = workersOf(k).join(', ') || '—';
-  $('wl-notes').textContent   = notesOf(k) || '—';
+  const its=dayNotes(k), sel=(rpNoteSel[k]=rpNoteSel[k]||{});
+  $('wl-notes').innerHTML = its.length ? its.map(e=>
+    '<label class="wl-note"><input type="checkbox" data-nid="'+e.id+'"'+(sel[e.id]?' checked':'')+'>'
+    +'<i class="wl-tag">['+esc(e.type||'특이')+']</i><span>'+esc(e.text)+'</span></label>').join('')
+    : '<span class="wl-none">오늘 기록된 특이사항 없음</span>';
+  $('wl-notes').querySelectorAll('[data-nid]').forEach(c=>c.addEventListener('change',()=>{sel[c.dataset.nid]=c.checked;}));
   const off = (dt.cls==='prep'||dt.cls==='wrap'||CLOSED[k]);
   $('sec-rp').style.display = off?'none':'';
   $('rp-off').style.display = off?'':'none';
@@ -1285,7 +1302,9 @@ function renderRp(){
   if(rpDirtyFor===k) return;
   const r=rpCache[k]||{};
   $('rp-va').value=r.va||''; $('rp-vr').value=r.vr||''; $('rp-gr').value=r.gr||'';
-  $('rp-ev').value=r.ev||''; $('rp-pp').value=r.pp||''; $('rp-po').value=r.po||'';
+  const fxEv=(FIXED[k]||[]).filter(f=>/크로스토크|개막식|폐막식/.test(f.t)&&!/RSVP/.test(f.t))
+    .map(f=>(f.tm?fmtTm(f.tm)+' ':'')+f.t.replace(/ — 식순 보기 ↗/,'')).join('\n');
+  $('rp-ev').value=r.ev||fxEv||''; $('rp-pp').value=r.pp||''; $('rp-po').value=r.po||'';
   const st=$('rp-sync-st');
   if(r.sentAt){st.textContent='시트 전송됨 · '+r.sentAt+' '+(r.sentBy||'');st.className='r ok';}
   else if(r.ts){st.textContent='앱에 저장됨 (시트 미전송)';st.className='r';}
