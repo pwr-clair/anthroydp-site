@@ -319,6 +319,7 @@
   .modal-b textarea{width:100%;min-height:180px;border:1px solid var(--line);border-radius:4px;padding:9px;font-size:13.5px;font-family:inherit}
   .modal-b .save{margin-top:8px;border:0;background:var(--red);color:#fff;border-radius:4px;padding:8px 16px;font-size:13px;font-weight:700}
 
+  .evlink{color:var(--red);text-decoration:underline;text-underline-offset:3px}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#232c42;border:1px solid var(--line);color:#fff;
     border-radius:4px;padding:8px 16px;font-size:12.5px;opacity:0;pointer-events:none;transition:.25s;z-index:99}
   .toast.show{opacity:1;transform:translateX(-50%)}
@@ -707,7 +708,7 @@ const EX_START='2026-09-01', EX_END='2026-09-20';
 const CLOSED = {'2026-09-07':1,'2026-09-14':1};           // 휴관(월)
 const FIXED = {
   '2026-08-31':[{tm:'',t:'리허설 · 운영인력 교육'}],
-  '2026-09-01':[{tm:'12:00',t:'전시 오픈 첫날'},{tm:'16:00',t:'개막식 「질문을 질문하기」'}],
+  '2026-09-01':[{tm:'12:00',t:'전시 오픈 첫날'},{tm:'16:00',t:'개막식 「질문을 질문하기」 — 식순 보기 ↗',u:'https://docs.google.com/spreadsheets/d/1z_U9qagsatxZnPw5kh56WK0JLeeLL0MsWz-DF3QB-sk/edit?gid=69424019#gid=69424019'}],
   '2026-09-16':[{tm:'18:00',t:'크로스토크'},{tm:'19:00',t:'크로스토크'}],
   '2026-09-17':[{tm:'12:00',t:'크로스토크'}],
   '2026-09-18':[{tm:'17:00',t:'크로스토크'},{tm:'18:00',t:'크로스토크'}],
@@ -950,7 +951,7 @@ function renderDay(){
    FIXED는 상수라 지울 수 없으므로 atc/cal/evx 에 흔적만 남기고, 수정하면 일반 항목으로 옮겨 담는다 */
 function renderEvents(){
   const k=selDay, ov=evxCache[k]||{};
-  const fixed=(FIXED[k]||[]).map((f,i)=>({id:'f'+i,src:'fx',tm:f.tm,text:f.t,
+  const fixed=(FIXED[k]||[]).map((f,i)=>({id:'f'+i,src:'fx',tm:f.tm,text:f.t,u:f.u,
       done:!!(ov['f'+i]||{}).done, o:(ov['f'+i]||{}).o}))
     .filter(x=>!(ov[x.id]||{}).del);
   const evs=Object.entries(evCache[k]||{}).map(([id,e])=>({id,src:'ev',tm:e.tm,text:e.text,by:e.by,done:!!e.done,o:e.o}));
@@ -963,7 +964,7 @@ function renderEvents(){
     const key=e.src+'|'+e.id;
     return '<div class="item'+(e.done?' done':'')+'" data-id="'+key+'">'
     +'<input type="checkbox" data-evck="'+key+'"'+(e.done?' checked':'')+'>'
-    +'<span class="txt">'+(e.tm?'<i class="tm">'+esc(e.tm)+'</i>':'')+esc(e.text)+'</span>'
+    +'<span class="txt">'+(e.tm?'<i class="tm">'+esc(e.tm)+'</i>':'')+(e.u?'<a class="evlink" href="'+e.u+'" target="_blank" rel="noopener">'+esc(e.text)+'</a>':esc(e.text))+'</span>'
     +(e.by?'<span class="by">'+esc(e.by)+'</span>':'')
     +(isAdmin()?'<button class="del" data-eved="'+key+'">✎</button>'
                +'<button class="del" data-evdel="'+key+'">✕</button>'
