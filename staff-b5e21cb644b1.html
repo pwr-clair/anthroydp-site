@@ -848,7 +848,7 @@ let curView = 'month';
 let staffSel = localStorage.getItem('atc-cal-staff') || '';
 const myName = ()=> meId==='staff' ? (staffSel||me.name) : me.name; // 공용 계정만 이름 선택
 /* 수정·삭제·출결 대리 입력·기간 전체 열람은 조아라만 */
-const ADMINS = ['joara'];
+const ADMINS = ['joara','juri','chaerin','chaewon']; // 수정·삭제·대리기록·전체열람 — 조아라+조주리·변채린·양채원(클라라 08-31)
 const isAdmin = ()=> ADMINS.includes(meId);
 /* 공인 IP — 브라우저는 SSID를 못 읽으므로 전시장 와이파이 판정은 공인 IP 대조로 대신한다 */
 fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(j=>{myIp=j.ip;renderAtt();}).catch(()=>{});
