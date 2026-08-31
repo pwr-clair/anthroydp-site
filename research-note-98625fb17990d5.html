@@ -7,16 +7,16 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="googlebot" content="noindex, nofollow">
 <title>연구노트 — 인류학 연습: 인간은 우리인가?</title>
-<link rel="icon" type="image/png" sizes="180x180" href="/app-icons/wm-3A7BF0-180.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/app-icons/wm-3A7BF0-180.png">
-<link rel="apple-touch-icon-precomposed" href="/app-icons/wm-3A7BF0-180.png">
+<link rel="icon" type="image/png" sizes="180x180" href="/app-icons/wm-1ED21E-180.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/app-icons/wm-1ED21E-180.png">
+<link rel="apple-touch-icon-precomposed" href="/app-icons/wm-1ED21E-180.png">
 <style>
-  /* 지면·헤더·탭 = works.html과 동일(다크+블루) — 한 시스템으로 움직인다.
+  /* 지면·헤더·탭 구조 = works.html과 동일, 색만 연구노트 표지 초록(클라라 08-31) — 한 시스템으로 움직인다.
      목록 구조 = forkingroom.kr/researchzine 참조: 표지 그리드 + Read more.
      표지 이미지(covers/*.jpg) = 각 PDF 1쪽 렌더 — 제목·작가명이 표지에 인쇄돼 있어 별도 텍스트 없음(alt로만). */
   :root{
     --bg:#0d0f15; --card:#151a26; --ink:#f0f2f7; --sub:#a0a9c6;
-    --accent:#3a7bf0; --accent-soft:rgba(58,123,240,.14); --line:#27304a;
+    --accent:#1ed21e; --accent-soft:rgba(30,210,30,.14); --line:#27304a;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -35,8 +35,8 @@
   nav .row::-webkit-scrollbar{display:none}
   nav a{flex:none;font-size:13px;font-weight:600;color:var(--sub);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
   nav a:active{color:var(--accent);border-color:var(--accent)}
-  nav a.red{color:#f0604a;border-color:#f0604a;background:rgba(240,96,74,.15);font-weight:800}
-  nav a.red:active{color:#f0604a;border-color:#f0604a}
+  nav a.red{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800}
+  nav a.red:active{color:var(--accent);border-color:var(--accent)}
   nav a.book{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);font-weight:800;
     width:74.4px;padding-left:0;padding-right:0;text-align:center}
 
@@ -44,7 +44,7 @@
   .lede{font-size:14px;color:var(--sub);word-break:keep-all;line-height:1.85}
 
   /* ── 표지 그리드 ── */
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:34px 22px;margin-top:30px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 14px;margin-top:30px}
   .cell{display:flex;flex-direction:column;align-items:center}
   .coverlink{display:block;width:100%}
   .cover{width:100%;display:block;border-radius:10px;background:var(--card);
@@ -59,7 +59,7 @@
   footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub);line-height:1.8}
   footer a{color:inherit;text-decoration:none}
 
-  @media (max-width:420px){ .grid{gap:26px 14px} .more{font-size:13px;padding:6px 18px} }
+  @media (max-width:420px){ .grid{gap:18px 8px} .more{font-size:11.5px;padding:5px 12px} }
 </style>
 </head>
 <body>
