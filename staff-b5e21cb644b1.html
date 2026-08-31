@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="지킴이">
+<meta name="apple-mobile-web-app-title" content="운영인력">
 <meta name="theme-color" content="#0d0f15">
 <link rel="apple-touch-icon" sizes="180x180" href="/app-icons/app-180.png">
 <link rel="apple-touch-icon-precomposed" href="/app-icons/app-180.png">
 <link rel="manifest" href="app-icons/manifest.json">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" type="image/png" sizes="180x180" href="/app-icons/wm-F0604A-180.png">
-<title>예술기술도시 지킴이 캘린더</title>
+<title>예술기술도시 운영인력 캘린더</title>
 <style>
   :root{
     /* 전시 홈페이지(anthroydp.site) 다크 톤앤매너 · 주조색 빨강 */
@@ -330,7 +330,7 @@
 <body>
 
 <div id="login">
-  <h1>지킴이 <b>캘린더</b></h1>
+  <h1>운영인력 <b>캘린더</b></h1>
   <div class="sub">인류학 연습 · 8.31 – 9.30 운영 일정</div>
   <label>이름</label>
   <input id="id-inp" placeholder="본명 입력 (예: 조아라)" autocomplete="username">
@@ -696,10 +696,10 @@ const USERS = {
   jinsun:  {name:'박진선', role:'lead',  av:'진', avCls:'av-lead'},
   haeun:   {name:'박하은', role:'lead',  av:'하', avCls:'av-lead'},
   youngjae:{name:'백영재', role:'lead',  av:'백', avCls:'av-lead'},
-  staff:   {name:'지킴이', role:'staff', av:'지', avCls:'av-staff'}, // 예비 공용(알바 등) — 공유·체크만
+  staff:   {name:'운영인력', role:'staff', av:'운', avCls:'av-staff'}, // 예비 공용(알바 등) — 공유·체크만
 };
 const NAME_TO_ID = {'조아라':'joara','양채원':'chaewon','조주리':'juri','변채린':'chaerin',
-  '박진선':'jinsun','진선':'jinsun','박하은':'haeun','하은':'haeun','백영재':'youngjae','영재':'youngjae','staff':'staff','지킴이':'staff'};
+  '박진선':'jinsun','진선':'jinsun','박하은':'haeun','하은':'haeun','백영재':'youngjae','영재':'youngjae','staff':'staff','지킴이':'staff','운영인력':'staff'};
 const SUFFIX = '@atc.local';
 /* 출결 명단 — DB(atc/cal/roster)가 정본. 비어 있으면 아래 기본값을 쓰고, 조아라가 처음 편집할 때 DB로 옮겨 담는다.
    본인 판정은 계정 id가 아니라 '이름'이라, 명단에 이름만 넣으면 그 사람이 자기 칸을 찍을 수 있다. */
