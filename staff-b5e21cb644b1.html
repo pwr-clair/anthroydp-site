@@ -370,7 +370,7 @@
   <input id="pw-inp" type="password" placeholder="전달받은 4자리 번호" autocomplete="current-password" inputmode="numeric">
   <button id="login-btn">입장</button>
   <div id="login-err"></div>
-  <div class="hint">첫 로그인 때 입력한 비밀번호가 그대로 등록됩니다.<br>비밀번호를 모르면 조아라에게 문의하세요.</div>
+  <div class="hint">팀원 연락처에 있는 이름이면 로그인됩니다. 첫 로그인 때 입력한 비밀번호가 그대로 등록됩니다.<br>비밀번호를 모르면 조아라에게 문의하세요.</div>
 </div>
 
 <div class="app" id="app">
@@ -734,7 +734,7 @@
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, set, update, push, remove } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getDatabase, ref, onValue, set, update, push, remove, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 /* ── Firebase: 전시 전용 프로젝트 anthroydp (2026-08-30 신설).
@@ -768,6 +768,12 @@ const USERS = {
 const NAME_TO_ID = {'조아라':'joara','양채원':'chaewon','조주리':'juri','변채린':'chaerin',
   '박진선':'jinsun','진선':'jinsun','박하은':'haeun','하은':'haeun','백영재':'youngjae','영재':'youngjae','이연지':'yeonji','연지':'yeonji','staff':'staff','지킴이':'staff','운영인력':'staff'};
 const SUFFIX = '@atc.local';
+/* 팀원 연락처 기반 로그인(클라라 08-31) — 코드 명단(USERS) 밖 이름은 이름을 hex로 감은 id로 계정 생성,
+   인증 직후 atc/cal/team에 이름이 있는지 검증(없으면 계정 즉시 삭제·거부). 규칙 변경 불요. */
+const nameId = n => 'u'+Array.from(new TextEncoder().encode(n)).map(x=>x.toString(16).padStart(2,'0')).join('');
+const idName = id => { try{ return new TextDecoder().decode(new Uint8Array(id.slice(1).match(/../g).map(h=>parseInt(h,16)))); }catch(e){ return null; } };
+const guestUser = id => { const n=idName(id)||'?'; return {name:n, role:'lead', av:n[0], avCls:'av-lead'}; };
+let loginVerifying=false;
 /* 출결 명단 — DB(atc/cal/roster)가 정본. 비어 있으면 아래 기본값을 쓰고, 조아라가 처음 편집할 때 DB로 옮겨 담는다.
    본인 판정은 계정 id가 아니라 '이름'이라, 명단에 이름만 넣으면 그 사람이 자기 칸을 찍을 수 있다. */
 const DEFAULT_ROSTER = ['박진선','박하은','백영재'];
@@ -857,24 +863,45 @@ $('login-btn').addEventListener('click', doLogin);
 $('pw-inp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 async function doLogin(){
   const raw=$('id-inp').value.trim(); let pw=$('pw-inp').value;
-  const id=NAME_TO_ID[raw]||raw.toLowerCase();
-  if(!USERS[id]){$('login-err').textContent='등록된 이름이 아닙니다 (본명 입력: 조아라, 박진선 …)';return;}
+  let id=NAME_TO_ID[raw]||raw.toLowerCase(), guest=false;
+  if(!USERS[id]){
+    if(!raw||raw.length<2){$('login-err').textContent='본명을 입력하세요';return;}
+    id=nameId(raw); guest=true; loginVerifying=true;
+  }
   if(pw.length<4){$('login-err').textContent='비밀번호는 4자리 이상';return;}
   if(pw.length<6) pw+='#atc'; // Firebase 최소 6자 요건 — 4자리 코드용 고정 패딩
   $('login-err').textContent='확인 중...';
+  let created=false;
   try{ await signInWithEmailAndPassword(auth, id+SUFFIX, pw); }
   catch(err){
     if(err.code==='auth/user-not-found'||err.code==='auth/invalid-credential'){
-      try{ await createUserWithEmailAndPassword(auth, id+SUFFIX, pw); toast('계정 생성 완료'); }
-      catch(e2){ $('login-err').textContent = e2.code==='auth/email-already-in-use' ? '비밀번호가 틀렸습니다' : '로그인 실패: '+e2.code; return; }
-    } else { $('login-err').textContent='로그인 실패: '+err.code; return; }
+      try{ await createUserWithEmailAndPassword(auth, id+SUFFIX, pw); created=true; }
+      catch(e2){ loginVerifying=false; $('login-err').textContent = e2.code==='auth/email-already-in-use' ? '비밀번호가 틀렸습니다' : '로그인 실패: '+e2.code; return; }
+    } else { loginVerifying=false; $('login-err').textContent='로그인 실패: '+err.code; return; }
   }
+  if(guest){
+    try{
+      const snap=await get(ref(db,'atc/cal/team'));
+      const ok=Object.values(snap.val()||{}).some(t=>String(t.name||'').trim()===raw);
+      if(!ok){
+        try{ if(created&&auth.currentUser) await auth.currentUser.delete(); else await signOut(auth); }
+        catch(e3){ await signOut(auth); }
+        loginVerifying=false;
+        $('login-err').textContent='팀원 연락처에 없는 이름입니다 — 관리자가 [팀원 추가]에 이름을 넣으면 바로 로그인돼요';
+        return;
+      }
+    }catch(e4){ await signOut(auth); loginVerifying=false; $('login-err').textContent='명단 확인 실패 — 잠시 후 다시'; return; }
+    if(created) toast('계정 생성 완료');
+    loginVerifying=false;
+    meId=id; me=guestUser(id); enterApp();
+  } else if(created) toast('계정 생성 완료');
 }
 /* #demo-admin|-lead|-staff : 로그인·DB 없이 UI만 보기 (규칙 개통 전 미리보기용) — 진입은 스크립트 맨끝 */
 const demo=location.hash.startsWith('#demo');
 onAuthStateChanged(auth,user=>{
   if(demo) return;
-  if(user){ meId=user.email.split('@')[0]; me=USERS[meId]||USERS.staff; enterApp(); }
+  if(user){ if(loginVerifying) return; meId=user.email.split('@')[0];
+    me=USERS[meId]||(meId[0]==='u'&&idName(meId)?guestUser(meId):USERS.staff); enterApp(); }
   else{ $('login').style.display='flex'; $('app').style.display='none'; }
 });
 $('uav').addEventListener('click',()=>{
