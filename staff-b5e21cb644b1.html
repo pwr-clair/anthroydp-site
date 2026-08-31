@@ -909,8 +909,8 @@ function renderWeek(){
     card.className='wday'+(CLOSED[k]?' closed':'')+(k===todayKey?' today':'');
     const ovw=evxCache[k]||{};
     const evs=[...(FIXED[k]||[]).map((f,i)=>({tm:f.tm,t:f.t,fi:'f'+i})).filter(f=>!(ovw[f.fi]||{}).del),
-      ...Object.values(evCache[k]||{}).sort((a,b)=>(a.tm||'99')<(b.tm||'99')?-1:1)];
-    const lines=evs.map(e=>'<div class="ln">'+(e.tm?'<span class="t">'+e.tm+'</span>':'')+esc(e.t||e.text)+'</div>').join('');
+      ...Object.values(evCache[k]||{}).sort((a,b)=>(normTm(a.tm)||'99')<(normTm(b.tm)||'99')?-1:1)];
+    const lines=evs.map(e=>'<div class="ln">'+(e.tm?'<span class="t">'+esc(fmtTm(e.tm))+'</span>':'')+esc(e.t||e.text)+'</div>').join('');
     const nIs=cnt(isCache,k)+cnt(shCache,k);
     const shNames=workersOf(k).join('·');
     card.innerHTML='<div class="h"><span class="dt'+(d.getDay()===0?' sun':'')+'">'+ (d.getMonth()+1)+'.'+d.getDate()+' '+DOW[d.getDay()]+'</span>'
@@ -958,13 +958,13 @@ function renderEvents(){
   const all=[...fixed,...evs].sort((a,b)=>{
     if(!!a.done!==!!b.done) return a.done?1:-1;            // 완료는 맨 아래로 (해제하면 o가 그대로라 제자리)
     const ao=a.o==null?999:a.o, bo=b.o==null?999:b.o;      // 손으로 옮긴 순서가 우선, 없으면 시간순
-    return ao!==bo ? ao-bo : (((a.tm||'99')<(b.tm||'99'))?-1:1);
+    return ao!==bo ? ao-bo : (((normTm(a.tm)||'99')<(normTm(b.tm)||'99'))?-1:1);
   });
   $('ev-list').innerHTML = all.length ? all.map(e=>{
     const key=e.src+'|'+e.id;
     return '<div class="item'+(e.done?' done':'')+'" data-id="'+key+'">'
     +'<input type="checkbox" data-evck="'+key+'"'+(e.done?' checked':'')+'>'
-    +'<span class="txt">'+(e.tm?'<i class="tm">'+esc(e.tm)+'</i>':'')+(e.u?'<a class="evlink" href="'+e.u+'" target="_blank" rel="noopener">'+esc(e.text)+'</a>':esc(e.text))+'</span>'
+    +'<span class="txt">'+(e.tm?'<i class="tm">'+esc(fmtTm(e.tm))+'</i>':'')+(e.u?'<a class="evlink" href="'+e.u+'" target="_blank" rel="noopener">'+esc(e.text)+'</a>':esc(e.text))+'</span>'
     +(e.by?'<span class="by">'+esc(e.by)+'</span>':'')
     +(isAdmin()?'<button class="del" data-eved="'+key+'">✎</button>'
                +'<button class="del" data-evdel="'+key+'">✕</button>'
@@ -1006,7 +1006,29 @@ $('nc-btn').addEventListener('click',()=>{
   $('nc-inp').value='';
 });
 
-const normTm = t => (t&&/^\d{3,4}$/.test(t)) ? t.padStart(4,'0').replace(/(\d\d)(\d\d)/,'$1:$2') : (t||'');
+/* 시간 정규화 — 어떤 표기든(1600·3:30·오후 3시 30분·3시반) 저장은 24h HH:MM, 표시는 오전/오후 N시 M분 */
+const normTm = t => {
+  if(!t) return '';
+  t=String(t).trim();
+  const mer=/오전|아침/.test(t)?'am':(/오후|저녁|밤/.test(t)?'pm':'');
+  let h,mi;
+  if(/^\d{3,4}$/.test(t)){ h=+t.slice(0,-2); mi=+t.slice(-2); }
+  else{
+    const m=t.replace(/오전|오후|아침|저녁|밤/g,'').trim().match(/^(\d{1,2})\s*[:시.\s]?\s*(\d{1,2}|반)?/);
+    if(!m) return t;                            /* 못 알아들으면 원문 유지 */
+    h=+m[1]; mi=m[2]==='반'?30:(+(m[2]||0)||0);
+  }
+  if(mer==='pm'&&h<12) h+=12;
+  if(mer==='am'&&h===12) h=0;
+  if(!mer&&h>=1&&h<=8) h+=12;                    /* ponytail: 무표기 1~8시는 오후로 간주(운영 12~20시) — 오전이 필요하면 '오전' 명기 */
+  if(h>23||mi>59) return t;
+  return String(h).padStart(2,'0')+':'+String(mi).padStart(2,'0');
+};
+const fmtTm = t => {
+  const n=normTm(t), m=/^(\d\d):(\d\d)$/.exec(n); if(!m) return t||'';
+  let h=+m[1]; const mi=+m[2], mer=h<12?'오전':'오후'; if(h>12) h-=12; if(h===12&&mer==='오전') h=0;
+  return mer+' '+h+'시'+(mi?' '+mi+'분':'');
+};
 function editEvent(src,id){
   const k=selDay;
   const cur = src==='fx' ? (FIXED[k]||[])[+id.slice(1)] : (evCache[k]||{})[id];
