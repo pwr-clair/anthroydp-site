@@ -309,6 +309,12 @@
   .ck-add{margin:8px 0 4px;border:1px dashed var(--line);background:none;color:var(--ink3);
     border-radius:5px;padding:7px 12px;font-size:11.5px;font-weight:700}
   .att .del{flex:none;border:0;background:none;color:var(--ink3);font-size:12px;padding:0 2px}
+  .mn-sub{margin:14px 0 6px;border:1px dashed var(--line);border-radius:8px;padding:0 12px}
+  .mn-sub summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:11px 0;font-size:13px;font-weight:800}
+  .mn-sub summary::-webkit-details-marker{display:none}
+  .mn-sub .tri{color:var(--red);font-size:10.5px;transition:transform .15s}
+  .mn-sub[open] .tri{transform:rotate(90deg)}
+  .mn-sub figure:last-of-type{margin-bottom:12px}
   .oo{margin:12px 0 18px} .oo img{width:100%;display:block;border:1px solid var(--line);border-radius:8px;background:#fff}
   .oo figcaption{font-size:10.5px;color:var(--ink3);text-align:center;margin-top:5px}
 
@@ -408,7 +414,89 @@
       <div class="sec-t">작품 매뉴얼</div>
       <div class="empty">작가가 전달한 운영 매뉴얼입니다. 작품에 문제가 생기면 여기부터 보고, 해결되지 않으면 아래 [전화]로 작가에게 바로 연락하세요.</div>
 
-      <div class="mn" id="mn-cky">
+            <!-- 작가 전달본 2건(08-31): 운영 가이드 2쪽 + 작품설명서 6쪽(속토글) -->
+      <div class="mn" id="mn-ksh">
+        <div class="mn-h"><i class="tri">▶</i><b>김시흔</b><span>호흡하는 잔여들</span></div>
+        <div class="mn-b">
+          <div class="mn-ok"><b>개장(ON)</b> — ① 멀티탭 전체 전원 ON(다른 스위치는 그대로) → ② 작품 아랫쪽 구동 전원 장치의 동그란 버튼 ON<br>
+            <b>폐장(OFF)</b> — 정확히 역순: ① 구동 전원 OFF → ② 멀티탭 전체 전원 OFF<br>
+            동작 오류 시 = 종료 순서로 전원 OFF → <b>5분 후</b> 시작 순서로 재인가</div>
+          <div class="mn-warn">전원 ON-OFF 외 다른 부분은 세팅된 상태 그대로 둘 것. <b>심각 오류</b>(공기주머니 이상 팽창·접합부 벌어짐 / 호스·피팅 이탈, 블로워가 계속 멈추지 않음 / 릴레이 반복 딸깍 / 탄 냄새·연기·비정상 발열)면 <b>전원 OFF 후 관리자·작가에게 연락</b>.</div>
+          <figure><img loading="lazy" src="manual-assets/kshguide-01.jpg" alt="김시흔 운영 가이드 1쪽 — 개장 순서"><figcaption>운영 가이드 1 / 2</figcaption></figure>
+          <figure><img loading="lazy" src="manual-assets/kshguide-02.jpg" alt="김시흔 운영 가이드 2쪽 — 폐장 순서·오류 대응"><figcaption>운영 가이드 2 / 2</figcaption></figure>
+          <details class="mn-sub">
+            <summary><i class="tri">▶</i>작품설명서 〈호흡하는 잔여들〉 (6쪽)</summary>
+            <figure><img loading="lazy" src="manual-assets/kshdesc-01.jpg" alt="작품설명서 1쪽"><figcaption>1 / 6</figcaption></figure>
+            <figure><img loading="lazy" src="manual-assets/kshdesc-02.jpg" alt="작품설명서 2쪽"><figcaption>2 / 6</figcaption></figure>
+            <figure><img loading="lazy" src="manual-assets/kshdesc-03.jpg" alt="작품설명서 3쪽"><figcaption>3 / 6</figcaption></figure>
+            <figure><img loading="lazy" src="manual-assets/kshdesc-04.jpg" alt="작품설명서 4쪽"><figcaption>4 / 6</figcaption></figure>
+            <figure><img loading="lazy" src="manual-assets/kshdesc-05.jpg" alt="작품설명서 5쪽"><figcaption>5 / 6</figcaption></figure>
+            <figure><img loading="lazy" src="manual-assets/kshdesc-06.jpg" alt="작품설명서 6쪽"><figcaption>6 / 6</figcaption></figure>
+          </details>
+          <div class="mn-call"><span class="i"><b>김시흔</b>작가</span><a href="tel:01025759817">전화</a></div>
+        </div>
+      </div>
+
+      <!-- 작가 메일(08-31 오전) 전달본 — 온오프 3곳뿐이라 본문 전사 방식 -->
+<div class="mn" id="mn-kjm">
+        <div class="mn-h"><i class="tri">▶</i><b>김재민이</b><span>테크노엇박과 낙서</span></div>
+        <div class="mn-b">
+          <h4>개장 · 폐장 — 온오프 3곳</h4>
+          <ol>
+            <li><b>레이저</b> — 탁상 위 레이저 기기 <b>뒷면의 빨간 스위치</b>만 ON/OFF. <b>다른 장비·케이블은 건드리지 않기</b> (작가 당부)</li>
+            <li><b>브라운관 TV</b> — TV 뒷쪽 콘센트 아래 멀티탭의 온오프 스위치로 ON/OFF</li>
+            <li><b>멍석 위 스탠드조명</b> — 조명에 달린 스위치로 ON/OFF</li>
+          </ol>
+          <div class="mn-warn">스탠드조명의 동그란 스위치를 잘못 누르면 빛 색깔이 바뀝니다 — <b>오렌지색</b>으로 다시 맞춰 주세요.</div>
+          <figure><img loading="lazy" src="manual-assets/kjmimg-01.jpg" alt="레이저 기기 뒷면 빨간 ON/OFF 스위치"><figcaption>1. 레이저 — 뒷면 빨간 스위치</figcaption></figure>
+          <figure><img loading="lazy" src="manual-assets/kjmimg-02.jpg" alt="TV 뒷쪽 콘센트의 멀티탭 스위치"><figcaption>2. 브라운관 TV — 콘센트 아래 멀티탭 스위치</figcaption></figure>
+          <figure><img loading="lazy" src="manual-assets/kjmimg-03.jpg" alt="멍석 위 스탠드조명"><figcaption>3. 멍석 위 스탠드조명 — 달려 있는 스위치</figcaption></figure>
+          <div class="mn-call"><span class="i"><b>김재민이</b>작가</span><a href="mailto:geminiatuk@gmail.com">메일</a></div>
+        </div>
+      </div>
+
+<div class="mn" id="mn-jyg">
+        <div class="mn-h"><i class="tri">▶</i><b>조영각</b><span>아무도 가지지 못한 것들</span></div>
+        <div class="mn-b">
+          <div class="mn-ok">작가가 전달한 매뉴얼 원본(12쪽)입니다. 사진을 눌러 확대해서 보세요.<br>
+            <b>개장(ON)</b> — ① 전원 → ② 로봇 → ③ 사운드<br>
+            <b>폐장(OFF)</b> — ① 사운드 → ② 로봇 → ③ 전원 <span style="color:var(--ink3)">(개장의 역순)</span><br>
+            PC는 자동입니다 — 오전 11:55 전원·프로그램 자동 시작 / 오후 19:50 프로그램 종료 / 오후 20:00 PC 자동 종료.<br>
+            메인 전원과 테이블 멀티탭은 전시기간 동안 계속 켜두는 것이 관리에 편합니다.</div>
+          <figure><img loading="lazy" src="manual-assets/jyg-01.jpg" alt="조영각 매뉴얼 1쪽"><figcaption>1 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-02.jpg" alt="조영각 매뉴얼 2쪽"><figcaption>2 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-03.jpg" alt="조영각 매뉴얼 3쪽"><figcaption>3 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-04.jpg" alt="조영각 매뉴얼 4쪽"><figcaption>4 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-05.jpg" alt="조영각 매뉴얼 5쪽"><figcaption>5 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-06.jpg" alt="조영각 매뉴얼 6쪽"><figcaption>6 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-07.jpg" alt="조영각 매뉴얼 7쪽"><figcaption>7 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-08.jpg" alt="조영각 매뉴얼 8쪽"><figcaption>8 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-09.jpg" alt="조영각 매뉴얼 9쪽"><figcaption>9 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-10.jpg" alt="조영각 매뉴얼 10쪽"><figcaption>10 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-11.jpg" alt="조영각 매뉴얼 11쪽"><figcaption>11 / 12</figcaption></figure>
+        <figure><img loading="lazy" src="manual-assets/jyg-12.jpg" alt="조영각 매뉴얼 12쪽"><figcaption>12 / 12</figcaption></figure>
+        
+          <div class="mn-call"><span class="i"><b>조영각</b>작가</span><a href="tel:01092098121">전화</a></div>
+        </div>
+      </div>
+
+<div class="mn" id="mn-jsa">
+        <div class="mn-h"><i class="tri">▶</i><b>주슬아</b><span>영사기</span></div>
+        <div class="mn-b">
+          <h4>영사기 조작 — 두 대 모두 동일</h4>
+          <ul>
+            <li><b>검은색 튀어나온 부분</b>을 위로 올리면 ON, 내리면 OFF</li>
+            <li>개장 때 ON, 마감 때 OFF</li>
+            <li>왼쪽 핸들을 돌리면서 관람할 수 있습니다 (관람객 안내)</li>
+          </ul>
+          <figure><img loading="lazy" src="manual-assets/jsaimg-01.jpg" alt="영사기 1"></figure>
+          <figure><img loading="lazy" src="manual-assets/jsaimg-02.jpg" alt="영사기 2"></figure>
+          <figure><img loading="lazy" src="manual-assets/jsaimg-03.jpg" alt="전원 스위치 — 위로 올리면 ON"><figcaption>전원 스위치 — 위로 올리면 ON</figcaption></figure>
+          <div class="mn-call"><span class="i"><b>주슬아</b>작가</span><a href="tel:01065801151">전화</a></div>
+        </div>
+      </div>
+
+<div class="mn" id="mn-cky">
         <div class="mn-h"><i class="tri">▶</i><b>최가영</b><span>나의 우육면 다이어리 · 우육면 트위스트</span></div>
         <div class="mn-b">
           <h4>작품 · 기기 목록</h4>
@@ -487,65 +575,6 @@
           <p class="mn-note">연락 주실 때 알려주시면 도움이 됩니다.<br>
             〈나의 우육면 다이어리〉 — 어느 화면에서 멈췄는지 / 터치에 반응하는지 / 소리는 나오는지<br>
             〈우육면 트위스트〉 — 왼쪽·오른쪽 중 어느 화면인지 / 화면에 무엇이 보이는지(캄캄함·글자·정지화면) / 전원을 켠 뒤 얼마나 지났는지 / 소리는 나오는지</p>
-        </div>
-      </div>
-
-      <div class="mn" id="mn-jyg">
-        <div class="mn-h"><i class="tri">▶</i><b>조영각</b><span>아무도 가지지 못한 것들</span></div>
-        <div class="mn-b">
-          <div class="mn-ok">작가가 전달한 매뉴얼 원본(12쪽)입니다. 사진을 눌러 확대해서 보세요.<br>
-            <b>개장(ON)</b> — ① 전원 → ② 로봇 → ③ 사운드<br>
-            <b>폐장(OFF)</b> — ① 사운드 → ② 로봇 → ③ 전원 <span style="color:var(--ink3)">(개장의 역순)</span><br>
-            PC는 자동입니다 — 오전 11:55 전원·프로그램 자동 시작 / 오후 19:50 프로그램 종료 / 오후 20:00 PC 자동 종료.<br>
-            메인 전원과 테이블 멀티탭은 전시기간 동안 계속 켜두는 것이 관리에 편합니다.</div>
-          <figure><img loading="lazy" src="manual-assets/jyg-01.jpg" alt="조영각 매뉴얼 1쪽"><figcaption>1 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-02.jpg" alt="조영각 매뉴얼 2쪽"><figcaption>2 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-03.jpg" alt="조영각 매뉴얼 3쪽"><figcaption>3 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-04.jpg" alt="조영각 매뉴얼 4쪽"><figcaption>4 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-05.jpg" alt="조영각 매뉴얼 5쪽"><figcaption>5 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-06.jpg" alt="조영각 매뉴얼 6쪽"><figcaption>6 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-07.jpg" alt="조영각 매뉴얼 7쪽"><figcaption>7 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-08.jpg" alt="조영각 매뉴얼 8쪽"><figcaption>8 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-09.jpg" alt="조영각 매뉴얼 9쪽"><figcaption>9 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-10.jpg" alt="조영각 매뉴얼 10쪽"><figcaption>10 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-11.jpg" alt="조영각 매뉴얼 11쪽"><figcaption>11 / 12</figcaption></figure>
-        <figure><img loading="lazy" src="manual-assets/jyg-12.jpg" alt="조영각 매뉴얼 12쪽"><figcaption>12 / 12</figcaption></figure>
-        
-          <div class="mn-call"><span class="i"><b>조영각</b>작가</span><a href="tel:01092098121">전화</a></div>
-        </div>
-      </div>
-
-      <div class="mn" id="mn-jsa">
-        <div class="mn-h"><i class="tri">▶</i><b>주슬아</b><span>영사기</span></div>
-        <div class="mn-b">
-          <h4>영사기 조작 — 두 대 모두 동일</h4>
-          <ul>
-            <li><b>검은색 튀어나온 부분</b>을 위로 올리면 ON, 내리면 OFF</li>
-            <li>개장 때 ON, 마감 때 OFF</li>
-            <li>왼쪽 핸들을 돌리면서 관람할 수 있습니다 (관람객 안내)</li>
-          </ul>
-          <figure><img loading="lazy" src="manual-assets/jsaimg-01.jpg" alt="영사기 1"></figure>
-          <figure><img loading="lazy" src="manual-assets/jsaimg-02.jpg" alt="영사기 2"></figure>
-          <figure><img loading="lazy" src="manual-assets/jsaimg-03.jpg" alt="전원 스위치 — 위로 올리면 ON"><figcaption>전원 스위치 — 위로 올리면 ON</figcaption></figure>
-          <div class="mn-call"><span class="i"><b>주슬아</b>작가</span><a href="tel:01065801151">전화</a></div>
-        </div>
-      </div>
-
-      <!-- 작가 메일(08-31 오전) 전달본 — 온오프 3곳뿐이라 본문 전사 방식 -->
-      <div class="mn" id="mn-kjm">
-        <div class="mn-h"><i class="tri">▶</i><b>김재민이</b><span>테크노엇박과 낙서</span></div>
-        <div class="mn-b">
-          <h4>개장 · 폐장 — 온오프 3곳</h4>
-          <ol>
-            <li><b>레이저</b> — 탁상 위 레이저 기기 <b>뒷면의 빨간 스위치</b>만 ON/OFF. <b>다른 장비·케이블은 건드리지 않기</b> (작가 당부)</li>
-            <li><b>브라운관 TV</b> — TV 뒷쪽 콘센트 아래 멀티탭의 온오프 스위치로 ON/OFF</li>
-            <li><b>멍석 위 스탠드조명</b> — 조명에 달린 스위치로 ON/OFF</li>
-          </ol>
-          <div class="mn-warn">스탠드조명의 동그란 스위치를 잘못 누르면 빛 색깔이 바뀝니다 — <b>오렌지색</b>으로 다시 맞춰 주세요.</div>
-          <figure><img loading="lazy" src="manual-assets/kjmimg-01.jpg" alt="레이저 기기 뒷면 빨간 ON/OFF 스위치"><figcaption>1. 레이저 — 뒷면 빨간 스위치</figcaption></figure>
-          <figure><img loading="lazy" src="manual-assets/kjmimg-02.jpg" alt="TV 뒷쪽 콘센트의 멀티탭 스위치"><figcaption>2. 브라운관 TV — 콘센트 아래 멀티탭 스위치</figcaption></figure>
-          <figure><img loading="lazy" src="manual-assets/kjmimg-03.jpg" alt="멍석 위 스탠드조명"><figcaption>3. 멍석 위 스탠드조명 — 달려 있는 스위치</figcaption></figure>
-          <div class="mn-call"><span class="i"><b>김재민이</b>작가</span><a href="mailto:geminiatuk@gmail.com">메일</a></div>
         </div>
       </div>
 
