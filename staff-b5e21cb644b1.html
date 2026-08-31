@@ -321,6 +321,26 @@
   .modal-b textarea{width:100%;min-height:180px;border:1px solid var(--line);border-radius:4px;padding:9px;font-size:13.5px;font-family:inherit}
   .modal-b .save{margin-top:8px;border:0;background:var(--red);color:#fff;border-radius:4px;padding:8px 16px;font-size:13px;font-weight:700}
 
+  /* 공지 — 당일 배너 + 모달(등록·삭제·지난 공지). 리스트+추가칸 방식에서 개편 (2026-08-31) */
+  .nc-bn{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--well);
+    border-radius:8px;padding:10px 12px;margin:6px 0 2px;color:var(--ink)}
+  .nc-bn .h{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:800;color:var(--red);margin-bottom:4px}
+  .nc-bn .h .meta{font-weight:700;color:var(--ink3);font-family:var(--num);font-size:10px;letter-spacing:0}
+  .nc-bn .tx{display:block;font-size:14px;font-weight:700;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+  .nc-bn.none .tx{color:var(--ink3);font-weight:400;font-size:12.5px}
+  #nc-dlg .nc-desc{font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:10px}
+  #nc-dlg textarea{width:100%;min-height:96px;border:1px solid var(--line);border-radius:6px;padding:10px;
+    font-size:14px;font-family:inherit;line-height:1.6;resize:vertical}
+  #nc-dlg .nc-btns{display:flex;gap:8px;margin-top:10px}
+  #nc-dlg .nc-btns button{flex:1;border-radius:5px;padding:11px 0;font-size:13.5px;font-weight:800}
+  #nc-reg{border:0;background:var(--red);color:#fff}
+  #nc-del{border:1px solid var(--red);background:none;color:var(--red)}
+  .nc-past-t{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:var(--ink3);margin:20px 0 2px}
+  .nc-p{border-bottom:1px solid var(--hair);padding:9px 0}
+  .nc-p:last-child{border-bottom:0}
+  .nc-p .m{font-family:var(--num);font-size:10.5px;color:var(--ink3);margin-bottom:2px}
+  .nc-p .t{font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+
   .evlink{color:var(--red);text-decoration:underline;text-underline-offset:3px}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#232c42;border:1px solid var(--line);color:#fff;
     border-radius:4px;padding:8px 16px;font-size:12.5px;opacity:0;pointer-events:none;transition:.25s;z-index:99}
@@ -619,10 +639,6 @@
       <div class="sec-t">당일 주요일정 · 공지</div>
       <div class="sub-l">공지</div>
       <div id="nc-list"></div>
-      <div class="add">
-        <input type="text" id="nc-inp" placeholder="+ 오늘의 공지">
-        <button id="nc-btn">추가</button>
-      </div>
       <div class="box-div"></div>
       <div class="sub-l">주요 일정</div>
       <div id="ev-list"></div>
@@ -659,6 +675,20 @@
     <div id="team-list"></div>
     <button class="tm-add" id="team-add" style="display:none">+ 팀원 추가</button>
     <button class="tm-lo" id="team-logout">로그아웃</button>
+  </div>
+</dialog>
+
+<dialog id="nc-dlg">
+  <div class="modal-h">📢 공지 <button id="nc-x">✕</button></div>
+  <div class="modal-b" style="white-space:normal">
+    <div class="nc-desc">오늘의 공지를 입력하세요. 당일이 지나면 자동으로 지난 공지로 이동돼요.</div>
+    <textarea id="nc-ta" placeholder="공지 내용"></textarea>
+    <div class="nc-btns">
+      <button id="nc-reg">등록</button>
+      <button id="nc-del">삭제</button>
+    </div>
+    <div class="nc-past-t">지난 공지</div>
+    <div id="nc-past"></div>
   </div>
 </dialog>
 
@@ -923,7 +953,7 @@ function renderWeek(){
     card.className='wday'+(CLOSED[k]?' closed':'')+(k===todayKey?' today':'');
     const ovw=evxCache[k]||{};
     const evs=[...(FIXED[k]||[]).map((f,i)=>({tm:f.tm,t:f.t,fi:'f'+i})).filter(f=>!(ovw[f.fi]||{}).del),
-      ...Object.values(evCache[k]||{}).sort((a,b)=>(normTm(a.tm)||'99')<(normTm(b.tm)||'99')?-1:1)];
+      ...Object.values(evCache[k]||{}).sort((a,b)=>{const at=normTm(a.tm)||'',bt=normTm(b.tm)||'';return at<bt?-1:at>bt?1:0;})];
     const lines=evs.map(e=>'<div class="ln">'+(e.tm?'<span class="t">'+esc(fmtTm(e.tm))+'</span>':'')+esc(e.t||e.text)+'</div>').join('');
     const nIs=cnt(isCache,k)+cnt(shCache,k);
     const shNames=workersOf(k).join('·');
@@ -966,13 +996,15 @@ function renderDay(){
 function renderEvents(){
   const k=selDay, ov=evxCache[k]||{};
   const fixed=(FIXED[k]||[]).map((f,i)=>({id:'f'+i,src:'fx',tm:f.tm,text:f.t,u:f.u,
-      done:!!(ov['f'+i]||{}).done, o:(ov['f'+i]||{}).o}))
+      done:!!(ov['f'+i]||{}).done}))
     .filter(x=>!(ov[x.id]||{}).del);
-  const evs=Object.entries(evCache[k]||{}).map(([id,e])=>({id,src:'ev',tm:e.tm,text:e.text,by:e.by,done:!!e.done,o:e.o}));
+  const evs=Object.entries(evCache[k]||{}).map(([id,e])=>({id,src:'ev',tm:e.tm,text:e.text,by:e.by,done:!!e.done}));
+  /* 자동 정렬 — 시간 없는 항목 맨 위, 시간 있는 항목은 시간순. 같으면 등록순(안정 정렬) */
   const all=[...fixed,...evs].sort((a,b)=>{
-    if(!!a.done!==!!b.done) return a.done?1:-1;            // 완료는 맨 아래로 (해제하면 o가 그대로라 제자리)
-    const ao=a.o==null?999:a.o, bo=b.o==null?999:b.o;      // 손으로 옮긴 순서가 우선, 없으면 시간순
-    return ao!==bo ? ao-bo : (((normTm(a.tm)||'99')<(normTm(b.tm)||'99'))?-1:1);
+    if(!!a.done!==!!b.done) return a.done?1:-1;            // 완료는 맨 아래로
+    const at=normTm(a.tm)||'', bt=normTm(b.tm)||'';
+    if(!at!==!bt) return at?1:-1;
+    return at<bt?-1 : at>bt?1 : 0;
   });
   $('ev-list').innerHTML = all.length ? all.map(e=>{
     const key=e.src+'|'+e.id;
@@ -981,43 +1013,51 @@ function renderEvents(){
     +'<span class="txt">'+(e.tm?'<i class="tm">'+esc(fmtTm(e.tm))+'</i>':'')+(e.u?'<a class="evlink" href="'+e.u+'" target="_blank" rel="noopener">'+esc(e.text)+'</a>':esc(e.text))+'</span>'
     +(e.by?'<span class="by">'+esc(e.by)+'</span>':'')
     +(isAdmin()?'<button class="del" data-eved="'+key+'">✎</button>'
-               +'<button class="del" data-evdel="'+key+'">✕</button>'
-               +'<span class="grip">≡</span>':'')+'</div>';
-  }).join('') : '<div class="empty">등록된 일정 · 공지 없음</div>';
-  makeSortable($('ev-list'),order=>{
-    const upd={}, ux={};
-    order.forEach((key,i)=>{ const [src,id]=key.split('|');
-      if(src==='ev') upd[id+'/o']=i; else ux[id+'/o']=i; });
-    if(Object.keys(upd).length) update(ref(db,'atc/cal/events/'+k),upd);
-    if(Object.keys(ux).length)  update(ref(db,'atc/cal/evx/'+k),ux);
-    toast('순서 저장');
-  });
+               +'<button class="del" data-evdel="'+key+'">✕</button>':'')+'</div>';
+  }).join('') : '<div class="empty">등록된 일정 없음</div>';
 }
-/* 공지 — 일정과 같은 박스, 선 위쪽. 시간 개념 없음 */
+/* 공지 — 당일 배너로 표시, 누르면 모달에서 쓰고(등록) 다시 고쳐 쓸 수 있다.
+   날짜가 지난 공지는 모달의 '지난 공지' 목록으로 내려간다 (2026-08-31 개편) */
+const ncEntries = k => Object.entries(ncCache[k]||{}).map(([id,e])=>({id,...e})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+const tsHM = ts => { if(!ts) return ''; const d=new Date(ts); return pad(d.getHours())+':'+pad(d.getMinutes()); };
 function renderNotice(){
-  const k=selDay;
-  const items=Object.entries(ncCache[k]||{}).map(([id,e])=>({id,...e})).sort((a,b)=>{
-    if(!!a.done!==!!b.done) return a.done?1:-1;
-    const ao=a.o==null?999:a.o, bo=b.o==null?999:b.o;
-    return ao!==bo ? ao-bo : (a.ts||0)-(b.ts||0);
-  });
+  const k=selDay, items=ncEntries(k);
   $('nc-list').innerHTML = items.length ? items.map(e=>
-    '<div class="item'+(e.done?' done':'')+'" data-id="'+e.id+'">'
-    +'<input type="checkbox" data-ncck="'+e.id+'"'+(e.done?' checked':'')+'>'
-    +'<span class="txt">'+esc(e.text)+'</span>'
-    +(e.by?'<span class="by">'+esc(e.by)+'</span>':'')
-    +(isAdmin()?'<button class="del" data-nced="'+e.id+'">✎</button>'
-               +'<button class="del" data-ncdel="'+e.id+'">✕</button><span class="grip">≡</span>':'')
-    +'</div>').join('') : '<div class="empty">공지 없음</div>';
-  if(isAdmin()) makeSortable($('nc-list'),order=>{
-    const upd={}; order.forEach((id,i)=>upd[id+'/o']=i);
-    update(ref(db,'atc/cal/notice/'+k),upd); toast('순서 저장');
-  });
+    '<button class="nc-bn" data-ncopen="1"><span class="h">📢 공지<span class="meta">'
+    +esc(e.by||'')+' · '+k+(e.ts?' '+tsHM(e.ts):'')+'</span></span>'
+    +'<span class="tx">'+esc(e.text)+'</span></button>').join('')
+   : '<button class="nc-bn none" data-ncopen="1"><span class="h">📢 공지</span><span class="tx">공지 없음 — 눌러서 작성</span></button>';
+  if($('nc-dlg').open) renderNcDlg(false);
 }
-$('nc-btn').addEventListener('click',()=>{
-  const v=$('nc-inp').value.trim(); if(!v)return;
-  push(ref(db,'atc/cal/notice/'+selDay),{text:v,by:myName(),ts:Date.now()});
-  $('nc-inp').value='';
+/* fill=false면 원격 갱신으로 다시 그릴 때 입력 중인 내용을 덮지 않는다 */
+function renderNcDlg(fill){
+  const items=ncEntries(selDay);
+  if(fill!==false) $('nc-ta').value = items.length ? items[items.length-1].text : '';
+  $('nc-del').style.display = items.length ? '' : 'none';
+  const rows=[];
+  Object.keys(ncCache).filter(d=>d<selDay).sort().reverse().forEach(d=>{
+    ncEntries(d).slice().reverse().forEach(e=>rows.push({d,...e}));
+  });
+  $('nc-past').innerHTML = rows.length ? rows.map(r=>
+    '<div class="nc-p"><div class="m">'+r.d+' · '+esc(r.by||'')+'</div><div class="t">'+esc(r.text)+'</div></div>').join('')
+   : '<div class="empty">지난 공지 없음</div>';
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-ncopen]')){ renderNcDlg(); $('nc-dlg').showModal(); }
+});
+$('nc-x').addEventListener('click',()=>$('nc-dlg').close());
+$('nc-reg').addEventListener('click',()=>{
+  const v=$('nc-ta').value.trim(); if(!v){toast('내용을 입력하세요');return;}
+  const items=ncEntries(selDay), data={text:v,by:myName(),ts:Date.now()};
+  if(items.length) update(ref(db,'atc/cal/notice/'+selDay+'/'+items[items.length-1].id),data);
+  else push(ref(db,'atc/cal/notice/'+selDay),data);
+  $('nc-dlg').close(); toast('공지 등록');
+});
+$('nc-del').addEventListener('click',()=>{
+  const items=ncEntries(selDay); if(!items.length) return;
+  if(!confirm('이 날짜의 공지를 삭제할까요?')) return;
+  remove(ref(db,'atc/cal/notice/'+selDay+'/'+items[items.length-1].id));
+  $('nc-ta').value=''; toast('공지 삭제');
 });
 
 /* 시간 정규화 — 어떤 표기든(1600·3:30·오후 3시 30분·3시반) 저장은 24h HH:MM, 표시는 오전/오후 N시 M분 */
@@ -1343,11 +1383,6 @@ document.addEventListener('keydown',e=>{
 /* 삭제·체크 위임 */
 document.addEventListener('click',e=>{
   const d=e.target.dataset||{};
-  if(d.nced){ const cur=(ncCache[selDay]||{})[d.nced]||{};
-    const v=prompt('공지 내용 (비우면 삭제)', cur.text||'');
-    if(v!==null){ if(v.trim()) update(ref(db,'atc/cal/notice/'+selDay+'/'+d.nced),{text:v.trim()});
-                  else remove(ref(db,'atc/cal/notice/'+selDay+'/'+d.nced)); toast('저장'); } }
-  if(d.ncdel){ if(confirm('삭제할까요?')) remove(ref(db,'atc/cal/notice/'+selDay+'/'+d.ncdel)); }
   if(d.eved){ const [src,id]=d.eved.split('|'); editEvent(src,id); }
   if(d.evdel){ const [src,id]=d.evdel.split('|');
     if(confirm('삭제할까요?')){
@@ -1360,7 +1395,6 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{
   const t=e.target; if(t.type!=='checkbox')return;
   const stamp=myName()+' '+hhmm();
-  if(t.dataset.ncck) update(ref(db,'atc/cal/notice/'+selDay+'/'+t.dataset.ncck),{done:t.checked});
   if(t.dataset.evck){ const [src,id]=t.dataset.evck.split('|');
     update(ref(db, src==='ev' ? 'atc/cal/events/'+selDay+'/'+id : 'atc/cal/evx/'+selDay+'/'+id), {done:t.checked}); }
   if(t.dataset.sh) update(ref(db,'atc/cal/share/'+selDay+'/'+t.dataset.sh),{done:t.checked,doneBy:t.checked?stamp:null});
