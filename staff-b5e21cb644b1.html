@@ -1252,7 +1252,7 @@ function renderAtt(){
   if(!today) note.push('오늘이 아닌 날짜는 기록할 수 없습니다'+(canAtt()?' — 관리자는 [수정]으로 입력':''));
   if(venueIp()) note.push(atVenue()
       ? '<b>전시장 와이파이 확인됨</b>'+(myIp?'':' (IP 조회 실패 — 기록에 ⚠ 표시)')
-      : '<s>전시장 와이파이가 아닙니다</s> — 전시장 와이파이에 연결해야 출퇴근이 열립니다');
+      : '<s>전시장 와이파이가 아닙니다</s> — 기록은 되지만 <s>⚠ 외부망</s>으로 표시됩니다');
   else note.push('전시장 와이파이 미등록 — 지금은 어디서나 기록됩니다');
   if(canAtt()) note.push('<button id="att-add">+ 인원 추가</button> '
       +'<button id="att-wifi">'+(venueIp()?'전시장 IP 재등록 (현재 '+esc(venueIp())+')':'현재 IP를 전시장 와이파이로 등록')+'</button>');
@@ -1269,10 +1269,9 @@ function renderAtt(){
     const n=prompt('추가할 인원 이름'); if(!n||!n.trim()) return;
     rosterSeed(list=>[...list,{key:'r'+Date.now().toString(36),name:n.trim()}]); toast('추가');
   });
-  $('att-list').querySelectorAll('[data-punch]').forEach(b=>{
-    if(!atVenue()){b.disabled=true;b.textContent='전시장 와이파이 필요';}
-    else b.addEventListener('click',()=>punch(b.dataset.punch,b.dataset.p));
-  });
+  /* 와이파이가 달라도 버튼은 잠그지 않는다(09-01) — 같은 전시장 안에서도 통신사 회선이면 IP가 달라
+     본인 출퇴근이 막히던 문제. 외부망이면 기록에 ⚠만 남기고, 판단은 조아라가 한다 */
+  $('att-list').querySelectorAll('[data-punch]').forEach(b=>b.addEventListener('click',()=>punch(b.dataset.punch,b.dataset.p)));
   $('att-list').querySelectorAll('[data-fix]').forEach(b=>b.addEventListener('click',()=>fixAtt(b.dataset.fix)));
   $('att-list').querySelectorAll('[data-rname]').forEach(b=>b.addEventListener('click',()=>{
     const cur=roster().find(x=>x.key===b.dataset.rname);
@@ -1289,7 +1288,7 @@ function renderAtt(){
 /* ponytail: 시각은 누른 기기의 시계. 서버 시각이 필요해지면 serverTimestamp()로 올리고 표시만 읽어오면 된다 */
 function punch(kind,pkey){
   const p=roster().find(x=>x.key===pkey), off=!!(venueIp() && myIp && myIp!==venueIp()), now=hhmm();
-  if(!confirm(p.name+' '+(kind==='in'?'출근':'퇴근')+' '+now+' 으로 기록할까요?')) return;
+  if(!confirm(p.name+' '+(kind==='in'?'출근':'퇴근')+' '+now+' 으로 기록할까요?'+(off?'\n(전시장 와이파이가 아니라 ⚠ 외부망으로 기록됩니다)':''))) return;
   update(ref(db,'atc/cal/att/'+selDay+'/'+pkey),
     kind==='in' ? {in:now,inTs:Date.now(),inIp:myIp||null,inOff:off||null,inBy:myName(),name:p.name}
                 : {out:now,outTs:Date.now(),outIp:myIp||null,outOff:off||null,outBy:myName()});
