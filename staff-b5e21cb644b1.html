@@ -209,7 +209,6 @@
   .att .btn.out{border-color:var(--red);background:var(--red-soft);color:var(--red)}
   .att .btn:disabled{border-color:var(--line);background:var(--well);color:var(--ink3)}
   .att .btn.fix{border-color:var(--line);background:var(--well);color:var(--ink2);font-weight:700}
-  .att .offwifi{flex:none;font-size:9px;line-height:1.35;color:var(--red);font-weight:700;text-align:right}
   .att-note{font-size:10.5px;color:var(--ink3);margin-top:10px;line-height:1.7}
   .att-note b{color:var(--grn-ink)} .att-note s{color:var(--red);text-decoration:none}
   .att-note button{border:1px solid var(--line);background:var(--well);color:var(--ink2);border-radius:4px;
@@ -860,7 +859,7 @@ const todayKey = keyOf(new Date());
 /* ── 상태 ── */
 let me=null, meId=null;
 let evCache={}, isCache={}, shCache={}, rpCache={};
-let attCache={}, venueCache=null, teamCache=null, myIp=null, evxCache={}, rosterCache=null, ckCache={}, ncCache={};
+let attCache={}, teamCache=null, evxCache={}, rosterCache=null, ckCache={}, ncCache={};
 let exDoneCache={}, exDate=null, exUnsub=[];
 let selDay = clampKey(todayKey);
 let curView = 'month';
@@ -872,11 +871,8 @@ const isAdmin = ()=> ADMINS.includes(meId);
 const canAtt    = ()=> meId==='joara';                 // 출결 관리 = 조아라만
 const canNotice = ()=> isAdmin() || meId==='jinsun';   // 공지 추가/수정 = 운영진 4인 + 박진선
 const canEdit   = ()=> !!meId;                          // 일정·체크리스트·특이/요청/공유·팀원 추가/수정 = 모든 팀원
-/* 공인 IP — 브라우저는 SSID를 못 읽으므로 전시장 와이파이 판정은 공인 IP 대조로 대신한다 */
-fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(j=>{myIp=j.ip;renderAtt();}).catch(()=>{});
-const venueIp = ()=> venueCache && venueCache.ip;
-/* ponytail: IP 조회가 실패하면(myIp=null) 잠그지 않고 통과시킨 뒤 기록에 ⚠만 남긴다 — 외부 서비스 장애로 출퇴근이 막히는 편이 더 나쁘다 */
-const atVenue = ()=> !venueIp() || !myIp || myIp===venueIp();
+/* 전시장 와이파이(공인 IP 대조) 판정은 폐기(09-01) — 같은 전시장에서도 통신사 회선이면 IP가 달라
+   혼선만 부르던 것. 출퇴근은 어디서나 기록되고, 대리·수정 권한으로만 관리한다 */
 /* 작성자 글색 — 단색 원칙에 따라 조아라(관리자)만 빨강, 나머지는 기본색 */
 const inkOf = n => n==='조아라' ? 'var(--red)' : 'inherit';
 
@@ -967,7 +963,6 @@ function startListeners(){
   onValue(ref(db,'atc/cal/att'),   s=>{attCache=s.val()||{};renderAtt();renderRp();});
   onValue(ref(db,'atc/cal/roster'),s=>{rosterCache=s.val();renderAtt();renderRp();});
   onValue(ref(db,'atc/cal/ck'),    s=>{ckCache=s.val()||{};renderCk();});
-  onValue(ref(db,'atc/cal/venue'), s=>{venueCache=s.val();renderAtt();});
   onValue(ref(db,'atc/cal/team'),  s=>{teamCache=s.val();renderTeam();});
   onValue(ref(db,'atc/cal/report'),s=>{rpCache=s.val()||{};renderRp();if(curView==='month')renderMonth();});
 }
@@ -1239,14 +1234,11 @@ function renderAtt(){
   $('att-list').innerHTML = rows.length ? rows.map(p=>{
     const r=rec[p.key]||{};
     const tms = (r.in?'<b>출근 '+esc(r.in)+'</b>':'<span>출근 —</span>')
-              + (r.out?' · <u>퇴근 '+esc(r.out)+'</u>':' · 퇴근 —')
-              + ((r.inOff||r.outOff)?' <span class="warn">⚠ 외부망</span>':'');
+              + (r.out?' · <u>퇴근 '+esc(r.out)+'</u>':' · 퇴근 —');
     let btn='';
-    if(today && (p.name===myName() || isAdmin())){
+    if(today && (p.name===myName() || isAdmin()))
       btn = !r.in ? '<button class="btn" data-punch="in" data-p="'+p.key+'">출근</button>'
           : (!r.out ? '<button class="btn out" data-punch="out" data-p="'+p.key+'">퇴근</button>' : '');
-      if(btn && !atVenue()) btn='<span class="offwifi">⚠ 전시장<br>와이파이 아님</span>'+btn;
-    }
     if(canAtt()) btn+='<button class="btn fix" data-fix="'+p.key+'">수정</button>'
                      +'<button class="del" data-rname="'+p.key+'">✎</button><span class="grip">≡</span>';
     return '<div class="att" data-id="'+p.key+'"><span class="nm">'+esc(p.name)+'</span><span class="tms">'+tms+'</span>'+btn+'</div>';
@@ -1254,27 +1246,14 @@ function renderAtt(){
 
   const note=[];
   if(!today) note.push('오늘이 아닌 날짜는 기록할 수 없습니다'+(canAtt()?' — 관리자는 [수정]으로 입력':''));
-  if(venueIp()) note.push(atVenue()
-      ? '<b>전시장 와이파이 확인됨</b>'+(myIp?'':' (IP 조회 실패 — 기록에 ⚠ 표시)')
-      : '<s>전시장 와이파이가 아닙니다</s> — 기록은 되지만 <s>⚠ 외부망</s>으로 표시됩니다');
-  else note.push('전시장 와이파이 미등록 — 지금은 어디서나 기록됩니다');
-  if(canAtt()) note.push('<button id="att-add">+ 인원 추가</button> '
-      +'<button id="att-wifi">'+(venueIp()?'전시장 IP 재등록 (현재 '+esc(venueIp())+')':'현재 IP를 전시장 와이파이로 등록')+'</button>');
+  if(canAtt()) note.push('<button id="att-add">+ 인원 추가</button>');
   $('att-note').innerHTML=note.join('<br>');
 
-  const wb=$('att-wifi');
-  if(wb) wb.addEventListener('click',()=>{
-    if(!myIp){toast('현재 IP를 확인하지 못했습니다');return;}
-    if(confirm('현재 접속 IP '+myIp+' 를 전시장 와이파이로 등록할까요?\n(전시장에서 눌러야 합니다)'))
-      set(ref(db,'atc/cal/venue'),{ip:myIp,by:myName(),ts:Date.now()});
-  });
   const ab=$('att-add');
   if(ab) ab.addEventListener('click',()=>{
     const n=prompt('추가할 인원 이름'); if(!n||!n.trim()) return;
     rosterSeed(list=>[...list,{key:'r'+Date.now().toString(36),name:n.trim()}]); toast('추가');
   });
-  /* 와이파이가 달라도 버튼은 잠그지 않는다(09-01) — 같은 전시장 안에서도 통신사 회선이면 IP가 달라
-     본인 출퇴근이 막히던 문제. 외부망이면 기록에 ⚠만 남기고, 판단은 조아라가 한다 */
   $('att-list').querySelectorAll('[data-punch]').forEach(b=>b.addEventListener('click',()=>punch(b.dataset.punch,b.dataset.p)));
   $('att-list').querySelectorAll('[data-fix]').forEach(b=>b.addEventListener('click',()=>fixAtt(b.dataset.fix)));
   $('att-list').querySelectorAll('[data-rname]').forEach(b=>b.addEventListener('click',()=>{
@@ -1291,11 +1270,11 @@ function renderAtt(){
 }
 /* ponytail: 시각은 누른 기기의 시계. 서버 시각이 필요해지면 serverTimestamp()로 올리고 표시만 읽어오면 된다 */
 function punch(kind,pkey){
-  const p=roster().find(x=>x.key===pkey), off=!!(venueIp() && myIp && myIp!==venueIp()), now=hhmm();
-  if(!confirm(p.name+' '+(kind==='in'?'출근':'퇴근')+' '+now+' 으로 기록할까요?'+(off?'\n(전시장 와이파이가 아니라 ⚠ 외부망으로 기록됩니다)':''))) return;
+  const p=roster().find(x=>x.key===pkey), now=hhmm();
+  if(!confirm(p.name+' '+(kind==='in'?'출근':'퇴근')+' '+now+' 으로 기록할까요?')) return;
   update(ref(db,'atc/cal/att/'+selDay+'/'+pkey),
-    kind==='in' ? {in:now,inTs:Date.now(),inIp:myIp||null,inOff:off||null,inBy:myName(),name:p.name}
-                : {out:now,outTs:Date.now(),outIp:myIp||null,outOff:off||null,outBy:myName()});
+    kind==='in' ? {in:now,inTs:Date.now(),inBy:myName(),name:p.name}
+                : {out:now,outTs:Date.now(),outBy:myName()});
   toast(p.name+' '+(kind==='in'?'출근':'퇴근')+' '+now);
 }
 function fixAtt(pkey){
