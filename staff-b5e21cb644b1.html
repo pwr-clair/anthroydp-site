@@ -209,6 +209,7 @@
   .att .btn.out{border-color:var(--red);background:var(--red-soft);color:var(--red)}
   .att .btn:disabled{border-color:var(--line);background:var(--well);color:var(--ink3)}
   .att .btn.fix{border-color:var(--line);background:var(--well);color:var(--ink2);font-weight:700}
+  .att .offwifi{flex:none;font-size:9px;line-height:1.35;color:var(--red);font-weight:700;text-align:right}
   .att-note{font-size:10.5px;color:var(--ink3);margin-top:10px;line-height:1.7}
   .att-note b{color:var(--grn-ink)} .att-note s{color:var(--red);text-decoration:none}
   .att-note button{border:1px solid var(--line);background:var(--well);color:var(--ink2);border-radius:4px;
@@ -1207,7 +1208,8 @@ function renderNotes(){
       +'<span class="chip '+cls+'">'+esc(e.type)+'</span>'
       +'<span class="txt" style="color:'+inkOf(e.by)+'">'+esc(e.text)+'</span>'
       +'<span class="by">'+by+'</span>'
-      +(canEdit()?'<button class="del" data-del-'+e.src+'="'+e.id+'">✕</button>':'')+'</div>';
+      +(canEdit()?'<button class="del" data-ed-'+e.src+'="'+e.id+'">✎</button>'
+                 +'<button class="del" data-del-'+e.src+'="'+e.id+'">✕</button>':'')+'</div>';
   }).join('') : '<div class="empty">기록 없음</div>';
 }
 /* ── 출결 (전시장 와이파이 = 공인 IP 대조) ── */
@@ -1240,9 +1242,11 @@ function renderAtt(){
               + (r.out?' · <u>퇴근 '+esc(r.out)+'</u>':' · 퇴근 —')
               + ((r.inOff||r.outOff)?' <span class="warn">⚠ 외부망</span>':'');
     let btn='';
-    if(today && (p.name===myName() || isAdmin()))
+    if(today && (p.name===myName() || isAdmin())){
       btn = !r.in ? '<button class="btn" data-punch="in" data-p="'+p.key+'">출근</button>'
           : (!r.out ? '<button class="btn out" data-punch="out" data-p="'+p.key+'">퇴근</button>' : '');
+      if(btn && !atVenue()) btn='<span class="offwifi">⚠ 전시장<br>와이파이 아님</span>'+btn;
+    }
     if(canAtt()) btn+='<button class="btn fix" data-fix="'+p.key+'">수정</button>'
                      +'<button class="del" data-rname="'+p.key+'">✎</button><span class="grip">≡</span>';
     return '<div class="att" data-id="'+p.key+'"><span class="nm">'+esc(p.name)+'</span><span class="tms">'+tms+'</span>'+btn+'</div>';
@@ -1501,6 +1505,14 @@ document.addEventListener('click',e=>{
     } }
   if(d.delIs){ if(confirm('삭제할까요?')) remove(ref(db,'atc/cal/issues/'+selDay+'/'+d.delIs)); }
   if(d.delSh){ if(confirm('삭제할까요?')) remove(ref(db,'atc/cal/share/'+selDay+'/'+d.delSh)); }
+  if(d.edIs){ const cur=(isCache[selDay]||{})[d.edIs]||{};
+    const v=prompt('내용 (비우면 삭제)', cur.text||'');
+    if(v!==null){ if(v.trim()) update(ref(db,'atc/cal/issues/'+selDay+'/'+d.edIs),{text:v.trim()});
+                  else remove(ref(db,'atc/cal/issues/'+selDay+'/'+d.edIs)); toast(v.trim()?'수정 완료':'삭제'); } }
+  if(d.edSh){ const cur=(shCache[selDay]||{})[d.edSh]||{};
+    const v=prompt('내용 (비우면 삭제)', cur.text||'');
+    if(v!==null){ if(v.trim()) update(ref(db,'atc/cal/share/'+selDay+'/'+d.edSh),{text:v.trim()});
+                  else remove(ref(db,'atc/cal/share/'+selDay+'/'+d.edSh)); toast(v.trim()?'수정 완료':'삭제'); } }
 });
 document.addEventListener('change',e=>{
   const t=e.target; if(t.type!=='checkbox')return;
