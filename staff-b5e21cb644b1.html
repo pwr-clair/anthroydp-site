@@ -370,7 +370,7 @@
   <input id="pw-inp" type="password" placeholder="전달받은 4자리 번호" autocomplete="current-password" inputmode="numeric">
   <button id="login-btn">입장</button>
   <div id="login-err"></div>
-  <div class="hint">팀원 연락처에 있는 이름이면 로그인됩니다. 첫 로그인 때 입력한 비밀번호가 그대로 등록됩니다.<br>비밀번호를 모르면 조아라에게 문의하세요.</div>
+  <div class="hint">조아라가 팀원 연락처에 추가한 이름이면 로그인됩니다. 첫 로그인 때 입력한 비밀번호가 그대로 등록됩니다.<br>비밀번호를 모르면 조아라에게 문의하세요.</div>
 </div>
 
 <div class="app" id="app">
@@ -850,6 +850,9 @@ const myName = ()=> meId==='staff' ? (staffSel||me.name) : me.name; // 공용 �
 /* 수정·삭제·출결 대리 입력·기간 전체 열람은 조아라만 */
 const ADMINS = ['joara','juri','chaerin','chaewon']; // 수정·삭제·대리기록·전체열람 — 조아라+조주리·변채린·양채원(클라라 08-31)
 const isAdmin = ()=> ADMINS.includes(meId);
+const canAtt    = ()=> meId==='joara';                 // 출결 관리 = 조아라만
+const canNotice = ()=> isAdmin() || meId==='jinsun';   // 공지 추가/수정 = 운영진 4인 + 박진선
+const canEdit   = ()=> !!meId;                          // 일정·체크리스트·특이/요청/공유·팀원 추가/수정 = 모든 팀원
 /* 공인 IP — 브라우저는 SSID를 못 읽으므로 전시장 와이파이 판정은 공인 IP 대조로 대신한다 */
 fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(j=>{myIp=j.ip;renderAtt();}).catch(()=>{});
 const venueIp = ()=> venueCache && venueCache.ip;
@@ -882,12 +885,15 @@ async function doLogin(){
   if(guest){
     try{
       const snap=await get(ref(db,'atc/cal/team'));
-      const ok=Object.values(snap.val()||{}).some(t=>String(t.name||'').trim()===raw);
+      const hit=Object.values(snap.val()||{}).find(t=>String(t.name||'').trim()===raw);
+      const ok=!!hit && (!hit.by || hit.by==='조아라');   /* by 없음=초기 시딩분(조아라 취급) */
       if(!ok){
         try{ if(created&&auth.currentUser) await auth.currentUser.delete(); else await signOut(auth); }
         catch(e3){ await signOut(auth); }
         loginVerifying=false;
-        $('login-err').textContent='팀원 연락처에 없는 이름입니다 — 관리자가 [팀원 추가]에 이름을 넣으면 바로 로그인돼요';
+        $('login-err').textContent = hit
+          ? '조아라가 추가한 이름만 바로 입장할 수 있어요 — 조아라에게 요청하세요'
+          : '팀원 연락처에 없는 이름입니다 — 조아라가 [팀원 추가]에 이름을 넣으면 바로 로그인돼요';
         return;
       }
     }catch(e4){ await signOut(auth); loginVerifying=false; $('login-err').textContent='명단 확인 실패 — 잠시 후 다시'; return; }
@@ -910,7 +916,7 @@ $('uav').addEventListener('click',()=>{
     const seed={}; DEFAULT_TEAM.forEach((t,i)=>seed['t'+i]={...t,o:i});
     set(ref(db,'atc/cal/team'),seed);
   }
-  $('team-add').style.display = isAdmin() ? '':'none';
+  $('team-add').style.display = canEdit() ? '':'none';   /* 추가는 전원 — 즉시 입장은 조아라 추가분만 */
   renderTeam();
   $('team-dlg').showModal();
 });
@@ -1080,7 +1086,7 @@ function renderEvents(){
     +'<input type="checkbox" data-evck="'+key+'"'+(e.done?' checked':'')+'>'
     +'<span class="txt">'+(e.tm?'<i class="tm">'+esc(fmtTm(e.tm))+'</i>':'')+(e.u?'<a class="evlink" href="'+e.u+'" target="_blank" rel="noopener">'+esc(e.text)+'</a>':esc(e.text))+'</span>'
     +(e.by?'<span class="by">'+esc(e.by)+'</span>':'')
-    +(isAdmin()?'<button class="del" data-eved="'+key+'">✎</button>'
+    +(canEdit()?'<button class="del" data-eved="'+key+'">✎</button>'
                +'<button class="del" data-evdel="'+key+'">✕</button>':'')+'</div>';
   }).join('') : '<div class="empty">등록된 일정 없음</div>';
 }
@@ -1101,7 +1107,10 @@ function renderNotice(){
 function renderNcDlg(fill){
   const items=ncEntries(selDay);
   if(fill!==false) $('nc-ta').value = items.length ? items[items.length-1].text : '';
-  $('nc-del').style.display = items.length ? '' : 'none';
+  $('nc-del').style.display = (items.length&&canNotice()) ? '' : 'none';
+  $('nc-reg').style.display = canNotice() ? '' : 'none';
+  $('nc-ta').readOnly = !canNotice();
+  $('nc-ta').placeholder = canNotice() ? '공지 내용' : '공지 작성은 조아라·조주리·변채린·양채원·박진선만 가능합니다';
   const rows=[];
   Object.keys(ncCache).filter(d=>d<selDay).sort().reverse().forEach(d=>{
     ncEntries(d).slice().reverse().forEach(e=>rows.push({d,...e}));
@@ -1115,6 +1124,7 @@ document.addEventListener('click',e=>{
 });
 $('nc-x').addEventListener('click',()=>$('nc-dlg').close());
 $('nc-reg').addEventListener('click',()=>{
+  if(!canNotice()){toast('공지는 운영진만 등록할 수 있어요');return;}
   const v=$('nc-ta').value.trim(); if(!v){toast('내용을 입력하세요');return;}
   const items=ncEntries(selDay), data={text:v,by:myName(),ts:Date.now()};
   if(items.length) update(ref(db,'atc/cal/notice/'+selDay+'/'+items[items.length-1].id),data);
@@ -1122,6 +1132,7 @@ $('nc-reg').addEventListener('click',()=>{
   $('nc-dlg').close(); toast('공지 등록');
 });
 $('nc-del').addEventListener('click',()=>{
+  if(!canNotice()){toast('공지는 운영진만 삭제할 수 있어요');return;}
   const items=ncEntries(selDay); if(!items.length) return;
   if(!confirm('이 날짜의 공지를 삭제할까요?')) return;
   remove(ref(db,'atc/cal/notice/'+selDay+'/'+items[items.length-1].id));
@@ -1178,7 +1189,7 @@ function renderNotes(){
       +'<span class="chip '+cls+'">'+esc(e.type)+'</span>'
       +'<span class="txt" style="color:'+inkOf(e.by)+'">'+esc(e.text)+'</span>'
       +'<span class="by">'+by+'</span>'
-      +(isAdmin()?'<button class="del" data-del-'+e.src+'="'+e.id+'">✕</button>':'')+'</div>';
+      +(canEdit()?'<button class="del" data-del-'+e.src+'="'+e.id+'">✕</button>':'')+'</div>';
   }).join('') : '<div class="empty">기록 없음</div>';
 }
 /* ── 출결 (전시장 와이파이 = 공인 IP 대조) ── */
@@ -1200,8 +1211,8 @@ const workersOf = k => roster().filter(p=>attOf(k)[p.key]&&attOf(k)[p.key].in).m
 
 function renderAtt(){
   const k=selDay, rec=attOf(k), today=(k===todayKey), all=roster();
-  const rows = isAdmin() ? all : all.filter(p=>p.name===myName());
-  $('att-sum').textContent = isAdmin() ? workersOf(k).length+'/'+all.length+' 출근' : '';
+  const rows = canAtt() ? all : all.filter(p=>p.name===myName());
+  $('att-sum').textContent = canAtt() ? workersOf(k).length+'/'+all.length+' 출근' : '';
 
   $('att-list').innerHTML = rows.length ? rows.map(p=>{
     const r=rec[p.key]||{};
@@ -1209,21 +1220,21 @@ function renderAtt(){
               + (r.out?' · <u>퇴근 '+esc(r.out)+'</u>':' · 퇴근 —')
               + ((r.inOff||r.outOff)?' <span class="warn">⚠ 외부망</span>':'');
     let btn='';
-    if(today && (p.name===myName() || isAdmin()))
+    if(today && (p.name===myName() || canAtt()))
       btn = !r.in ? '<button class="btn" data-punch="in" data-p="'+p.key+'">출근</button>'
           : (!r.out ? '<button class="btn out" data-punch="out" data-p="'+p.key+'">퇴근</button>' : '');
-    if(isAdmin()) btn+='<button class="btn fix" data-fix="'+p.key+'">수정</button>'
+    if(canAtt()) btn+='<button class="btn fix" data-fix="'+p.key+'">수정</button>'
                      +'<button class="del" data-rname="'+p.key+'">✎</button><span class="grip">≡</span>';
     return '<div class="att" data-id="'+p.key+'"><span class="nm">'+esc(p.name)+'</span><span class="tms">'+tms+'</span>'+btn+'</div>';
-  }).join('') : '<div class="empty">'+(isAdmin()?'명단이 비어 있습니다':'출결 명단에 없습니다. 조아라에게 문의하세요.')+'</div>';
+  }).join('') : '<div class="empty">'+(canAtt()?'명단이 비어 있습니다':'출결 명단에 없습니다. 조아라에게 문의하세요.')+'</div>';
 
   const note=[];
-  if(!today) note.push('오늘이 아닌 날짜는 기록할 수 없습니다'+(isAdmin()?' — 관리자는 [수정]으로 입력':''));
+  if(!today) note.push('오늘이 아닌 날짜는 기록할 수 없습니다'+(canAtt()?' — 관리자는 [수정]으로 입력':''));
   if(venueIp()) note.push(atVenue()
       ? '<b>전시장 와이파이 확인됨</b>'+(myIp?'':' (IP 조회 실패 — 기록에 ⚠ 표시)')
       : '<s>전시장 와이파이가 아닙니다</s> — 전시장 와이파이에 연결해야 출퇴근이 열립니다');
   else note.push('전시장 와이파이 미등록 — 지금은 어디서나 기록됩니다');
-  if(isAdmin()) note.push('<button id="att-add">+ 인원 추가</button> '
+  if(canAtt()) note.push('<button id="att-add">+ 인원 추가</button> '
       +'<button id="att-wifi">'+(venueIp()?'전시장 IP 재등록 (현재 '+esc(venueIp())+')':'현재 IP를 전시장 와이파이로 등록')+'</button>');
   $('att-note').innerHTML=note.join('<br>');
 
@@ -1250,7 +1261,7 @@ function renderAtt(){
     rosterSeed(list=>list.map(x=>x.key===cur.key?{...x,name:v.trim()}:x).filter(x=>x.name));
     toast(v.trim()?'저장':'삭제');
   }));
-  if(isAdmin()) makeSortable($('att-list'),order=>{
+  if(canAtt()) makeSortable($('att-list'),order=>{
     rosterSeed(list=>order.map(key=>list.find(x=>x.key===key)).filter(Boolean));
     toast('순서 저장');
   });
@@ -1394,16 +1405,16 @@ function renderCk(){
       return '<div class="item'+(st&&st.done?' done':'')+'" data-id="'+x.key+'">'
         +'<input type="checkbox" data-ck="'+sec+'|'+x.key+'"'+(st&&st.done?' checked':'')+'>'
         +'<span class="txt">'+esc(x.text)+'</span><span class="by">'+(st&&st.done?esc(st.by||''):'')+'</span>'
-        +(isAdmin()?'<button class="del" data-cked="'+sec+'|'+x.key+'">✎</button><span class="grip">≡</span>':'')+'</div>';
+        +(canEdit()?'<button class="del" data-cked="'+sec+'|'+x.key+'">✎</button><span class="grip">≡</span>':'')+'</div>';
     }).join('');
     const box=document.createElement('div');
     box.className='ck-wrap'+((ckOpen[sec]!==undefined?ckOpen[sec]:k===todayKey)?' open':'');
     box.innerHTML='<div class="ck-h"><i class="tri">▶</i>'+EX_SEC_NAMES[sec]+'<span class="pr">'+done+'/'+items.length+'</span></div>'
       +'<div class="ck-body"><div class="ck-list">'+rows+'</div>'
-      +(isAdmin()?'<button class="ck-add" data-ckadd="'+sec+'">+ 항목 추가</button>':'')+'</div>';
+      +(canEdit()?'<button class="ck-add" data-ckadd="'+sec+'">+ 항목 추가</button>':'')+'</div>';
     box.querySelector('.ck-h').addEventListener('click',()=>{ckOpen[sec]=!box.classList.contains('open');box.classList.toggle('open');});
     wrap.appendChild(box);
-    if(isAdmin()) makeSortable(box.querySelector('.ck-list'),order=>{
+    if(canEdit()) makeSortable(box.querySelector('.ck-list'),order=>{
       ckSeed(sec,list=>order.map(key=>list.find(x=>x.key===key)).filter(Boolean)); toast('순서 저장');
     });
   });
@@ -1502,7 +1513,7 @@ function renderTeam(){
     const tel=String(t.phone||'').replace(/[^0-9+]/g,'');
     return '<div class="tm-row" data-id="'+id+'"><span class="i"><b>'+esc(t.name||'')+'</b><span>'+esc(t.role||'')+(t.phone?' · '+esc(t.phone):' · 번호 미입력')+'</span></span>'
       + '<a class="call'+(tel?'':' off')+'" href="'+(tel?'tel:'+tel:'#')+'">전화</a>'
-      + (isAdmin()?'<button class="ed" data-tm="'+id+'">✎</button><span class="grip">≡</span>':'')+'</div>';
+      + (canEdit()?'<button class="ed" data-tm="'+id+'">✎</button><span class="grip">≡</span>':'')+'</div>';
   }).join('');
   $('team-list').querySelectorAll('[data-tm]').forEach(b=>b.addEventListener('click',()=>editTeam(b.dataset.tm)));
   initTeamDrag();
@@ -1558,7 +1569,7 @@ $('team-add').addEventListener('click',()=>{
   if(!v) return;
   const [name,role,phone]=v.split('|').map(x=>x.trim());
   if(!name) return;
-  push(ref(db,'atc/cal/team'),{name,role:role||'',phone:phone||'',o:Object.keys(teamCache||{}).length});
+  push(ref(db,'atc/cal/team'),{name,role:role||'',phone:phone||'',by:myName(),o:Object.keys(teamCache||{}).length});
   toast('추가');
 });
 $('team-x').addEventListener('click',()=>$('team-dlg').close());
