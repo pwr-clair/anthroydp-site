@@ -1229,8 +1229,10 @@ const workersOf = k => roster().filter(p=>attOf(k)[p.key]&&attOf(k)[p.key].in).m
 
 function renderAtt(){
   const k=selDay, rec=attOf(k), today=(k===todayKey), all=roster();
-  const rows = canAtt() ? all : all.filter(p=>p.name===myName());
-  $('att-sum').textContent = canAtt() ? workersOf(k).length+'/'+all.length+' 출근' : '';
+  /* 열람·대리 출퇴근은 운영진 4인 — 조아라 단독으로 좁혔더니 현장 운영진 화면에서 출근·퇴근 버튼이
+     통째로 사라져 복구(09-01). 명단 관리(수정·이름·순서·인원추가·IP)는 그대로 조아라(canAtt) 단독 */
+  const rows = isAdmin() ? all : all.filter(p=>p.name===myName());
+  $('att-sum').textContent = isAdmin() ? workersOf(k).length+'/'+all.length+' 출근' : '';
 
   $('att-list').innerHTML = rows.length ? rows.map(p=>{
     const r=rec[p.key]||{};
@@ -1238,13 +1240,13 @@ function renderAtt(){
               + (r.out?' · <u>퇴근 '+esc(r.out)+'</u>':' · 퇴근 —')
               + ((r.inOff||r.outOff)?' <span class="warn">⚠ 외부망</span>':'');
     let btn='';
-    if(today && (p.name===myName() || canAtt()))
+    if(today && (p.name===myName() || isAdmin()))
       btn = !r.in ? '<button class="btn" data-punch="in" data-p="'+p.key+'">출근</button>'
           : (!r.out ? '<button class="btn out" data-punch="out" data-p="'+p.key+'">퇴근</button>' : '');
     if(canAtt()) btn+='<button class="btn fix" data-fix="'+p.key+'">수정</button>'
                      +'<button class="del" data-rname="'+p.key+'">✎</button><span class="grip">≡</span>';
     return '<div class="att" data-id="'+p.key+'"><span class="nm">'+esc(p.name)+'</span><span class="tms">'+tms+'</span>'+btn+'</div>';
-  }).join('') : '<div class="empty">'+(canAtt()?'명단이 비어 있습니다':'출결 명단에 없습니다. 조아라에게 문의하세요.')+'</div>';
+  }).join('') : '<div class="empty">'+(isAdmin()?'명단이 비어 있습니다':'출결 명단에 없습니다. 조아라에게 문의하세요.')+'</div>';
 
   const note=[];
   if(!today) note.push('오늘이 아닌 날짜는 기록할 수 없습니다'+(canAtt()?' — 관리자는 [수정]으로 입력':''));
