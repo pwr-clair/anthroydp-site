@@ -105,6 +105,7 @@
   .dnav .dt .sun{color:var(--red)}
   .dnav .sp{flex:1}
   .dnav .today-btn{width:auto;padding:0 10px;height:23px;font-size:10.5px;font-weight:800}
+  .dnav .today-btn.on{border-color:var(--red);background:var(--red-soft);color:var(--red)}
 
   /* ===== month grid ===== */
   .dow{display:grid;grid-template-columns:repeat(7,1fr);font-size:9.5px;font-weight:800;color:var(--ink3);
@@ -1069,7 +1070,8 @@ function renderDay(){
   selDay=clampKey(selDay);
   const k=selDay, d=parseKey(k), dt=dayType(k);
   $('d-title').innerHTML=dTitle(k,dt); setBdg($('d-bdg'),dt);
-  $('d-today').style.display = k===todayKey?'none':'';
+  /* '오늘'은 항상 노출 — 오늘 날짜여도 지워두지 않는다(요청 09-02). 오늘이면 강조만 뺀다 */
+  $('d-today').classList.toggle('on', k!==todayKey);
   listenEx(k);
 
   renderAtt();
@@ -1437,7 +1439,12 @@ function renderCk(){
 }
 $('d-prev').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,-1));renderDay();});
 $('d-next').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,1));renderDay();});
-$('d-today').addEventListener('click',()=>{selDay=clampKey(todayKey);renderDay();});
+$('d-today').addEventListener('click',()=>{
+  /* 실시간 오늘 — 자정을 넘겨 todayKey가 낡았으면 새로고침해 오늘 기준 전체를 다시 잡는다 */
+  const t=keyOf(new Date());
+  if(t!==todayKey){ location.reload(); return; }
+  selDay=clampKey(t); renderDay();
+});
 
 /* ── 입력 핸들러 ── */
 /* 시간은 기본 없음 — [시간]을 눌러야 입력칸이 열린다 */
