@@ -86,6 +86,49 @@
   .views button.on{border-color:var(--red);background:var(--red-soft);color:var(--red)}
   .views button[data-v=att]{color:var(--vio);border-color:rgba(125,109,242,.4)}
   .views button[data-v=att].on{border-color:var(--vio);background:var(--vio-soft);color:var(--vio)}
+  .views button[data-v=lucky]{color:var(--gr);border-color:rgba(30,210,30,.4)}
+  .views button[data-v=lucky].on{border-color:var(--gr);background:var(--gr-soft);color:var(--gr)}
+  /* 럭키드로우 — 이 페이지만 초록 강조 (특이·요청·공유와 같은 --gr) */
+  .lk .sec-t .tri{color:var(--gr)}
+  .lk .add button{background:var(--gr);color:#0d0f15}
+  .lk .seg button.on{background:var(--gr);color:#0d0f15}
+  .lk .add input.no-in{flex:none;width:64px;font-family:var(--num);text-align:center}
+  .lk-dup{font-size:11px;margin:6px 2px 0;min-height:16px;line-height:1.5}
+  .lk-dup.hit{color:var(--red);font-weight:700}
+  .lk-dup.ok{color:var(--gr)}
+  .lk-tb{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+  .lk-tb th{font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--ink3);text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);white-space:nowrap}
+  .lk-tb td{padding:7px 4px;border-bottom:1px solid var(--hair);vertical-align:top}
+  .lk-tb tr:last-child td{border-bottom:0}
+  .lk-tb .n{font-family:var(--num);color:var(--ink3);font-size:11px;white-space:nowrap}
+  .lk-tb .acct{font-weight:700;word-break:break-all}
+  .lk-tb .tm{font-family:var(--num);font-size:11px;color:var(--ink2);white-space:nowrap}
+  .lk-tb .by{font-size:10px;color:var(--ink3);white-space:nowrap}
+  .lk-tb td.ops{white-space:nowrap;text-align:right}
+  .lk-tb td.ops button{border:0;background:none;color:var(--ink3);font-size:12px;padding:0 3px}
+  .lk-tb tr.dh td{padding:9px 4px 3px;font-size:10.5px;font-weight:800;color:var(--gr);border-bottom:0;font-family:var(--num)}
+  .lk-tier{display:inline-block;font-size:10px;font-weight:800;border-radius:2px;padding:1px 6px;background:var(--gr-soft);color:var(--gr);white-space:nowrap}
+  .lk-tier.t1{background:rgba(240,96,74,.18);color:var(--red)}
+  .lk-st{table-layout:fixed}
+  .lk-st th,.lk-st td{text-align:center;font-family:var(--num)}
+  .lk-st th:first-child,.lk-st td:first-child{text-align:left}
+  .lk-st td b{color:var(--ink);font-weight:700}
+  .lk-st td i{font-style:normal;color:var(--ink3)}
+  .lk-st tr.today td{background:var(--well)}
+  .lk-st tr.sum td{border-top:1px solid var(--line);font-weight:800;color:var(--gr)}
+  .lk-guide h4{font-size:12.5px;font-weight:800;color:var(--gr);margin:18px 0 6px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+  .lk-guide h4:first-child{margin-top:8px}
+  .lk-guide h5{font-size:13px;font-weight:800;margin:12px 0 4px}
+  .lk-guide p,.lk-guide li{font-size:13px;line-height:1.75;color:var(--ink2);margin:0 0 4px}
+  .lk-guide ol,.lk-guide ul{margin:0 0 6px;padding-left:19px}
+  .lk-guide b{color:var(--ink);font-weight:700}
+  .lk-guide .tag{font-family:var(--num);font-size:12px;color:var(--gr)}
+  .lk-guide .ck{list-style:none;padding-left:0}
+  .lk-guide .ck li{padding-left:22px;position:relative}
+  .lk-guide .ck li::before{content:'';position:absolute;left:2px;top:6px;width:12px;height:12px;border:1px solid var(--line);border-radius:3px}
+  .lk-guide .ck li ul{margin-top:2px}
+  .lk-guide .ck li ul li{padding-left:0}
+  .lk-guide .ck li ul li::before{content:none}
 
   .page{display:none;padding:18px 20px 64px}
   .page.on{display:block}
@@ -393,6 +436,7 @@
     <button data-v="week">주</button>
     <button data-v="month">월</button>
     <button data-v="att">출결</button>
+    <button data-v="lucky">럭키드로우</button>
     <button data-v="sheet">근무일지</button>
     <button data-v="man">매뉴얼</button>
     <button data-v="onoff">전시장 온오프</button>
@@ -614,6 +658,79 @@
       <figure class="oo"><img loading="lazy" src="manual-assets/onoff-01.jpg" alt="전시장 온오프 매뉴얼 1 — 도어락·입구 스위치·입구가벽 조명"><figcaption>1 / 3</figcaption></figure>
       <figure class="oo"><img loading="lazy" src="manual-assets/onoff-02.jpg" alt="전시장 온오프 매뉴얼 2 — 연구노트 라이트·간판·레일 조명"><figcaption>2 / 3</figcaption></figure>
       <figure class="oo"><img loading="lazy" src="manual-assets/onoff-03.jpg" alt="전시장 온오프 매뉴얼 3 — 레일조명(상시)·연구노트 스탠드 주의"><figcaption>3 / 3</figcaption></figure>
+    </div>
+  </div>
+
+  <!-- 럭키드로우 (관람객 리워드 이벤트) — 명단·재고는 atc/cal/lucky, 재고표는 명단에서 자동 집계 -->
+  <div class="page lk" data-page="lucky">
+    <div class="sec fold" id="lk-guide-sec">
+      <div class="sec-t"><i class="tri">▶</i>관람객 리워드 이벤트 운영 안내문<span class="r">스태프용</span></div>
+      <div class="fold-b lk-guide">
+        <h4>0. 사전 준비물 확인</h4>
+        <ul class="ck">
+          <li><b>추첨권 확인</b>
+            <ul><li>1등(식사권) 20매 · 2등(에코백) 50매 · 3등(아메리카노) 150매 · 4등(L파일) 500매</li></ul></li>
+          <li>경품 재고: 등급별 수량 파악 (에코백, 아메리카노)</li>
+          <li>제휴 매장 이용권(=해당 등수 추첨권) 재고 수량 파악</li>
+          <li>전시 해시태그 <span class="tag">#2026예술기술도시 #인류학연습 #문래동전시</span> 정확히 숙지</li>
+        </ul>
+
+        <h4>1. 기본 운영 절차</h4>
+        <h5>STEP 1. 게시물 확인</h5>
+        <ul>
+          <li>관람객이 인스타그램에 올린 게시물(사진·영상·스토리 무관)을 <b>직접 화면으로</b> 확인합니다.</li>
+          <li>확인 포인트는 2가지뿐입니다.
+            <ol>
+              <li>해시태그 <span class="tag">#2026예술기술도시 #인류학연습 #문래동전시</span>가 포함되어 있는가</li>
+              <li>전시 관련 내용(사진·후기 등)이 맞는가</li>
+            </ol></li>
+        </ul>
+        <h5>STEP 2. 참여 이력 확인</h5>
+        <ul>
+          <li>아래 <b>참여자 명단</b>에 계정명을 입력하면 같은 계정의 참여 이력이 바로 뜹니다.</li>
+          <li><b>1인 1회 원칙</b> — 기존 참여 이력이 있으면 정중히 안내하고 종료합니다.</li>
+        </ul>
+        <h5>STEP 3. 럭키드로우 진행</h5>
+        <ul>
+          <li>아크릴박스에서 럭키드로우를 <b>직접 뽑도록</b> 안내합니다.</li>
+          <li>결과가 뜨면 스태프가 기록용으로 <b>사진</b>을 남깁니다.</li>
+        </ul>
+        <h5>STEP 4. 경품 지급</h5>
+        <ul>
+          <li>결과 등급에 따라 아래 중 하나를 지급합니다.
+            <ul>
+              <li><b>경품</b>: 현장에서 즉시 지급</li>
+              <li><b>제휴 매장 이용권(카페/식당)</b>: 사용 기간(<b>2026. 9. 30.까지</b>)·매장명 안내 → 뒷면에 담당자 확인 서명 및 발급일 수기 입력</li>
+            </ul></li>
+          <li>지급과 동시에 아래 <b>참여자 명단</b>에 기록합니다 — 재고는 명단에서 자동으로 차감됩니다.</li>
+        </ul>
+        <h5>STEP 5. 기록 및 마무리</h5>
+        <ul>
+          <li>참여자 계정명·응모번호·당첨 등급을 명단에 기록합니다 (지급 시각은 자동).</li>
+          <li>"전시 잘 관람해주셔서 감사합니다" 인사로 마무리합니다.</li>
+          <li>퇴근 전 <b>재고 현황표</b>의 오늘 줄이 실물 재고와 맞는지 확인합니다.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">럭키드로우 참여자 명단<span class="r" id="lk-cnt"></span></div>
+      <div class="add">
+        <input type="text" id="lk-acct" placeholder="@ 참여자 계정명" autocapitalize="none" autocomplete="off">
+        <input type="text" class="no-in" id="lk-no" placeholder="응모번호" inputmode="numeric">
+      </div>
+      <div class="lk-dup" id="lk-dup"></div>
+      <div class="add" style="margin-top:6px">
+        <div class="seg" id="lk-seg"><button data-t="1">1등</button><button data-t="2">2등</button><button data-t="3">3등</button><button data-t="4" class="on">4등</button></div>
+        <span style="flex:1"></span>
+        <button id="lk-btn">추가</button>
+      </div>
+      <div id="lk-list"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">럭키드로우 재고 현황표<span class="r">출고 / 재고 · 명단 자동 집계</span></div>
+      <div id="lk-stock"></div>
     </div>
   </div>
 
@@ -860,6 +977,7 @@ const todayKey = keyOf(new Date());
 /* ── 상태 ── */
 let me=null, meId=null;
 let evCache={}, isCache={}, shCache={}, rpCache={};
+let lkCache={};
 let attCache={}, teamCache=null, evxCache={}, rosterCache=null, ckCache={}, ncCache={};
 let exDoneCache={}, exDate=null, exUnsub=[];
 let selDay = clampKey(todayKey);
@@ -966,6 +1084,7 @@ function startListeners(){
   onValue(ref(db,'atc/cal/ck'),    s=>{ckCache=s.val()||{};renderCk();});
   onValue(ref(db,'atc/cal/team'),  s=>{teamCache=s.val();renderTeam();});
   onValue(ref(db,'atc/cal/report'),s=>{rpCache=s.val()||{};renderRp();if(curView==='month')renderMonth();});
+  onValue(ref(db,'atc/cal/lucky'), s=>{lkCache=s.val()||{};if(curView==='lucky')renderLucky();});
 }
 function listenEx(dateKey){
   if(exDate===dateKey) return;
@@ -979,6 +1098,7 @@ function switchView(v){
   document.querySelectorAll('.views button[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.dataset.page===v));
   if(v==='sheet'){ $('sheet-open').href=SHEET_URL; renderWorklog(); }
+  if(v==='lucky') renderLucky();
   renderAll();
 }
 document.querySelectorAll('.views button[data-v]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.v)));
@@ -1289,6 +1409,78 @@ function fixAtt(pkey){
   update(path,{in:i||null,out:o||null,fixBy:myName(),fixAt:Date.now()});
   toast('수정 완료');
 }
+
+/* ── 럭키드로우 (관람객 리워드) — 명단 atc/cal/lucky/{id}, 재고표는 명단에서 자동 집계 ── */
+const LK_TOTAL={1:20,2:50,3:150,4:500}, LK_NAME={1:'식사권',2:'에코백',3:'아메리카노',4:'L파일'};
+const lkNorm = a => String(a||'').trim().replace(/^@+/,'').toLowerCase();
+const lkEntries = ()=> Object.entries(lkCache).map(([id,e])=>({id,...e})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+const lkTier = t => '<span class="lk-tier t'+t+'">'+t+'등 '+(LK_NAME[t]||'')+'</span>';
+const lkDate = k => { const d=parseKey(k); return (d.getMonth()+1)+'/'+d.getDate()+' '+DOW[d.getDay()]; };
+let lkSel='4';
+function renderLucky(){
+  const all=lkEntries();
+  $('lk-cnt').textContent = all.length ? '총 '+all.length+'명' : '';
+  /* 명단 — 날짜별 묶음, 연번은 전체 통산 */
+  let html='', last='';
+  all.forEach((e,i)=>{
+    if(e.at!==last){ last=e.at; html+='<tr class="dh"><td colspan="5">'+esc(lkDate(e.at))+'</td></tr>'; }
+    html+='<tr><td class="n">'+(i+1)+'</td><td class="acct">@'+esc(e.acct)+(e.no?' <span class="n">#'+esc(e.no)+'</span>':'')+'</td>'
+      +'<td>'+lkTier(e.tier)+'</td><td class="tm">'+esc(e.tm||'')+'<br><span class="by">'+esc(e.by||'')+'</span></td>'
+      +'<td class="ops">'+(canEdit()?'<button data-lked="'+e.id+'">✎</button><button data-lkdel="'+e.id+'">✕</button>':'')+'</td></tr>';
+  });
+  $('lk-list').innerHTML = all.length
+    ? '<table class="lk-tb"><thead><tr><th>연번</th><th>계정명</th><th>등급</th><th>지급 시각</th><th></th></tr></thead><tbody>'+html+'</tbody></table>'
+    : '<div class="empty">아직 참여자가 없습니다</div>';
+  /* 재고 현황표 — 참여 기록이 있는 날짜 + 오늘, 출고량/재고량(누적 차감) */
+  const days=[...new Set([...all.map(e=>e.at), todayKey])].filter(Boolean).sort();
+  const cum={1:0,2:0,3:0,4:0};
+  let rows='';
+  days.forEach(k=>{
+    const day={1:0,2:0,3:0,4:0}; all.filter(e=>e.at===k).forEach(e=>{day[e.tier]=(day[e.tier]||0)+1;});
+    [1,2,3,4].forEach(t=>cum[t]+=day[t]);
+    rows+='<tr'+(k===todayKey?' class="today"':'')+'><td>'+esc(lkDate(k))+'</td>'
+      +[1,2,3,4].map(t=>'<td><b>'+day[t]+'</b> <i>/ '+(LK_TOTAL[t]-cum[t])+'</i></td>').join('')+'</tr>';
+  });
+  rows+='<tr class="sum"><td>남은 재고</td>'+[1,2,3,4].map(t=>'<td>'+(LK_TOTAL[t]-cum[t])+'</td>').join('')+'</tr>';
+  $('lk-stock').innerHTML='<table class="lk-tb lk-st"><thead><tr><th>날짜</th>'
+    +[1,2,3,4].map(t=>'<th>'+t+'등<br>'+LK_NAME[t]+'<br><i style="font-weight:600">'+LK_TOTAL[t]+'</i></th>').join('')
+    +'</tr></thead><tbody>'+rows+'</tbody></table>';
+  lkDupHint();
+}
+/* 계정명을 치는 동안 참여 이력을 바로 보여준다 — STEP 2(1인 1회) */
+function lkDupHint(){
+  const q=lkNorm($('lk-acct').value), el=$('lk-dup');
+  if(!q){ el.textContent=''; el.className='lk-dup'; return; }
+  const hits=lkEntries().filter(e=>lkNorm(e.acct).includes(q));
+  if(hits.length){ el.className='lk-dup hit';
+    el.textContent='⚠ 이미 참여: '+hits.slice(0,3).map(h=>'@'+h.acct+' ('+lkDate(h.at)+' '+h.tier+'등)').join(' · ')+(hits.length>3?' 외 '+(hits.length-3):''); }
+  else { el.className='lk-dup ok'; el.textContent='참여 이력 없음 — 진행 가능'; }
+}
+$('lk-acct').addEventListener('input',lkDupHint);
+$('lk-seg').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  lkSel=b.dataset.t; $('lk-seg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+});
+$('lk-btn').addEventListener('click',()=>{
+  if(!canEdit()) return;
+  const acct=String($('lk-acct').value||'').trim().replace(/^@+/,''); if(!acct){toast('계정명을 입력하세요');return;}
+  const dup=lkEntries().find(e=>lkNorm(e.acct)===lkNorm(acct));
+  if(dup && !confirm('@'+dup.acct+' 은(는) '+lkDate(dup.at)+'에 이미 참여했습니다 (1인 1회).\n그래도 기록할까요?')) return;
+  const now=new Date(), k=keyOf(now);
+  push(ref(db,'atc/cal/lucky'),{acct,no:String($('lk-no').value||'').trim(),tier:+lkSel,at:k,tm:hhmm(),ts:Date.now(),by:myName()});
+  $('lk-acct').value=''; $('lk-no').value=''; lkDupHint(); toast('@'+acct+' '+lkSel+'등 기록');
+});
+document.addEventListener('click',e=>{
+  const d=e.target.dataset||{};
+  if(d.lked){ const cur=lkCache[d.lked]||{};
+    const v=prompt('계정명 | 응모번호 | 등급(1~4)', [cur.acct||'',cur.no||'',cur.tier||''].join(' | '));
+    if(v===null) return;
+    const [acct,no,tier]=v.split('|').map(x=>x.trim());
+    if(!acct){ if(confirm('삭제할까요?')) remove(ref(db,'atc/cal/lucky/'+d.lked)); return; }
+    update(ref(db,'atc/cal/lucky/'+d.lked),{acct:acct.replace(/^@+/,''),no:no||'',tier:Math.min(4,Math.max(1,+tier||cur.tier||4))}); toast('수정 완료'); }
+  if(d.lkdel){ if(confirm('삭제할까요?')) remove(ref(db,'atc/cal/lucky/'+d.lkdel)); }
+});
+$('lk-guide-sec').querySelector('.sec-t').addEventListener('click',()=>$('lk-guide-sec').classList.toggle('open'));
 
 /* ── 근무일지 (앱 내 입력 → 구글시트 전송) ── */
 $('go-wl').addEventListener('click',()=>switchView('sheet'));
