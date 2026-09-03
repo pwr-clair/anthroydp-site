@@ -90,20 +90,21 @@
   .views button[data-v=lucky].on{border-color:var(--gr);background:var(--gr-soft);color:var(--gr)}
   /* 럭키드로우 — 이 페이지만 초록 강조 (특이·요청·공유와 같은 --gr) */
   .lk .sec-t .tri{color:var(--gr)}
-  .lk .add button{background:var(--gr);color:#0d0f15}
+  .lk .add button{background:var(--gr-soft);color:var(--gr);border:1px solid rgba(30,210,30,.5)}
   .lk .add.lk-in{margin-top:12px}
   .lk .add.lk-in input[type=text]{padding:11px 12px;font-size:15px}
   .lk .add input.no-in{flex:none;width:88px;font-family:var(--num);text-align:center}
-  .lk-dup{font-size:11.5px;margin:7px 2px 0;min-height:17px;line-height:1.5}
-  /* 등수 = 통통한 알약 토글, 추가 = 표준 44px 네모 버튼 */
-  .lk-act{display:flex;align-items:center;gap:12px;margin:12px 0 4px}
+  .lk-dup{font-size:11.5px;margin:0 2px;line-height:1.5}
+  .lk-dup:not(:empty){margin-top:6px}
+  /* 등수 = 통통한 알약 토글, 추가 = 표준 44px 네모 버튼. 앱 톤대로 반투명(soft) 바탕 + 초록 글자·테두리, 불투명 채움 금지 */
+  .lk-act{display:flex;align-items:center;gap:12px;margin:8px 0 4px}
   .lk-tiers{display:flex;gap:8px;flex-wrap:wrap;flex:1;min-width:0}
-  .lk-tiers button{flex:none;height:38px;padding:0 15px;border-radius:999px;border:1.5px solid rgba(30,210,30,.45);
-    background:transparent;color:var(--gr);font-size:13.5px;font-weight:800;line-height:1;letter-spacing:-.01em}
-  .lk-tiers button.on{background:var(--gr);color:#0d0f15;border-color:var(--gr);box-shadow:0 0 0 3px var(--gr-soft)}
-  .lk-act .go{flex:none;margin-left:auto;min-height:44px;padding:0 22px;border:0;border-radius:6px;
-    background:var(--gr);color:#0d0f15;font-size:14.5px;font-weight:800}
-  .lk-act .go:active{filter:brightness(.9)}
+  .lk-tiers button{flex:none;height:38px;padding:0 15px;border-radius:999px;border:1px solid var(--line);
+    background:transparent;color:var(--ink2);font-size:13.5px;font-weight:800;line-height:1;letter-spacing:-.01em}
+  .lk-tiers button.on{background:var(--gr-soft);color:var(--gr);border-color:var(--gr)}
+  .lk-act .go{flex:none;margin-left:auto;min-height:44px;padding:0 22px;border-radius:6px;
+    border:1px solid var(--gr);background:var(--gr-soft);color:var(--gr);font-size:14.5px;font-weight:800}
+  .lk-act .go:active{background:rgba(30,210,30,.28)}
   #lk-list{margin-top:14px}
   .lk-dup.hit{color:var(--red);font-weight:700}
   .lk-dup.ok{color:var(--gr)}
