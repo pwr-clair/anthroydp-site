@@ -261,8 +261,11 @@
   .attw:last-child{border-bottom:0}
   .att{display:flex;align-items:center;gap:8px;padding:9px 2px}
   /* 식대 — 출근 줄 아래 한 줄. 사진은 필수(축소해 DB에 직접 저장), 한도 15,000원 */
-  .meal{display:flex;align-items:center;gap:7px;padding:0 2px 10px;flex-wrap:wrap}
-  .meal .lb{font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--ink3);flex:none}
+  .meal{display:flex;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+  .meal:last-child{border-bottom:0}
+  .meal .nm{font-size:13.5px;font-weight:700;flex:none;min-width:56px}
+  .meal .sp{flex:1}
+  .meal .del{flex:none;border:0;background:none;color:var(--ink3);font-size:12px;padding:0 2px}
   .meal .amt{font-family:var(--num);font-size:12.5px;font-weight:700}
   .meal .over,.ms-det .over{font-style:normal;font-size:10px;color:var(--red);font-weight:700}
   .meal-in{width:92px;border:1px solid var(--line);border-radius:4px;padding:7px 8px;font-size:14px;font-family:var(--num);text-align:right;min-width:0}
@@ -505,6 +508,10 @@
       <div class="sec-t">출결 확인<span class="r" id="att-sum"></span></div>
       <div id="att-list"></div>
       <div class="att-note" id="att-note"></div>
+    </div>
+    <div class="sec" id="sec-mealin">
+      <div class="sec-t">식대 기록<span class="r">1일 15,000원 · 영수증 필수</span></div>
+      <div id="meal-list"></div>
     </div>
     <div class="sec fold" id="sec-meal" style="display:none">
       <div class="sec-t"><i class="tri">▶</i>식대 정산<span class="r" id="meal-sum-r"></span></div>
@@ -901,7 +908,7 @@
     </div>
 
     <div class="sec" id="sec-ck">
-      <div class="sec-t">운영 체크리스트<span class="r">각 단계 후 체크표시 해주세요</span></div>
+      <div class="sec-t">운영 체크리스트<span class="r" style="color:var(--red)">각 단계 후 체크표시 해주세요</span></div>
       <div id="ck-secs"></div>
     </div>
 
@@ -1443,8 +1450,7 @@ function renderAtt(){
           : (!r.out ? '<button class="btn out" data-punch="out" data-p="'+p.key+'">퇴근</button>' : '');
     if(canAtt()) btn+='<button class="btn fix" data-fix="'+p.key+'">수정</button>'
                      +'<button class="del" data-rname="'+p.key+'">✎</button><span class="grip">≡</span>';
-    return '<div class="attw" data-id="'+p.key+'"><div class="att"><span class="nm">'+esc(p.name)+'</span><span class="tms">'+tms+'</span>'+btn+'</div>'
-      +mealBlock(p,k,r)+'</div>';
+    return '<div class="attw" data-id="'+p.key+'"><div class="att"><span class="nm">'+esc(p.name)+'</span><span class="tms">'+tms+'</span>'+btn+'</div></div>';
   }).join('') : '<div class="empty">'+(isAdmin()?'명단이 비어 있습니다':'출결 명단에 없습니다. 조아라에게 문의하세요.')+'</div>';
 
   const note=[];
@@ -1470,7 +1476,7 @@ function renderAtt(){
     rosterSeed(list=>order.map(key=>list.find(x=>x.key===key)).filter(Boolean));
     toast('순서 저장');
   });
-  bindMeal(); renderMealSum();
+  renderMealIn(rows,k); renderMealSum();
 }
 
 /* ── 식대 — atc/cal/meal/{날짜}/{명단키} {amt,by,ts,tm,img:true} / 사진은 atc/cal/mealImg/{날짜}/{명단키} (dataURL)
@@ -1482,26 +1488,31 @@ function listenMealImg(k){
   if(mealImgDate===k) return;
   if(mealImgUnsub) mealImgUnsub(); mealImgDate=k;
   mealImgUnsub=onValue(ref(db,'atc/cal/mealImg/'+k),s=>{mealImgCache[k]=s.val()||{};
-    $('att-list').querySelectorAll('.meal').forEach(el=>{ const key=el.dataset.mk, src=(mealImgCache[k]||{})[key];
+    $('meal-list').querySelectorAll('.meal').forEach(el=>{ const key=el.dataset.mk, src=(mealImgCache[k]||{})[key];
       const th=el.querySelector('.meal-th'); if(src&&th&&!th.src.startsWith('data:image')) th.src=src; else if(src&&!th) renderAtt(); });
   });
 }
-function mealBlock(p,k,r){
+function mealBlock(p,k){
   const m=(mealCache[k]||{})[p.key], edit=(p.name===myName()||isAdmin()) && (k===todayKey||isAdmin());
   const d=mealDraft[k+'|'+p.key]||{};
   const img=d.img||(mealImgCache[k]||{})[p.key]||'';
   const thumb=(img||(m&&m.img))?'<img class="meal-th" data-mealimg="'+p.key+'" src="'+(img||'')+'" alt="영수증">':'';
-  const over=(m&&+m.amt>MEAL_CAP)?' <i class="over">한도 초과 → '+won(MEAL_CAP)+' 인정</i>':'';
-  if(!edit) return m ? '<div class="meal" data-mk="'+p.key+'"><span class="lb">식대</span><span class="amt">'+won(m.amt)+'원</span>'+over+thumb+'</div>' : '';
+  const over=(m&&+m.amt>MEAL_CAP)?'<i class="over">한도 초과 → '+won(MEAL_CAP)+' 인정</i>':'';
+  const nm='<span class="nm">'+esc(p.name)+'</span>';
+  if(!edit) return '<div class="meal" data-mk="'+p.key+'">'+nm+(m?'<span class="amt">'+won(m.amt)+'원</span>'+over+thumb:'<span class="by">기록 없음</span>')+'</div>';
   const amt = d.amt!=null ? d.amt : (m?m.amt:'');
-  return '<div class="meal" data-mk="'+p.key+'"><span class="lb">식대</span>'
+  return '<div class="meal" data-mk="'+p.key+'">'+nm
     +'<input type="text" inputmode="numeric" class="meal-in" data-mealamt="'+p.key+'" value="'+esc(amt)+'" placeholder="금액">'
-    +'<label class="meal-cam'+(img||(m&&m.img)?' has':'')+'">'+(img||(m&&m.img)?'📷 다시 찍기':'📷 영수증')+'<input type="file" accept="image/*" capture="environment" data-mealfile="'+p.key+'" hidden></label>'
-    +thumb
+    +'<label class="meal-cam'+(img||(m&&m.img)?' has':'')+'">'+(img||(m&&m.img)?'📷 다시':'📷 영수증')+'<input type="file" accept="image/*" capture="environment" data-mealfile="'+p.key+'" hidden></label>'
+    +thumb+'<span class="sp"></span>'
     +'<button class="meal-save" data-mealsave="'+p.key+'">'+(m?'수정':'저장')+'</button>'
-    +(m?'<span class="by">'+esc(m.by||'')+' '+esc(m.tm||'')+'</span>':'')
     +(m&&isAdmin()?'<button class="del" data-mealdel="'+p.key+'">✕</button>':'')
-    +over+'</div>';
+    +(m||over?'<span style="flex-basis:100%;display:flex;gap:8px;align-items:center;padding-left:64px">'+(m?'<span class="by">'+esc(m.by||'')+' '+esc(m.tm||'')+' 기록</span>':'')+over+'</span>':'')
+    +'</div>';
+}
+function renderMealIn(rows,k){
+  $('meal-list').innerHTML = rows.length ? rows.map(p=>mealBlock(p,k)).join('') : '<div class="empty">출결 명단에 없습니다</div>';
+  bindMeal();
 }
 /* 사진 축소 — 긴 변 900px, JPEG 0.72. 400KB 넘으면 품질을 더 낮춘다 */
 function shrinkImage(file,max=900){
@@ -1518,7 +1529,7 @@ function shrinkImage(file,max=900){
   });
 }
 function bindMeal(){
-  const k=selDay, list=$('att-list');
+  const k=selDay, list=$('meal-list');
   list.querySelectorAll('[data-mealamt]').forEach(i=>i.addEventListener('input',()=>{
     const dk=k+'|'+i.dataset.mealamt; mealDraft[dk]={...(mealDraft[dk]||{}),amt:i.value}; }));
   list.querySelectorAll('[data-mealfile]').forEach(f=>f.addEventListener('change',async()=>{
