@@ -1184,7 +1184,7 @@ function switchView(v){
   document.querySelectorAll('.views button[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.dataset.page===v));
   if(v==='sheet'){ $('sheet-open').href=SHEET_URL; renderWorklog(); }
-  if(v==='lucky') renderLucky();
+  if(v==='lucky'){ $('lk-guide-sec').classList.remove('open'); renderLucky(); } /* 안내문은 탭에 들어올 때마다 닫힌 상태로 — 열어야만 보인다 */
   renderAll();
 }
 document.querySelectorAll('.views button[data-v]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.v)));
