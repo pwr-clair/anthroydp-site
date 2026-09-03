@@ -92,20 +92,22 @@
   .lk .sec-t .tri{color:var(--gr)}
   .lk input:focus-visible,.lk button:focus-visible,.lk textarea:focus-visible{outline-color:var(--gr)}
   .lk .add button{background:var(--gr-soft);color:var(--gr);border:1px solid rgba(30,210,30,.5)}
-  .lk .add.lk-in{margin-top:12px}
+  /* 1행: 응모번호 + 등수 알약 / 2행: 계정명 + 추가. 앱 톤대로 반투명(soft) 바탕 + 초록 글자·테두리, 불투명 채움 금지 */
+  .lk-row1{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .lk-row1 input.no-in{flex:none;width:88px;height:38px;border:1px solid var(--line);border-radius:4px;padding:0 10px;
+    font-size:15px;font-family:var(--num);text-align:center;min-width:0}
+  .lk .add.lk-in{margin-top:10px;gap:10px}
   .lk .add.lk-in input[type=text]{padding:11px 12px;font-size:15px}
-  .lk .add input.no-in{flex:none;width:88px;font-family:var(--num);text-align:center}
   .lk-dup{font-size:11.5px;margin:0 2px;line-height:1.5}
   .lk-dup:not(:empty){margin-top:6px}
-  /* 등수 = 통통한 알약 토글, 추가 = 표준 44px 네모 버튼. 앱 톤대로 반투명(soft) 바탕 + 초록 글자·테두리, 불투명 채움 금지 */
-  .lk-act{display:flex;align-items:center;gap:12px;margin:8px 0 4px}
+  .lk-flow{font-size:11px;color:var(--ink3);margin:8px 2px 0;line-height:1.6;word-break:keep-all}
   .lk-tiers{display:flex;gap:8px;flex-wrap:wrap;flex:1;min-width:0}
   .lk-tiers button{flex:none;height:38px;padding:0 15px;border-radius:999px;border:1px solid var(--line);
     background:transparent;color:var(--ink2);font-size:13.5px;font-weight:800;line-height:1;letter-spacing:-.01em}
   .lk-tiers button.on{background:var(--gr-soft);color:var(--gr);border-color:var(--gr)}
-  .lk-act .go{flex:none;margin-left:auto;min-height:44px;padding:0 22px;border-radius:6px;
+  .lk .go{flex:none;min-height:44px;padding:0 22px;border-radius:6px;
     border:1px solid var(--gr);background:var(--gr-soft);color:var(--gr);font-size:14.5px;font-weight:800}
-  .lk-act .go:active{background:rgba(30,210,30,.28)}
+  .lk .go:active{background:rgba(30,210,30,.28)}
   #lk-list{margin-top:14px}
   .lk-dup.hit{color:var(--red);font-weight:700}
   .lk-dup.ok{color:var(--gr)}
@@ -750,15 +752,16 @@
 
     <div class="sec">
       <div class="sec-t">럭키드로우 참여자 명단<span class="r" id="lk-cnt"></span></div>
+      <div class="lk-row1">
+        <input type="text" class="no-in" id="lk-no" placeholder="응모번호" inputmode="numeric">
+        <div class="lk-tiers" id="lk-seg"><button data-t="1">1등</button><button data-t="2">2등</button><button data-t="3">3등</button><button data-t="4" class="on">4등</button></div>
+      </div>
       <div class="add lk-in">
         <input type="text" id="lk-acct" placeholder="@ 참여자 계정명" autocapitalize="none" autocomplete="off">
-        <input type="text" class="no-in" id="lk-no" placeholder="응모번호" inputmode="numeric">
-      </div>
-      <div class="lk-dup" id="lk-dup"></div>
-      <div class="lk-act">
-        <div class="lk-tiers" id="lk-seg"><button data-t="1">1등</button><button data-t="2">2등</button><button data-t="3">3등</button><button data-t="4" class="on">4등</button></div>
         <button class="go" id="lk-btn">추가</button>
       </div>
+      <div class="lk-dup" id="lk-dup"></div>
+      <p class="lk-flow">*응모번호 기입(001부터 시작) → 게시글 확인 후 계정명 작성 → 럭키드로우 진행 후 등수 선택 → 추가 버튼</p>
       <div id="lk-list"></div>
     </div>
 
