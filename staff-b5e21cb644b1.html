@@ -1480,6 +1480,9 @@ function renderAtt(){
   });
   renderMealIn(rows,k); renderMealSum();
 }
+$('a-prev').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,-1));renderAll();});
+$('a-next').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,1));renderAll();});
+$('a-today').addEventListener('click',()=>{selDay=clampKey(todayKey);renderAll();});
 
 /* ── 식대 — atc/cal/meal/{날짜}/{명단키} {amt,by,ts,tm,img:true} / 사진은 atc/cal/mealImg/{날짜}/{명단키} (dataURL)
    사진을 따로 두는 이유: 정산표는 금액만 구독하면 되고, 사진은 보는 날짜 것만 내려받는다 ── */
