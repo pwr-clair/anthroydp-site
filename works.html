@@ -109,10 +109,11 @@
 
   #zoomX{position:fixed;top:14px;right:14px;width:34px;height:34px;font-size:15px;
     color:#fff;background:none;border:1px solid rgba(255,255,255,.5);border-radius:999px;cursor:pointer}
-  figure.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:center}
-  figure.row3 img{width:100%;max-height:none;margin:0}
-  figure.row3 figcaption{grid-column:1 / -1}
-  @media (max-width:520px){ figure.row3{grid-template-columns:1fr} }
+  /* 여러 장을 한 줄로 — 비율이 제각각이어도 높이를 맞춰 정렬(잘라내지 않음). 좁은 화면에선 옆으로 밀어 봄 */
+  figure.rowfit .rf{display:flex;gap:8px;align-items:flex-start;justify-content:center;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  figure.rowfit .rf::-webkit-scrollbar{display:none}
+  figure.rowfit .rf img{height:clamp(150px,30vh,230px);width:auto;max-width:none;flex:0 0 auto;margin:0}
   </style>
 </head>
 <body>
@@ -175,10 +176,12 @@
   <h3>최고은</h3>
   <div class="wtitle">〈나는 전기양의 꿈을 꾸는가?〉</div>
   <div class="wcap">2026 · 시트지와 천에 디지털 프린트, 가변크기</div>
-  <figure class="row3">
-    <img src="works-assets/w01-2.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가? 설치 전경" loading="lazy" data-zoom>
-    <img src="works-assets/w01-3.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가? 설치 전경" loading="lazy" data-zoom>
-    <img src="works-assets/w01.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가?" loading="lazy" data-zoom>
+  <figure class="rowfit">
+    <div class="rf">
+      <img src="works-assets/w01-2.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가? 설치 전경" loading="lazy" data-zoom>
+      <img src="works-assets/w01-3.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가? 설치 전경" loading="lazy" data-zoom>
+      <img src="works-assets/w01.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가?" loading="lazy" data-zoom>
+    </div>
     <figcaption>오른쪽: 작가 화풍을 학습한 AI로 생성한 이미지</figcaption>
   </figure>
   <p class="wtx">이 작업에서 작가는 자신의 화풍을 이미지 생성형 AI에 학습시키는 과정을 하나의 실험으로 제시한다. 이는 작가와 AI를 창작의 주체와 도구로 구분하기보다, 이미지가 생성되고 순환하는 과정에서 두 존재가 서로의 역할을 어떻게 갱신하는지를 탐색하는 시도이다. AI가 생산한 이미지는 원본과 복제, 창작과 학습의 경계를 흔들며 회화의 저자성과 창작 행위의 의미를 다시 질문한다. 나아가 작가는 여성성과 남성성을 동시에 투사받으면서도 본질적으로는 젠더를 갖지 않는 AI의 역설적 특성에 주목하며, 인간이 기술에 부여하는 정체성과 욕망의 구조를 드러낸다.</p>
@@ -204,9 +207,11 @@
   <h3>주슬아</h3>
   <div class="wtitle">〈displace - - -〉</div>
   <div class="wcap">2026 · 혼합 매체, 가변설치</div>
-  <figure class="pair">
-    <img src="works-assets/w03-1.jpg" alt="주슬아, displace - - - 설치 전경" loading="lazy" data-zoom>
-    <img src="works-assets/w03-2.jpg" alt="주슬아, displace - - -" loading="lazy" data-zoom>
+  <figure class="rowfit">
+    <div class="rf">
+      <img src="works-assets/w03-1.jpg" alt="주슬아, displace - - - 설치 전경" loading="lazy" data-zoom>
+      <img src="works-assets/w03-2.jpg" alt="주슬아, displace - - -" loading="lazy" data-zoom>
+    </div>
   </figure>
   <p class="wtx">리서치는 장소를 읽기 위한 과정이지만, 하나의 장소는 과연 하나의 방식으로만 읽힐 수 있을까. 작가의 질문은 의미를 만들고 다시 미끄러지는 만담의 구조와 닮아 있다. 작업은 이 과정을 displace(전위)의 개념으로 이어간다. 현장에서 직접 걷고 수집한 경험과 인터넷에서 모은 경인선 철길 이미지는 같은 장소를 가리키지만 서로 다른 읽기를 만들어낸다. 화면 위의 이미지는 displacement 기능을 통해 시각 정보에서 높이값으로 이동하고, 3D 프린터의 적층 과정을 거쳐 다시 물질이 된다. 이 과정에서 철길은 더 이상 재현의 대상이 아니라, 장소를 읽는 방식이 다른 위치와 다른 물질로 계속 이동하는 과정으로 드러난다. 하나의 장소는 사진과 데이터, 계산된 표면, 적층된 물질 사이를 오가며 반복해서 읽히고, 그 읽기는 또 다른 추적을 만들어낸다.</p>
   <details class="bio"><summary><span class="tri">►</span>주슬아 Sla Joo</summary>
