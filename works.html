@@ -109,7 +109,11 @@
 
   #zoomX{position:fixed;top:14px;right:14px;width:34px;height:34px;font-size:15px;
     color:#fff;background:none;border:1px solid rgba(255,255,255,.5);border-radius:999px;cursor:pointer}
-</style>
+  figure.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:center}
+  figure.row3 img{width:100%;max-height:none;margin:0}
+  figure.row3 figcaption{grid-column:1 / -1}
+  @media (max-width:520px){ figure.row3{grid-template-columns:1fr} }
+  </style>
 </head>
 <body>
 
@@ -171,9 +175,11 @@
   <h3>최고은</h3>
   <div class="wtitle">〈나는 전기양의 꿈을 꾸는가?〉</div>
   <div class="wcap">2026 · 시트지와 천에 디지털 프린트, 가변크기</div>
-  <figure class="tall">
+  <figure class="row3">
+    <img src="works-assets/w01-2.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가? 설치 전경" loading="lazy" data-zoom>
+    <img src="works-assets/w01-3.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가? 설치 전경" loading="lazy" data-zoom>
     <img src="works-assets/w01.jpg" alt="최고은, 나는 전기양의 꿈을 꾸는가?" loading="lazy" data-zoom>
-    <figcaption>작가 화풍을 학습한 AI로 생성한 이미지</figcaption>
+    <figcaption>오른쪽: 작가 화풍을 학습한 AI로 생성한 이미지</figcaption>
   </figure>
   <p class="wtx">이 작업에서 작가는 자신의 화풍을 이미지 생성형 AI에 학습시키는 과정을 하나의 실험으로 제시한다. 이는 작가와 AI를 창작의 주체와 도구로 구분하기보다, 이미지가 생성되고 순환하는 과정에서 두 존재가 서로의 역할을 어떻게 갱신하는지를 탐색하는 시도이다. AI가 생산한 이미지는 원본과 복제, 창작과 학습의 경계를 흔들며 회화의 저자성과 창작 행위의 의미를 다시 질문한다. 나아가 작가는 여성성과 남성성을 동시에 투사받으면서도 본질적으로는 젠더를 갖지 않는 AI의 역설적 특성에 주목하며, 인간이 기술에 부여하는 정체성과 욕망의 구조를 드러낸다.</p>
   <details class="bio"><summary><span class="tri">►</span>최고은 Che Go Eun</summary>
@@ -198,7 +204,10 @@
   <h3>주슬아</h3>
   <div class="wtitle">〈displace - - -〉</div>
   <div class="wcap">2026 · 혼합 매체, 가변설치</div>
-  <figure><img src="works-assets/w03.jpg" alt="주슬아, displace - - -" loading="lazy" data-zoom></figure>
+  <figure class="pair">
+    <img src="works-assets/w03-1.jpg" alt="주슬아, displace - - - 설치 전경" loading="lazy" data-zoom>
+    <img src="works-assets/w03-2.jpg" alt="주슬아, displace - - -" loading="lazy" data-zoom>
+  </figure>
   <p class="wtx">리서치는 장소를 읽기 위한 과정이지만, 하나의 장소는 과연 하나의 방식으로만 읽힐 수 있을까. 작가의 질문은 의미를 만들고 다시 미끄러지는 만담의 구조와 닮아 있다. 작업은 이 과정을 displace(전위)의 개념으로 이어간다. 현장에서 직접 걷고 수집한 경험과 인터넷에서 모은 경인선 철길 이미지는 같은 장소를 가리키지만 서로 다른 읽기를 만들어낸다. 화면 위의 이미지는 displacement 기능을 통해 시각 정보에서 높이값으로 이동하고, 3D 프린터의 적층 과정을 거쳐 다시 물질이 된다. 이 과정에서 철길은 더 이상 재현의 대상이 아니라, 장소를 읽는 방식이 다른 위치와 다른 물질로 계속 이동하는 과정으로 드러난다. 하나의 장소는 사진과 데이터, 계산된 표면, 적층된 물질 사이를 오가며 반복해서 읽히고, 그 읽기는 또 다른 추적을 만들어낸다.</p>
   <details class="bio"><summary><span class="tri">►</span>주슬아 Sla Joo</summary>
     <p>주슬아는 ‘분열’과 ‘변형’이라는 주제에 관심을 두고, 애니메이션과 문학에서 받은 영향을 작업으로 풀어낸다. 작가는 주로 몸을 변형하고 자아를 해체하며 새로운 정체성을 구축하는 이야기에 매료되어 왔다. 이러한 서사는 파편화된 자아와 혼란을 통해 현대 사회에서 개인의 정체성이 어떻게 균열되고 재구성되는지를 질문하게 한다. 주로 다양한 매체를 활용하여 매체 간의 전이를 실험하고, 이 과정에서 의도적 오류를 만들어낸다. 이를 통해 정체성의 붕괴와 재구성 과정에서 발생하는 공포와 변형을 시각적으로 탐구하며, 새로운 형태의 서사를 발생시킨다.</p>
@@ -249,7 +258,10 @@
   <h3>권희수</h3>
   <div class="wtitle">〈오렌지 방〉</div>
   <div class="wcap">2026 · 렌티큘러 라이트박스, 빈티지 액자 속 사진, 작가의 집에서 가져온 커튼과 옷걸이, 액자 속 타자 원고, 가변설치</div>
-  <figure><img src="works-assets/w07.jpg" alt="권희수, 오렌지 방" loading="lazy" data-zoom></figure>
+  <figure>
+    <img src="works-assets/w07-1.jpg" alt="권희수, 오렌지 방 설치 전경" loading="lazy" data-zoom>
+    <img src="works-assets/w07-2.jpg" alt="권희수, 오렌지 방" loading="lazy" data-zoom>
+  </figure>
   <p class="wtx">〈오렌지 방〉은 2026년 권희수가 로스앤젤레스로 이주하며 마련한 작업실에서 진행된 첫 명상적 유도 시각화 세션에서 시작되었다. 오렌지빛으로 방을 축복하는 의식을 계기로, 작가는 방과 자궁, 아카이브가 하나의 구조로 겹쳐지는 것을 발견했다. 렌티큘러 라이트박스와 빈티지 프레임 속 사진, 작가의 집에서 가져온 커튼과 옷걸이, 타자로 친 원고가 서로 다른 시간대의 이미지를 오렌지빛이라는 감각적 신호로 연결하며, 개인의 기억을 현재진행형으로 기록하는 살아있는 아카이브의 첫 페이지를 이룬다.</p>
   <details class="bio"><summary><span class="tri">►</span>권희수 Heesoo Kwon</summary>
     <p>권희수는 자신과 가족의 삶, 여성 계보, 한국 신화를 바탕으로 의례적이고 자기민족지적인 아카이브 작업 레이무숨을 이어가고 있다. 디지털 기술을 도구 삼아 조상의 기억을 따라가며 가부장적 서사를 낯설게 재해석한다. 2017년 시작된 이 프로젝트는 아날로그와 디지털 매체를 결합한 3D 애니메이션과 사진 아카이브로, 작가가 창안한 '자전적 페미니즘 종교'의 신전이자 여성 조상들이 공존하는 유토피아를 그린다.</p>
@@ -277,7 +289,10 @@
   <h3>정혜정, 사이언스(황준규)</h3>
   <div class="wtitle">〈바이오 오디세이: 유령효모를 찾아서〉 · 〈부풀어 오르는〉</div>
   <div class="wcap">〈바이오 오디세이: 유령효모를 찾아서〉 2026 · 디지털 애니메이션, FHD, 컬러, 3분 10초<br>〈부풀어 오르는〉 2026 · 효모가 부풀린 풍선에 은박 테이프, 가변크기<br>〈바이오 오디세이: 유령효모를 찾아서〉 워크숍 참여 청소년 15명과 공동 제작</div>
-  <figure><img src="works-assets/w09.jpg" alt="바이오 오디세이: 유령효모를 찾아서" loading="lazy" data-zoom></figure>
+  <figure>
+    <img src="works-assets/w09-1.jpg" alt="바이오 오디세이: 유령효모를 찾아서 설치 전경" loading="lazy" data-zoom>
+    <img src="works-assets/w09-2.jpg" alt="바이오 오디세이: 유령효모를 찾아서" loading="lazy" data-zoom>
+  </figure>
   <p class="wtx">영등포문화재단과 종근당고촌재단이 함께한 워크숍 〈바이오 오디세이: 유령효모를 찾아서〉는 초등학교 5학년부터 중학교 1학년까지의 청소년 15명과 사이언스(황준규), 정혜정 작가가 함께 영등포의 공기 속 효모를 채집하고 관찰하여 키네틱 조각과 캐릭터, 애니메이션으로 구현한 공동 창작 프로젝트다.</p>
   <details class="bio"><summary><span class="tri">►</span>정혜정, 사이언스(황준규) Haejung Jung, Psients (Mikael Hwang)</summary>
     <p>정혜정과 사이언스(황준규)는 청소년 15명이 참여한 바이오 워크숍을 기획하고 이끌었다. 정혜정은 3D 애니메이션, 영상, 설치를 주요 매체로 작업하며, 자연·문화·기술·물질 사이를 가로지르는 인간과 비인간 존재들의 얽힘을 작업으로 시각화하고, 프로그램의 출발점이 된 효모 탐구의 개념과 내러티브를 제안한 사이언스(황준규)는 서울의 예술 연구 실험실 Critical Biology의 대표이자 과학자 출신 예술가로, 생물학과 소리, 음악이 만나는 지점을 탐구한다.</p></details>
@@ -289,7 +304,10 @@
   <div class="wtitle">〈머리 위를 지나 도착하는 곳〉</div>
   <div class="wcap">2026 · 실시간 데이터 기반 다채널 설치, 혼합 매체, 가변크기</div>
   <figure>
-    <img src="works-assets/w10.jpg" alt="반재하, 머리 위를 지나 도착하는 곳" loading="lazy" data-zoom>
+    <img src="works-assets/w10-1.jpg" alt="반재하, 머리 위를 지나 도착하는 곳 설치 전경" loading="lazy" data-zoom>
+  </figure>
+  <figure>
+    <img src="works-assets/w10-2.jpg" alt="반재하, 머리 위를 지나 도착하는 곳" loading="lazy" data-zoom>
     <figcaption>Contains modified Copernicus Sentinel data 2024 (Sentinel-2, 2024년 8월 27일 촬영) · 처리: 반재하<br>도로 자료 ⓒ OpenStreetMap contributors</figcaption>
   </figure>
   <p class="wtx">일반적으로 북한에 관한 수치와 정보는 현지에서 직접 측정한 값이 아니라 인공위성이 포착한 흔적을 바탕으로 산출된 결과다. 이 작업을 위해 반재하는 공개 위성자료를 이용해 북한 내 13개 도시를 관측하고, 한국 연구기관의 방법론을 따라 경제 지표를 직접 산출해 보았다. 동시에 같은 관측값에 경제 지표가 아닌 다른 이름을 붙임으로써, 제한된 관측이 해석과 명명을 거쳐 북한에 관한 숫자와 지식으로 구성되는 방식을 드러낸다. 이를 통해 객관적 사실처럼 보이는 숫자와 지식 또한 관측과 해석, 명명에 의해 구성된 것임을 되묻고, 나아가 북한에 관한 우리의 지식과 판단이 만들어지는 과정 자체를 돌아보게 한다.</p>

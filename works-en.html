@@ -110,7 +110,11 @@
 
   #zoomX{position:fixed;top:14px;right:14px;width:34px;height:34px;font-size:15px;
     color:#fff;background:none;border:1px solid rgba(255,255,255,.5);border-radius:999px;cursor:pointer}
-</style>
+  figure.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:center}
+  figure.row3 img{width:100%;max-height:none;margin:0}
+  figure.row3 figcaption{grid-column:1 / -1}
+  @media (max-width:520px){ figure.row3{grid-template-columns:1fr} }
+  </style>
 </head>
 <body>
 
@@ -172,9 +176,11 @@
   <h3>Che Go Eun</h3>
   <div class="wtitle"><em>Do I Dream of Electric Sheep?</em></div>
   <div class="wcap">2026 · Digital print on self-adhesive film and fabric, dimensions variable</div>
-  <figure class="tall">
+  <figure class="row3">
+    <img src="works-assets/w01-2.jpg" alt="Che Go Eun, Do I Dream of Electric Sheep?, installation view" loading="lazy" data-zoom>
+    <img src="works-assets/w01-3.jpg" alt="Che Go Eun, Do I Dream of Electric Sheep?, installation view" loading="lazy" data-zoom>
     <img src="works-assets/w01.jpg" alt="Che Go Eun, Do I Dream of Electric Sheep?" loading="lazy" data-zoom>
-    <figcaption>AI-generated image trained on the artist’s style</figcaption>
+    <figcaption>Right: AI-generated image trained on the artist’s style</figcaption>
   </figure>
   <p class="wtx">In this work, Goeun Che presents the process of training a generative image AI on her own painterly style as an artistic experiment. Rather than defining the artist and AI as the respective creator and tool, the work explores how their roles are continuously renegotiated through the processes of image generation and circulation. The images produced by the AI unsettle the boundaries between original and copy, creation and learning, prompting renewed questions about authorship and the meaning of artistic practice. Furthermore, the artist draws attention to the paradoxical nature of AI: while it is readily projected with both feminine and masculine qualities, it possesses no gender of its own. In doing so, the work reveals the structures of identity and desire that humans continue to inscribe onto technology.</p>
   <details class="bio"><summary><span class="tri">►</span>Che Go Eun</summary>
@@ -199,7 +205,10 @@
   <h3>Sla Joo</h3>
   <div class="wtitle"><em>displace - - -</em></div>
   <div class="wcap">2026 · Mixed media, variable installation</div>
-  <figure><img src="works-assets/w03.jpg" alt="Sla Joo, displace - - -" loading="lazy" data-zoom></figure>
+  <figure class="pair">
+    <img src="works-assets/w03-1.jpg" alt="Sla Joo, displace - - -, installation view" loading="lazy" data-zoom>
+    <img src="works-assets/w03-2.jpg" alt="Sla Joo, displace - - -" loading="lazy" data-zoom>
+  </figure>
   <p class="wtx">Research is a process of reading a place, but can a single place ever be read in only one way? This question resembles the structure of mandam—a conversational form in which meanings are continually produced, only to slip away again. The work extends this process through the concept of displace. Experiences gathered by walking through the site and images of the Gyeongin railway collected from the internet point to the same place, yet generate different modes of reading. Through displacement, the images on the screen shift from visual information into height data, and through the layer-by-layer process of 3D printing, they become material once again. In this process, the railway is no longer an object of representation; instead, it emerges as an ongoing movement in which ways of reading a place are translated into different positions and material states. A single place repeatedly circulates between photographs, data, calculated surfaces, and layered matter, continually being read anew, with each reading giving rise to another act of tracing.</p>
   <details class="bio"><summary><span class="tri">►</span>Sla Joo</summary>
     <p>Sla Joo's practice centers on themes of fragmentation and transformation, informed by influences from animation and literature. I am drawn to narratives in which bodies are altered, identities are dismantled, and new forms of subjectivity emerge. Such narratives offer a way to reflect on how identity is continuously fractured and reconfigured within contemporary society. Through the use of multiple media, I explore transitions between different material and representational forms, often introducing intentional glitches and errors into the process. These disruptions become a means of visualizing the anxiety, instability, and transformation that accompany the breakdown and reconstruction of identity, while opening up possibilities for new narrative structures.</p>
@@ -250,7 +259,10 @@
   <h3>Heesoo Kwon</h3>
   <div class="wtitle"><em>The Orange Room</em></div>
   <div class="wcap">2026 · Lenticular light box, photographs in vintage frames, curtain and hanger from the artist’s house, typewritten pages in frame, variable installation</div>
-  <figure><img src="works-assets/w07.jpg" alt="Heesoo Kwon, The Orange Room" loading="lazy" data-zoom></figure>
+  <figure>
+    <img src="works-assets/w07-1.jpg" alt="Heesoo Kwon, The Orange Room, installation view" loading="lazy" data-zoom>
+    <img src="works-assets/w07-2.jpg" alt="Heesoo Kwon, The Orange Room" loading="lazy" data-zoom>
+  </figure>
   <p class="wtx">The Orange Room began with a hypnosis session held in Kwon’s first studio after relocating to Los Angeles in 2026. During the session, she performed a ritual blessing the room in orange light—a moment that revealed room, womb, and archive as a single, continuous structure. A lenticular light box, photographs in vintage frames, a curtain and hanger from the artist’s home, and typewritten pages connect images from different periods of her life through the recurring signal of orange light, forming the first page of an ongoing living archive of personal memory.</p>
   <details class="bio"><summary><span class="tri">►</span>Heesoo Kwon</summary>
     <p>Heesoo Kwon works on Leymusoom, a ritualistic and auto-ethnographic archive project rooted in her own and her family's life, matrilineal genealogies, and Korean mythology. Using digital technology as a tool of creation, she traces ancestral memories to reimagine patriarchal narratives. Begun in 2017, the project is an archive of 3D animation and photography combining analog and digital media—a shrine to Kwon's invented "autobiographical feminist religion," envisioning a utopia where her female ancestors coexist.</p>
@@ -278,7 +290,10 @@
   <h3>Haejung Jung, Psients (Mikael Hwang)</h3>
   <div class="wtitle"><em>Bio Odyssey: In Search of Phantom Yeast</em> · <em>Inflating</em></div>
   <div class="wcap"><em>Bio Odyssey: In Search of Phantom Yeast</em> 2026 · Digital animation, Full HD, color, 3 min. 10 sec.<br><em>Inflating</em> 2026 · Aluminum foil tape on yeast-inflated balloons, dimensions variable<br>Co-created by Haejung Jung, Psients (Mikael Hwang), and the 15 participants of the workshop “Bio Odyssey: In Search of Phantom Yeast”</div>
-  <figure><img src="works-assets/w09.jpg" alt="Haejung Jung, Psients (Mikael Hwang), Bio Odyssey: In Search of Phantom Yeast" loading="lazy" data-zoom></figure>
+  <figure>
+    <img src="works-assets/w09-1.jpg" alt="Bio Odyssey: In Search of Phantom Yeast, installation view" loading="lazy" data-zoom>
+    <img src="works-assets/w09-2.jpg" alt="Haejung Jung, Psients (Mikael Hwang), Bio Odyssey: In Search of Phantom Yeast" loading="lazy" data-zoom>
+  </figure>
   <p class="wtx">Co-organized by the Yeongdeungpo Cultural Foundation and the Chong Kun Dang Kochon Foundation, Bio Odyssey: In Search of Phantom Yeast is a collaborative workshop project bringing together 15 participants (grades 5–7) with the artists Psients (Mikael Hwang) and Haejung Jung. Together they collected and observed airborne yeast in Yeongdeungpo, then gave it visible form through kinetic sculptures, character design, and animation.</p>
   <details class="bio"><summary><span class="tri">►</span>Haejung Jung, Psients (Mikael Hwang)</summary>
     <p>Haejung Jung and Psients collaborated to conceive and lead a bio-workshop and co-creation project with fifteen children and adolescents from the Yeongdeungpo district. Haejung Jung works primarily in 3D animation, video, and installation, exploring the entanglements of human and nonhuman entities across the boundaries of nature, culture, technology, and matter. Psients (Mikael Hwang) is a scientist-turned-artist and the Director of Critical Biology, an artistic research laboratory based in Seoul, whose practice investigates the intersections of biology, sound, and music.</p></details>
@@ -290,7 +305,10 @@
   <div class="wtitle"><em>Where What Passes Overhead Arrives</em></div>
   <div class="wcap">2026 · Real-time data-driven multi-channel installation, mixed media, dimensions variable</div>
   <figure>
-    <img src="works-assets/w10.jpg" alt="Jaeha Ban, Where What Passes Overhead Arrives" loading="lazy" data-zoom>
+    <img src="works-assets/w10-1.jpg" alt="Jaeha Ban, Where What Passes Overhead Arrives, installation view" loading="lazy" data-zoom>
+  </figure>
+  <figure>
+    <img src="works-assets/w10-2.jpg" alt="Jaeha Ban, Where What Passes Overhead Arrives" loading="lazy" data-zoom>
     <figcaption>Contains modified Copernicus Sentinel data 2024 (Sentinel-2, captured on August 27, 2024) · Processed by Jaeha Ban · Road data © OpenStreetMap contributors</figcaption>
   </figure>
   <p class="wtx">Many of the numbers and information about North Korea are not measured directly on the ground, but derived from traces captured by satellites. For this work, Ban Jaeha uses publicly available satellite data to observe thirteen cities in North Korea and reconstruct economic indicators by following methodologies used by South Korean research institutions. At the same time, he assigns non-economic names to the same observations, revealing how limited observations are interpreted and named to become numbers and knowledge about North Korea. In doing so, the work questions how numbers and knowledge that appear to be objective facts are themselves constructed through processes of observation, interpretation, and naming, prompting us to reflect on how our own knowledge and judgments about North Korea are formed.</p>
