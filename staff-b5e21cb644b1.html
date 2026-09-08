@@ -1473,7 +1473,7 @@ function renderAtt(){
   }).join('') : '<div class="empty">'+(isAdmin()?'명단이 비어 있습니다':'출결 명단에 없습니다. 조아라에게 문의하세요.')+'</div>';
 
   const note=[];
-  if(!today) note.push('오늘이 아닌 날짜는 기록할 수 없습니다'+(canAtt()?' — 관리자는 [수정]으로 입력':''));
+  if(!today) note.push('출퇴근 도장은 당일만 — 지난 날짜는 '+(canAtt()?'[수정]으로 입력':'조아라에게 요청')+'. 식대는 지난 날짜도 올릴 수 있어요');
   if(canAtt()) note.push('<button id="att-add">+ 인원 추가</button>');
   $('att-note').innerHTML=note.join('<br>');
 
@@ -1515,7 +1515,8 @@ function listenMealImg(k){
   });
 }
 function mealBlock(p,k){
-  const m=(mealCache[k]||{})[p.key], edit=(p.name===myName()||isAdmin()) && (k===todayKey||isAdmin());
+  /* 지난 날짜도 본인 식대는 올릴 수 있다 — 당일만 허용했더니 하루 지난 영수증을 못 올린다는 현장 보고(09-08) */
+  const m=(mealCache[k]||{})[p.key], edit=(p.name===myName()||isAdmin());
   const d=mealDraft[k+'|'+p.key]||{};
   const img=d.img||(mealImgCache[k]||{})[p.key]||'';
   const thumb=(img||(m&&m.img))?'<img class="meal-th" data-mealimg="'+p.key+'" src="'+(img||'')+'" alt="영수증">':'';
