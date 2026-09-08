@@ -124,6 +124,7 @@
   .lk-tb tr.dh td{padding:9px 4px 3px;font-size:10.5px;font-weight:800;color:var(--gr);border-bottom:0;font-family:var(--num)}
   .lk-tier{display:inline-block;font-size:10px;font-weight:800;border-radius:2px;padding:1px 6px;background:var(--gr-soft);color:var(--gr);white-space:nowrap}
   .lk-tier.t1{background:rgba(240,96,74,.18);color:var(--red)}
+  .lk-tb a.ig{color:inherit;text-decoration:none;border-bottom:1px dotted var(--ink3)} /* 계정명 탭 → 인스타그램 새 창 */
   .lk-st{table-layout:fixed}
   .lk-st th,.lk-st td{text-align:center;font-family:var(--num)}
   .lk-st th:first-child,.lk-st td:first-child{text-align:left}
@@ -1656,7 +1657,7 @@ function renderLucky(){
   let html='', last='';
   all.forEach((e,i)=>{
     if(e.at!==last){ last=e.at; html+='<tr class="dh"><td colspan="5">'+esc(lkDate(e.at))+'</td></tr>'; }
-    html+='<tr><td class="n">'+(i+1)+'</td><td class="acct">@'+esc(e.acct)+(e.no?' <span class="n">#'+esc(e.no)+'</span>':'')+'</td>'
+    html+='<tr><td class="n">'+(i+1)+'</td><td class="acct"><a class="ig" href="https://instagram.com/'+encodeURIComponent(String(e.acct).replace(/^@/,''))+'" target="_blank" rel="noopener">@'+esc(e.acct)+'</a>'+(e.no?' <span class="n">#'+esc(e.no)+'</span>':'')+'</td>'
       +'<td>'+lkTier(e.tier)+'</td><td class="tm">'+esc(e.tm||'')+'<br><span class="by">'+esc(e.by||'')+'</span></td>'
       +'<td class="ops">'+(canEdit()?'<button data-lked="'+e.id+'">✎</button><button data-lkdel="'+e.id+'">✕</button>':'')+'</td></tr>';
   });
