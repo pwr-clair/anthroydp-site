@@ -853,6 +853,7 @@
       <div class="wl-grid">
         <label>일 방문자수<small>실제</small></label><input type="text" inputmode="numeric" id="rp-va" placeholder="명">
         <label>일 방문자수<small>보고용</small></label><input type="text" inputmode="numeric" id="rp-vr" placeholder="명">
+        <label>도슨트<small>참가자수</small></label><input type="text" inputmode="numeric" id="rp-dc" placeholder="명 (13시·16시·19시 합산)">
         <label>단체관람 예약</label><textarea id="rp-gr" placeholder="예: 14시 꿈의 스튜디오 도슨트"></textarea>
         <label>연계행사</label><textarea id="rp-ev" placeholder="예: 16시 크로스토크"></textarea>
         <label>참가자수<small>사전신청</small></label><input type="text" inputmode="numeric" id="rp-pp" placeholder="연계행사 있을 때">
@@ -1717,7 +1718,7 @@ $('go-wl').addEventListener('click',()=>switchView('sheet'));
 $('s-prev').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,-1));renderAll();});
 $('s-next').addEventListener('click',()=>{selDay=clampKey(addDays(selDay,1));renderAll();});
 $('s-today').addEventListener('click',()=>{selDay=clampKey(todayKey);renderAll();});
-const RP_FIELDS=['rp-va','rp-vr','rp-gr','rp-ev','rp-pp','rp-po'];
+const RP_FIELDS=['rp-va','rp-vr','rp-dc','rp-gr','rp-ev','rp-pp','rp-po'];
 let rpDirtyFor=null; // 입력 중인 날짜 — 그 날짜의 원격 갱신으로 입력을 덮지 않음
 const rpNoteSel={}; // 날짜별 {항목id:true} — 체크한 특이사항만 시트로 (기본 미체크, 클라라 08-31)
 function dayNotes(k){
@@ -1772,7 +1773,7 @@ function renderRp(){
   if(off) $('rp-off-t').textContent = (CLOSED[k]?'휴관일':dt.label)+' — 근무일지 대상이 아닙니다. 아래 목록에서 날짜를 고르세요.';
   if(rpDirtyFor===k) return;
   const r=rpCache[k]||{};
-  $('rp-va').value=r.va||''; $('rp-vr').value=r.vr||''; $('rp-gr').value=r.gr||'';
+  $('rp-va').value=r.va||''; $('rp-vr').value=r.vr||''; $('rp-dc').value=r.dc||''; $('rp-gr').value=r.gr||'';
   const fxEv=(FIXED[k]||[]).filter(f=>/크로스토크|개막식|폐막식/.test(f.t)&&!/RSVP/.test(f.t))
     .map(f=>(f.tm?fmtTm(f.tm)+' ':'')+f.t.replace(/ — 식순 보기 ↗/,'')).join('\n');
   $('rp-ev').value=r.ev||fxEv||''; $('rp-pp').value=r.pp||''; $('rp-po').value=r.po||'';
@@ -1783,7 +1784,8 @@ function renderRp(){
 }
 RP_FIELDS.forEach(id=>$(id).addEventListener('input',()=>{rpDirtyFor=selDay;}));
 function rpData(){
-  return {va:$('rp-va').value.trim(), vr:$('rp-vr').value.trim(), gr:$('rp-gr').value.trim(),
+  return {va:$('rp-va').value.trim(), vr:$('rp-vr').value.trim(), dc:$('rp-dc').value.trim(),
+          gr:$('rp-gr').value.trim(),
           ev:$('rp-ev').value.trim(), pp:$('rp-pp').value.trim(), po:$('rp-po').value.trim()};
 }
 $('rp-save').addEventListener('click',()=>{
@@ -1796,6 +1798,7 @@ $('rp-send').addEventListener('click',async ()=>{
   const names=workersOf(k).join(', '), notes=notesOf(k);
   const payload={date:k};
   if(d.va||d.vr) payload.visitors={actual:d.va,reported:d.vr};
+  if(d.dc) payload.docent=d.dc;
   if(d.pp||d.po) payload.participants={pre:d.pp,onsite:d.po};
   if(d.gr) payload.group=d.gr;
   if(d.ev) payload.event=d.ev;
