@@ -225,6 +225,17 @@
   #bio .x{position:absolute;top:14px;right:14px;width:30px;height:30px;line-height:1;
     font-size:14px;color:var(--sub);background:none;border:1px solid var(--line);
     border-radius:999px;cursor:pointer}
+  /* 리플렛 비치처 — 관람 안내 끝, 크레딧과 같은 세모 접기(작게) */
+  .leaflet{margin-top:14px}
+  .leaflet summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;
+    font-size:13.5px;font-weight:800;color:var(--ink)}
+  .leaflet summary::-webkit-details-marker{display:none}
+  .leaflet .tri{display:inline-block;color:var(--accent);font-size:10.5px;line-height:1;transition:transform .15s}
+  .leaflet[open] .tri{transform:rotate(90deg)}
+  .leaflet .lead{font-size:13px;color:var(--sub);margin:10px 0 6px;word-break:keep-all}
+  .leaflet .shops{font-size:13px;line-height:2;color:var(--ink);word-break:keep-all}
+  .leaflet .shops i{font-style:normal;color:var(--accent);margin:0 4px}
+
   /* 전시 전경 — 인스타형 캐러셀: 한 장씩 스냅, 점 인디케이터는 사진 위 오버레이(활성 점 = 키컬러 파랑), 우상단 n/전체 카운터 */
   #venue .car{position:relative;border-radius:12px;overflow:hidden;background:var(--card)}
   #venue .track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
@@ -315,6 +326,11 @@
       <dt>장소</dt><dd>서울시 영등포구 문래동2가 21-6 (종도빌딩 1층)</dd>
     </dl>
     <iframe class="map" src="https://maps.google.com/maps?q=37.5123849,126.8944350+(%EC%A2%85%EB%8F%84%EB%B9%8C%EB%94%A9)&z=17&output=embed" loading="lazy" title="오시는 길"></iframe>
+    <details class="leaflet">
+      <summary><span class="tri">►</span>리플렛 비치처</summary>
+      <p class="lead">전시 리플렛은 전시장뿐 아니라 문래동의 이웃 가게들에서도 만나실 수 있습니다.</p>
+      <p class="shops">카페 몬키<i>·</i>카페 발원지<i>·</i>더데일리브레드<i>·</i>킷사 고구마<i>·</i>카페 정글핌피<i>·</i>해방음<i>·</i>아뚤라에르<i>·</i>치우소이다이닝<i>·</i>컨셔스클로딩<i>·</i>슬롯<i>·</i>스틸바이트<i>·</i>페스트<i>·</i>러스크<i>·</i>버블빈티지<i>·</i>세이트러스크 카페</p>
+    </details>
   </div>
 </section>
 
