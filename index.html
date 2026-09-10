@@ -225,6 +225,21 @@
   #bio .x{position:absolute;top:14px;right:14px;width:30px;height:30px;line-height:1;
     font-size:14px;color:var(--sub);background:none;border:1px solid var(--line);
     border-radius:999px;cursor:pointer}
+  /* 전시 전경 — 인스타형 캐러셀: 한 장씩 스냅, 점 인디케이터는 사진 위 오버레이(활성 점 = 키컬러 파랑), 우상단 n/전체 카운터 */
+  #venue .car{position:relative;border-radius:12px;overflow:hidden;background:var(--card)}
+  #venue .track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #venue .track::-webkit-scrollbar{display:none}
+  #venue .track img{flex:0 0 100%;width:100%;aspect-ratio:3/2;object-fit:cover;scroll-snap-align:start;scroll-snap-stop:always;display:block;cursor:zoom-in}
+  #venue .cnt{position:absolute;top:10px;right:10px;font-size:12px;font-weight:700;color:#fff;background:rgba(0,0,0,.55);border-radius:999px;padding:3px 10px;font-variant-numeric:tabular-nums;pointer-events:none}
+  #venue .dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;align-items:center;gap:5px;pointer-events:none}
+  #venue .dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6);box-shadow:0 0 3px rgba(0,0,0,.4);transition:transform .15s,background .15s}
+  #venue .dots i.on{background:var(--accent);transform:scale(1.25)}
+  #venue .dots i.sm{transform:scale(.7)}
+  #venue .dots i.xs{transform:scale(.45)}
+  /* 캐러셀 사진 전체화면 보기 */
+  #vzoom{border:0;padding:0;background:transparent;max-width:100vw;max-height:100vh;margin:auto;outline:none}
+  #vzoom::backdrop{background:rgba(0,0,0,.88)}
+  #vzoom img{max-width:96vw;max-height:92vh;display:block;border-radius:8px}
 </style>
 </head>
 <body>
@@ -250,6 +265,7 @@
     <!-- TODO: 작품 소개 페이지 URL(works.html 예정) -->
     <a class="book js-works" href="#">전시작품</a>
     <a href="#visit">관람 안내</a>
+    <a href="#venue">전시 전경</a>
     <a href="#opening">개막식</a>
     <a href="#program">연계 프로그램</a>
     <!-- TODO: 연구노트 페이지 URL(research-note.html 예정). 자료 확정되면 href 교체 — 아래 바로가기 버튼과 함께 2곳 -->
@@ -299,6 +315,26 @@
       <dt>장소</dt><dd>서울시 영등포구 문래동2가 21-6 (종도빌딩 1층)</dd>
     </dl>
     <iframe class="map" src="https://maps.google.com/maps?q=37.5123849,126.8944350+(%EC%A2%85%EB%8F%84%EB%B9%8C%EB%94%A9)&z=17&output=embed" loading="lazy" title="오시는 길"></iframe>
+  </div>
+</section>
+
+<section id="venue">
+  <h2>전시 전경</h2>
+  <div class="car">
+    <div class="track" id="vtrack">
+      <img src="venue-assets/venue-01.jpg" alt="전시 전경 1">
+      <img src="venue-assets/venue-02.jpg" alt="전시 전경 2" loading="lazy">
+      <img src="venue-assets/venue-03.jpg" alt="전시 전경 3" loading="lazy">
+      <img src="venue-assets/venue-04.jpg" alt="전시 전경 4" loading="lazy">
+      <img src="venue-assets/venue-05.jpg" alt="전시 전경 5" loading="lazy">
+      <img src="venue-assets/venue-06.jpg" alt="전시 전경 6" loading="lazy">
+      <img src="venue-assets/venue-07.jpg" alt="전시 전경 7" loading="lazy">
+      <img src="venue-assets/venue-08.jpg" alt="전시 전경 8" loading="lazy">
+      <img src="venue-assets/venue-09.jpg" alt="전시 전경 9" loading="lazy">
+      <img src="venue-assets/venue-10.jpg" alt="전시 전경 10" loading="lazy">
+    </div>
+    <span class="cnt" id="vcnt">1/10</span>
+    <div class="dots" id="vdots"></div>
   </div>
 </section>
 
@@ -439,6 +475,8 @@
   </div>
 </dialog>
 
+<dialog id="vzoom"><img id="vzoomimg" alt="전시 전경 크게 보기"></dialog>
+
 <script>
 (function(){
   /* 주소 두 줄만 바꾸면 탭·버튼·팝업이 한꺼번에 연결됩니다 */
@@ -522,6 +560,37 @@
     else{ var go=lang.href; langTimer=setTimeout(function(){ location.href=go; },360); }
     lastLang=now;
   });
+})();
+
+/* 전시 전경 캐러셀 — 스크롤 위치로 현재 장 계산, 점·카운터 갱신. 탭하면 전체화면 */
+(function(){
+  var track = document.getElementById('vtrack');
+  if (!track) return;
+  var imgs = track.querySelectorAll('img');
+  var dotsBox = document.getElementById('vdots'), cnt = document.getElementById('vcnt');
+  var dots = [];
+  imgs.forEach(function(_, i){
+    var d = document.createElement('i'); dotsBox.appendChild(d); dots.push(d);
+  });
+  var cur = -1;
+  function update(){
+    var i = Math.round(track.scrollLeft / track.clientWidth);
+    i = Math.max(0, Math.min(imgs.length - 1, i));
+    if (i === cur) return;
+    cur = i;
+    cnt.textContent = (i + 1) + '/' + imgs.length;
+    dots.forEach(function(d, j){
+      var dist = Math.abs(j - i);
+      d.className = j === i ? 'on' : dist === 3 ? 'sm' : dist >= 4 ? 'xs' : '';
+    });
+  }
+  update();
+  track.addEventListener('scroll', function(){ requestAnimationFrame(update); }, {passive:true});
+  var vz = document.getElementById('vzoom'), vzi = document.getElementById('vzoomimg');
+  imgs.forEach(function(im){
+    im.addEventListener('click', function(){ vzi.src = im.src; vz.showModal(); });
+  });
+  vz.addEventListener('click', function(){ vz.close(); });
 })();
 </script>
 </body>
