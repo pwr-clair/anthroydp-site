@@ -137,6 +137,9 @@
 
   /* ZOOM 배지 — 제목 맨 앞. 흰 반투명 바탕 + 스위스 국기 빨강 볼드 */
   .badge.zoom{background:rgba(255,255,255,.8);color:#da291c;font-weight:800;margin:0 6px 0 0}
+  .zoombtn{display:inline-block;margin-top:12px;padding:9px 16px;border:0;border-radius:999px;background:#da291c;color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
+  .zoombtn:active{opacity:.85}
+  .zoombtn[hidden]{display:none}
 
   /* 섹션 간격 — 개막식↔프로그램, 프로그램↔폐막식만 절반으로 */
   #program, #closing{padding-top:28px}
@@ -301,6 +304,7 @@
   <a class="card cello" href="https://forms.gle/MWWiMaJCLCqVmhyL8" target="_blank" rel="noopener">
     <h3><span class="badge zoom">ZOOM</span>Virtual Performance: Working Together in Orange&rsquo;s Room</h3>
     <div class="meta">Sep 17 (Thu), 12:00 PM · Heesoo Kwon (Artist) × Juri Cho (Curator) · Zoom link to be shared</div>
+    <button type="button" class="zoombtn" id="zoomBtn" hidden>Join on ZOOM →</button>
   </a>
   <a class="card cello" href="https://forms.gle/3jTBzap37a5n7xvT8" target="_blank" rel="noopener">
     <h3>How Many Times Can a Place Be Read?</h3>
@@ -478,6 +482,24 @@ var BIOS = {
     lastLang=now;
   });
 })();
+
+  /* ZOOM 입장 버튼 — 9/17(목) 11:30~14:00 KST에만 표시. 당일 ZOOM_URL에 링크만 넣으면 됨(대기실·비번 없이 바로 입장). */
+  (function(){
+    var ZOOM_URL = '';
+    var OPEN  = Date.UTC(2026, 8, 17, 2, 30);   /* 2026-09-17 11:30 KST */
+    var CLOSE = Date.UTC(2026, 8, 17, 5, 0);    /* 2026-09-17 14:00 KST */
+    var btn = document.getElementById('zoomBtn');
+    if (!btn) return;
+    function tick(){
+      var now = Date.now();
+      btn.hidden = !(ZOOM_URL && now >= OPEN && now < CLOSE);
+    }
+    btn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      window.open(ZOOM_URL, '_blank', 'noopener');
+    });
+    tick(); setInterval(tick, 30000);
+  })();
 </script>
 </body>
 </html>
