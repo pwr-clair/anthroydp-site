@@ -22,6 +22,7 @@
     --red:#F0604A; --red-soft:rgba(240,96,74,.15);
     --pur:var(--red); --pur-soft:var(--red-soft);
     --gr:#1ED21E;  --gr-soft:rgba(30,210,30,.15);    /* 특이·요청·공유 전용 */
+    --rv:#B8655E;  --rv-soft:rgba(184,101,94,.18);   /* RSVP 탭 전용 — 채도 낮춘 죽은 빨강 */
     --grn:var(--red); --grn-ink:var(--red); --grn-soft:var(--red-soft);
     --blu:var(--red); --blu-soft:var(--red-soft);
     --num:ui-monospace,"SF Mono",Menlo,monospace;
@@ -83,7 +84,8 @@
   .views button{border:1px solid var(--line);background:var(--card);border-radius:999px;
     padding:7px 14px;font-size:13px;font-weight:800;color:var(--ink2)}
   .views button.on{border-color:var(--red);background:var(--red-soft);color:var(--red)}
-  .views button[data-v=rsvp]{color:var(--red);border-color:rgba(240,96,74,.4)} /* RSVP 탭은 평소에도 빨강 */
+  .views button[data-v=rsvp]{color:var(--rv);border-color:rgba(184,101,94,.45)}
+  .views button[data-v=rsvp].on{border-color:var(--rv);background:var(--rv-soft);color:var(--rv)}
   .views button[data-v=lucky]{color:var(--gr);border-color:rgba(30,210,30,.4)}
   .views button[data-v=lucky].on{border-color:var(--gr);background:var(--gr-soft);color:var(--gr)}
   /* 럭키드로우 — 이 페이지만 초록 강조 (특이·요청·공유와 같은 --gr) */
@@ -1908,7 +1910,7 @@ function renderRsvp(){
   if(!rvSel) rvSel=rvDefaultSes();
   const now=new Date(), nowK=todayKey+' '+pad(now.getHours())+':'+pad(now.getMinutes());
   const unk=rvEntries('unk');
-  const list=[...RV_SES, ...(unk.length?[RV_UNK]:[])];
+  const list=[...RV_SES.filter(x=>x.d>=todayKey), ...RV_SES.filter(x=>x.d<todayKey), ...(unk.length?[RV_UNK]:[])]; // 지난 프로그램은 뒤로
   $('rv-ses').innerHTML=list.map(x=>{
     const all=rvEntries(x.k), es=all.filter(e=>!e.out), outN=all.length-es.length, done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
     const past=!!x.d && x.d<todayKey;
