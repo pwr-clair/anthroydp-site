@@ -1905,7 +1905,7 @@ function renderRsvpStatus(){
   st.className='rv-st';
   const t=new Date(rvLoadedAt);
   const hid=Object.values(rvCache.hide||{}).filter(x=>x.ses===rvSel).length;
-  st.innerHTML = rvLoadedAt ? '시트 기준 '+pad(t.getHours())+':'+pad(t.getMinutes())+' · 총 접수 '+rvRows.length+'건 · <a href="'+RV_SHEET_URL+'" target="_blank" rel="noopener">시트 열기 ↗</a>'
+  st.innerHTML = rvLoadedAt ? '시트 기준 '+pad(t.getHours())+':'+pad(t.getMinutes())+' · 시트 접수 '+rvRows.length+'건 · <a href="'+RV_SHEET_URL+'" target="_blank" rel="noopener">시트 열기 ↗</a>'
     +(hid&&canRvDel()?' · 지운 접수 '+hid+'건 <span class="undo" data-rvundo="1">되돌리기</span>':'') : '';
 }
 function renderRsvp(){
@@ -1921,7 +1921,8 @@ function renderRsvp(){
       +'<i>'+(all.length?done+'/'+es.length+'팀 · '+ppl+'명'+(yesN?' · 예정 '+yesN:'')+(outN?' · 불참 '+outN:''):'접수 없음')+'</i></button>';
   }).join('');
   const onBtn=$('rv-ses').querySelector('button.on'); if(onBtn&&onBtn.scrollIntoView) onBtn.scrollIntoView({block:'nearest',inline:'center'});
-  const tot=rvRows.reduce((a,e)=>a+e.n,0); $('rv-tot').textContent = rvRows.length ? '전체 '+rvRows.length+'건 · '+tot+'명' : '';
+  const live=RV_SES.concat([RV_UNK]).flatMap(x=>rvEntries(x.k)).filter(e=>!e.out), tot=live.reduce((a,e)=>a+e.n,0);
+  $('rv-tot').textContent = live.length ? '전체 '+live.length+'팀 · '+tot+'명' : '';
   /* 명단 */
   const ses=rvSesOf(rvSel), es=rvEntries(rvSel), q=String($('rv-q').value||'').trim(), qd=rvDigits(q), qn=rvNormName(q);
   const act=es.filter(e=>!e.out), outs=es.filter(e=>e.out), outPpl=outs.reduce((a,e)=>a+e.n,0);
