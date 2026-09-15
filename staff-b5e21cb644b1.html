@@ -22,7 +22,7 @@
     --red:#F0604A; --red-soft:rgba(240,96,74,.15);
     --pur:var(--red); --pur-soft:var(--red-soft);
     --gr:#1ED21E;  --gr-soft:rgba(30,210,30,.15);    /* 특이·요청·공유 전용 */
-    --rv:#B8655E;  --rv-soft:rgba(184,101,94,.18);   /* RSVP 탭 전용 — 채도 낮춘 죽은 빨강 */
+    --past:#8A2A22; --past-bg:#2a100e;               /* RSVP 지난 프로그램 칩 — 진하고 어두운 빨강 */
     --grn:var(--red); --grn-ink:var(--red); --grn-soft:var(--red-soft);
     --blu:var(--red); --blu-soft:var(--red-soft);
     --num:ui-monospace,"SF Mono",Menlo,monospace;
@@ -84,8 +84,7 @@
   .views button{border:1px solid var(--line);background:var(--card);border-radius:999px;
     padding:7px 14px;font-size:13px;font-weight:800;color:var(--ink2)}
   .views button.on{border-color:var(--red);background:var(--red-soft);color:var(--red)}
-  .views button[data-v=rsvp]{color:var(--rv);border-color:rgba(184,101,94,.45)}
-  .views button[data-v=rsvp].on{border-color:var(--rv);background:var(--rv-soft);color:var(--rv)}
+  .views button[data-v=rsvp]{color:var(--red);border-color:rgba(240,96,74,.4)} /* RSVP 탭은 평소에도 빨강 */
   .views button[data-v=lucky]{color:var(--gr);border-color:rgba(30,210,30,.4)}
   .views button[data-v=lucky].on{border-color:var(--gr);background:var(--gr-soft);color:var(--gr)}
   /* 럭키드로우 — 이 페이지만 초록 강조 (특이·요청·공유와 같은 --gr) */
@@ -102,7 +101,10 @@
   .rv-ses button i{display:block;font-style:normal;font-family:var(--num);font-size:10.5px;color:var(--ink3);margin-top:3px}
   .rv-ses button.on{border-color:var(--red);background:var(--red-soft);color:var(--ink)}
   .rv-ses button.on b,.rv-ses button.on i{color:var(--red)}
-  .rv-ses button.past{opacity:.55}
+  .rv-ses button.past{background:var(--past-bg);border-color:var(--past);color:#b9827c}
+  .rv-ses button.past b,.rv-ses button.past i{color:#a5443b}
+  .rv-ses button.past.on{border-color:var(--red);background:#4a1712;color:var(--ink)}
+  .rv-ses button.past.on b,.rv-ses button.past.on i{color:var(--red)}
   .rv-flow{font-size:12.5px;font-weight:700;color:var(--red);margin:8px 2px 0;line-height:1.6;word-break:keep-all}
   .rv-st{font-size:12px;color:var(--ink3);margin:6px 2px 0;line-height:1.6;word-break:keep-all}
   .rv-st.err{color:var(--red);font-weight:700}
@@ -124,7 +126,7 @@
   #rv-list .item.done .nm{color:var(--red)}
   #rv-list .item.done .n{background:rgba(0,0,0,.35);color:var(--red)}
   #rv-list .item .rv-out{flex:none;border:1px solid var(--line);background:none;color:var(--ink3);border-radius:999px;font-size:11px;font-weight:800;padding:2px 9px;line-height:1.5}
-  #rv-list .item .rv-out.on{border-color:var(--rv);color:var(--rv);background:var(--rv-soft)}
+  #rv-list .item .rv-out.on{border-color:var(--red);color:var(--red);background:var(--red-soft)}
   #rv-list .item.out{opacity:.55}
   #rv-list .item.out .nm{text-decoration:line-through;color:var(--ink3)}
   #rv-list .item.out .n{background:var(--well);color:var(--ink3)}
