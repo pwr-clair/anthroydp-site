@@ -21,7 +21,6 @@
     /* 단색(빨강). 포스터 나머지 색 변수는 빨강으로 접어 사용처를 일괄 전환 */
     --red:#F0604A; --red-soft:rgba(240,96,74,.15);
     --pur:var(--red); --pur-soft:var(--red-soft);
-    --vio:#7D6DF2; --vio-soft:rgba(125,109,242,.16); /* 출결 탭 전용 — 여기 말고는 쓰지 않는다 */
     --gr:#1ED21E;  --gr-soft:rgba(30,210,30,.15);    /* 특이·요청·공유 전용 */
     --grn:var(--red); --grn-ink:var(--red); --grn-soft:var(--red-soft);
     --blu:var(--red); --blu-soft:var(--red-soft);
@@ -84,8 +83,7 @@
   .views button{border:1px solid var(--line);background:var(--card);border-radius:999px;
     padding:7px 14px;font-size:13px;font-weight:800;color:var(--ink2)}
   .views button.on{border-color:var(--red);background:var(--red-soft);color:var(--red)}
-  .views button[data-v=att]{color:var(--vio);border-color:rgba(125,109,242,.4)}
-  .views button[data-v=att].on{border-color:var(--vio);background:var(--vio-soft);color:var(--vio)}
+  .views button[data-v=rsvp]{color:var(--red);border-color:rgba(240,96,74,.4)} /* RSVP 탭은 평소에도 빨강 */
   .views button[data-v=lucky]{color:var(--gr);border-color:rgba(30,210,30,.4)}
   .views button[data-v=lucky].on{border-color:var(--gr);background:var(--gr-soft);color:var(--gr)}
   /* 럭키드로우 — 이 페이지만 초록 강조 (특이·요청·공유와 같은 --gr) */
@@ -525,8 +523,8 @@
     <button data-v="week">주</button>
     <button data-v="month">월</button>
     <button data-v="att">출결</button>
-    <button data-v="rsvp">RSVP</button>
     <button data-v="lucky">럭키드로우</button>
+    <button data-v="rsvp">RSVP</button>
     <button data-v="sheet">근무일지</button>
     <button data-v="man">매뉴얼</button>
     <button data-v="onoff">전시장 온오프</button>
