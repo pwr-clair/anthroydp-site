@@ -121,6 +121,11 @@
   #rv-list .item.done .txt{text-decoration:none;color:inherit} /* 완료 항목 공통 취소선은 명단에 쓰지 않는다 */
   #rv-list .item.done .nm{color:var(--red)}
   #rv-list .item.done .n{background:rgba(0,0,0,.35);color:var(--red)}
+  #rv-list .item .rv-out{flex:none;border:1px solid var(--line);background:none;color:var(--ink3);border-radius:999px;font-size:11px;font-weight:800;padding:2px 9px;line-height:1.5}
+  #rv-list .item.out{opacity:.55}
+  #rv-list .item.out .nm{text-decoration:line-through;color:var(--ink3)}
+  #rv-list .item.out .n{background:var(--well);color:var(--ink3)}
+  #rv-list .item.out .rv-out{border-color:var(--red);color:var(--red)}
   #rv-list .item.hide{display:none}
   .rv-more{font-size:11px;font-weight:800;color:var(--ink3);text-align:center;padding:8px 0 0;letter-spacing:.06em;cursor:pointer}
   .lk-row1{display:flex;align-items:center;gap:10px;margin-top:12px}
@@ -1884,8 +1889,9 @@ const rvSesDate = x => x.d ? (+x.d.slice(5,7))+'/'+(+x.d.slice(8))+' '+DOW[parse
 function rvEntries(ses){
   const walk=Object.entries((rvCache.walk||{})).map(([id,w])=>({key:'w_'+id,ses:w.ses,name:w.name,p4:w.p4||'',n:w.n||1,walk:true,id}));
   const hide=rvCache.hide||{};
-  return [...rvRows,...walk].filter(e=>e.ses===ses && !hide[e.key]).map(e=>({...e,in:(rvCache.in||{})[e.key]||null}))
-    .sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+  const outs=rvCache.out||{};
+  return [...rvRows,...walk].filter(e=>e.ses===ses && !hide[e.key]).map(e=>({...e,in:(rvCache.in||{})[e.key]||null,out:outs[e.key]||null}))
+    .sort((a,b)=>(!!a.out-!!b.out) || a.name.localeCompare(b.name,'ko'));
 }
 function renderRsvpStatus(){
   const st=$('rv-st');
@@ -1904,26 +1910,28 @@ function renderRsvp(){
   const unk=rvEntries('unk');
   const list=[...RV_SES, ...(unk.length?[RV_UNK]:[])];
   $('rv-ses').innerHTML=list.map(x=>{
-    const es=rvEntries(x.k), done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
+    const all=rvEntries(x.k), es=all.filter(e=>!e.out), outN=all.length-es.length, done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
     const past=!!x.d && x.d<todayKey;
     return '<button data-rvses="'+x.k+'" class="'+(x.k===rvSel?'on':'')+(past?' past':'')+'"><b>'+esc(rvSesDate(x)||'—')+'</b>'+esc(x.s)
-      +'<i>'+(es.length?done+'/'+es.length+'팀 · '+ppl+'명':'접수 없음')+'</i></button>';
+      +'<i>'+(all.length?done+'/'+es.length+'팀 · '+ppl+'명'+(outN?' · 불참 '+outN:''):'접수 없음')+'</i></button>';
   }).join('');
   const onBtn=$('rv-ses').querySelector('button.on'); if(onBtn&&onBtn.scrollIntoView) onBtn.scrollIntoView({block:'nearest',inline:'center'});
   const tot=rvRows.reduce((a,e)=>a+e.n,0); $('rv-tot').textContent = rvRows.length ? '전체 '+rvRows.length+'건 · '+tot+'명' : '';
   /* 명단 */
   const ses=rvSesOf(rvSel), es=rvEntries(rvSel), q=String($('rv-q').value||'').trim(), qd=rvDigits(q), qn=rvNormName(q);
-  const done=es.filter(e=>e.in), ppl=es.reduce((a,e)=>a+e.n,0), inPpl=done.reduce((a,e)=>a+((e.in&&e.in.a)||e.n),0);
-  $('rv-cnt').innerHTML = es.length ? '입장 <b style="color:var(--red)">'+done.length+'</b>/'+es.length+'팀 · '+inPpl+'/'+ppl+'명'+(ses.k!=='unk'?' · 정원 '+RV_CAP:'') : '';
+  const act=es.filter(e=>!e.out), outs=es.filter(e=>e.out), outPpl=outs.reduce((a,e)=>a+e.n,0);
+  const done=act.filter(e=>e.in), ppl=act.reduce((a,e)=>a+e.n,0), inPpl=done.reduce((a,e)=>a+((e.in&&e.in.a)||e.n),0);
+  $('rv-cnt').innerHTML = es.length ? '입장 <b style="color:var(--red)">'+done.length+'</b>/'+act.length+'팀 · '+inPpl+'/'+ppl+'명'+(outs.length?' · 불참 '+outs.length+'팀 '+outPpl+'명':'')+(ses.k!=='unk'?' · 잔여 '+(RV_CAP-ppl):'') : '';
   const hit=e=>{ if(!q) return true; if(qd&&qd.length<=4&&e.p4&&e.p4.includes(qd)) return true; return !!qn && rvNormName(e.name).includes(qn); };
   const shown=es.filter(hit);
   $('rv-list').innerHTML = es.length ? (shown.length ? shown.map(e=>{
     const i=e.in;
-    return '<div class="item'+(i?' done':'')+(e.walk?' walk':'')+'" data-rvrow="'+e.key+'">'
-      +'<input type="checkbox" data-rvck="'+e.key+'"'+(i?' checked':'')+(canEdit()?'':' disabled')+'>'
+    return '<div class="item'+(i?' done':'')+(e.walk?' walk':'')+(e.out?' out':'')+'" data-rvrow="'+e.key+'">'
+      +'<input type="checkbox" data-rvck="'+e.key+'"'+(i?' checked':'')+(canEdit()&&!e.out?'':' disabled')+'>'
       +'<span class="txt"><span class="nm">'+esc(e.name)+'</span><span class="p4">'+(e.p4?'· '+esc(e.p4):'')+'</span>'
-      +(i?'<span class="sub">입장 '+esc(i.tm||'')+' · '+esc(i.by||'')+(i.a&&i.a!==e.n?' · 실제 '+i.a+'명':'')+'</span>':(e.walk?'<span class="sub">현장 접수</span>':''))+'</span>'
+      +(e.out?'<span class="sub">불참 '+esc(e.out.tm||'')+' · '+esc(e.out.by||'')+'</span>':i?'<span class="sub">입장 '+esc(i.tm||'')+' · '+esc(i.by||'')+(i.a&&i.a!==e.n?' · 실제 '+i.a+'명':'')+'</span>':(e.walk?'<span class="sub">현장 접수</span>':''))+'</span>'
       +'<span class="n" data-rvn="'+e.key+'" title="실제 입장 인원 수정">'+e.n+'명</span>'
+      +(canEdit()?(e.out?'<button class="rv-out" data-rvback="'+e.key+'">복귀</button>':'<button class="rv-out" data-rvout="'+e.key+'">불참</button>'):'')
       +(canRvDel()?'<button class="del" data-rvdel="'+e.key+'" title="접수 지우기">✕</button>':'')+'</div>';
   }).join('') : '<div class="empty">"'+esc(q)+'" 에 맞는 접수가 없어요 — 철자·뒷자리를 다시 확인하거나 아래 [현장 접수 추가]로 넣으세요</div>')
   : '<div class="empty">'+(rvErr?'':(rvBusy?'읽는 중…':'이 프로그램의 접수가 아직 없어요'))+'</div>';
@@ -1942,9 +1950,13 @@ $('rv-st').addEventListener('click',e=>{
 $('rv-list').addEventListener('click',e=>{
   if(!canEdit()) return;
   const d=e.target.dataset||{};
+  if(d.rvout){ const t=rvEntries(rvSel).find(x=>x.key===d.rvout); if(!t) return;
+    set(ref(db,'atc/cal/rsvp/out/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()});
+    if(t.in) remove(ref(db,'atc/cal/rsvp/in/'+t.key)); toast(t.name+' 불참'); return; }
+  if(d.rvback){ remove(ref(db,'atc/cal/rsvp/out/'+d.rvback)); toast('복귀'); return; }
   if(d.rvdel){ if(!canRvDel()) return; const t=rvEntries(rvSel).find(x=>x.key===d.rvdel); if(!t) return;
     if(!confirm(t.name+(t.p4?' ('+t.p4+')':'')+' 접수를 지울까요?')) return;
-    remove(ref(db,'atc/cal/rsvp/in/'+t.key));
+    remove(ref(db,'atc/cal/rsvp/in/'+t.key)); remove(ref(db,'atc/cal/rsvp/out/'+t.key));
     if(t.walk) remove(ref(db,'atc/cal/rsvp/walk/'+t.id));
     else set(ref(db,'atc/cal/rsvp/hide/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()}); /* 시트에는 남으므로 숨김으로 기록 */
     toast(t.name+' 지움'); return; }
@@ -1953,6 +1965,7 @@ $('rv-list').addEventListener('click',e=>{
     update(ref(db,'atc/cal/rsvp/in/'+d.rvn),{a:a>0?a:null}); return; }
   const row=e.target.closest('[data-rvrow]'); if(!row) return;
   const key=row.dataset.rvrow, cur=(rvCache.in||{})[key];
+  if((rvCache.out||{})[key]){ toast('불참 처리된 접수 — 복귀 후 체크하세요'); renderRsvp(); return; }
   if(cur){ if(e.target.tagName==='INPUT' || confirm('입장 체크를 해제할까요?')) remove(ref(db,'atc/cal/rsvp/in/'+key)); else renderRsvp(); }
   else set(ref(db,'atc/cal/rsvp/in/'+key),{by:myName(),tm:hhmm(),ts:Date.now(),ses:rvSel});
 });
