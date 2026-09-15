@@ -1777,11 +1777,12 @@ document.addEventListener('click',e=>{
 $('lk-guide-sec').querySelector('.sec-t').addEventListener('click',()=>$('lk-guide-sec').classList.toggle('open'));
 
 /* ── RSVP (크로스토크·폐막식 사전접수 확인) ──
-   명단 정본 = 접수 현황 구글 시트(RV_SHEET). 탭에 들어올 때마다 시트를 직접 읽는다(시트 공유가 '링크가 있는 모든 사용자 · 뷰어'여야 브라우저가 읽을 수 있다).
+   명단 정본 = 접수 현황 구글 시트(RV_SHEET)의 '접수' 탭 — 폼 응답을 gas-rsvp-sync.gs(Apps Script, 5분마다)가 모아 쓴다.
+   탭에 들어올 때마다 시트를 직접 읽는다(시트 공유가 '링크가 있는 모든 사용자 · 뷰어'여야 브라우저가 읽을 수 있다).
    저장하는 건 입장 체크(atc/cal/rsvp/in)와 현장 접수(atc/cal/rsvp/walk)뿐 — 전화번호는 뒷자리 4자리만 키에 쓴다. */
-const RV_SHEET_ID='1NwKQnk5UKuvRw8Jyzlqf0n2nmPCgo48_-yn4nHCd4w4', RV_GID='0';
+const RV_SHEET_ID='1NwKQnk5UKuvRw8Jyzlqf0n2nmPCgo48_-yn4nHCd4w4', RV_GID='0', RV_TAB='접수';
 const RV_SHEET_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/edit?gid='+RV_GID+'#gid='+RV_GID;
-const RV_CSV_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/gviz/tq?tqx=out:csv&gid='+RV_GID;
+const RV_CSV_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent(RV_TAB);
 const RV_CAP=15; // 프로그램 정원(선착순), 1회 최대 4명
 /* 프로그램 — 홈페이지 프로그램 카드와 같은 순서. kw = 시트 답변에서 프로그램을 알아내는 실마리(제목 조각·참여자 이름) */
 const RV_SES=[
@@ -1864,7 +1865,9 @@ async function rvLoad(force){
     if(!res.ok) throw new Error('HTTP '+res.status);
     const text=await res.text();
     if(/<html/i.test(text.slice(0,300))) throw new Error('시트가 공개(링크 공유)돼 있지 않아요');
-    rvRows=rvParse(rvCsv(text)); rvLoadedAt=Date.now();
+    const grid=rvCsv(text);
+    if(grid.length && /^폼$/.test(String(grid[0][0]||'').trim())) throw new Error("'"+RV_TAB+"' 탭이 아직 없어요 — 시트에서 Apps Script(gas-rsvp-sync.gs)의 installTrigger를 먼저 실행하세요");
+    rvRows=rvParse(grid); rvLoadedAt=Date.now();
   }catch(e){ rvErr=String(e&&e.message||e); }
   rvBusy=false; renderRsvp();
 }
