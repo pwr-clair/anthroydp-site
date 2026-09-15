@@ -93,6 +93,37 @@
   .lk input:focus-visible,.lk button:focus-visible,.lk textarea:focus-visible{outline-color:var(--gr)}
   .lk .add button{background:var(--gr-soft);color:var(--gr);border:1px solid rgba(30,210,30,.5)}
   /* 1행: 응모번호 + 등수 알약 / 2행: 계정명 + 추가. 앱 톤대로 반투명(soft) 바탕 + 초록 글자·테두리, 불투명 채움 금지 */
+  /* ── RSVP 탭 (크로스토크·폐막식 사전접수 확인) ── */
+  .rv-ses{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:2px 0 6px;margin-top:8px}
+  .rv-ses::-webkit-scrollbar{display:none}
+  .rv-ses button{flex:none;max-width:170px;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 11px 8px;
+    text-align:left;color:var(--ink2);font-size:12px;line-height:1.35;word-break:keep-all}
+  .rv-ses button b{display:block;font-family:var(--num);font-size:10.5px;font-weight:700;color:var(--ink3);margin-bottom:2px}
+  .rv-ses button i{display:block;font-style:normal;font-family:var(--num);font-size:10.5px;color:var(--ink3);margin-top:3px}
+  .rv-ses button.on{border-color:var(--red);background:var(--red-soft);color:var(--ink)}
+  .rv-ses button.on b,.rv-ses button.on i{color:var(--red)}
+  .rv-ses button.past{opacity:.55}
+  .rv-flow{font-size:12.5px;font-weight:700;color:var(--red);margin:8px 2px 0;line-height:1.6;word-break:keep-all}
+  .rv-st{font-size:12px;color:var(--ink3);margin:6px 2px 0;line-height:1.6;word-break:keep-all}
+  .rv-st.err{color:var(--red);font-weight:700}
+  .rv-st a{color:var(--red)}
+  .rv-add input.p4-in{flex:none;width:76px;font-family:var(--num);text-align:center}
+  .rv-add input.n-in{flex:none;width:52px;font-family:var(--num);text-align:center}
+  #rv-list{margin-top:6px}
+  #rv-list .item{align-items:center;padding:9px 2px;cursor:pointer}
+  #rv-list .item input[type=checkbox]{width:19px;height:19px;margin:0}
+  #rv-list .item input[type=checkbox]:checked::after{left:6px;top:2px;width:5px;height:10px}
+  #rv-list .item .nm{font-weight:700;font-size:14.5px;color:var(--ink)}
+  #rv-list .item .p4{font-family:var(--num);font-size:12px;color:var(--ink3);margin-left:6px;font-weight:600}
+  #rv-list .item .sub{display:block;font-size:10.5px;color:var(--ink3);font-family:var(--num);margin-top:1px}
+  #rv-list .item .n{flex:none;font-family:var(--num);font-size:11.5px;font-weight:800;border-radius:2px;padding:1px 7px;background:var(--well);color:var(--ink2)}
+  #rv-list .item.walk .n{background:var(--gr-soft);color:var(--gr)}
+  #rv-list .item.done{background:var(--red-soft);margin:0 -6px;padding-left:8px;padding-right:8px;border-radius:6px}
+  #rv-list .item.done .txt{text-decoration:none;color:inherit} /* 완료 항목 공통 취소선은 명단에 쓰지 않는다 */
+  #rv-list .item.done .nm{color:var(--red)}
+  #rv-list .item.done .n{background:rgba(0,0,0,.35);color:var(--red)}
+  #rv-list .item.hide{display:none}
+  .rv-more{font-size:11px;font-weight:800;color:var(--ink3);text-align:center;padding:8px 0 0;letter-spacing:.06em;cursor:pointer}
   .lk-row1{display:flex;align-items:center;gap:10px;margin-top:12px}
   .lk-row1 input.no-in{flex:none;width:88px;height:38px;border:1px solid var(--line);border-radius:4px;padding:0 10px;
     font-size:15px;font-family:var(--num);text-align:center;min-width:0}
@@ -494,6 +525,7 @@
     <button data-v="week">주</button>
     <button data-v="month">월</button>
     <button data-v="att">출결</button>
+    <button data-v="rsvp">RSVP</button>
     <button data-v="lucky">럭키드로우</button>
     <button data-v="sheet">근무일지</button>
     <button data-v="man">매뉴얼</button>
@@ -750,6 +782,33 @@
       <figure class="oo"><img loading="lazy" src="manual-assets/onoff-01.jpg" alt="전시장 온오프 매뉴얼 1 — 도어락·입구 스위치·입구가벽 조명"><figcaption>1 / 3</figcaption></figure>
       <figure class="oo"><img loading="lazy" src="manual-assets/onoff-02.jpg" alt="전시장 온오프 매뉴얼 2 — 연구노트 라이트·간판·레일 조명"><figcaption>2 / 3</figcaption></figure>
       <figure class="oo"><img loading="lazy" src="manual-assets/onoff-03.jpg" alt="전시장 온오프 매뉴얼 3 — 레일조명(상시)·연구노트 스탠드 주의"><figcaption>3 / 3</figcaption></figure>
+    </div>
+  </div>
+
+  <!-- RSVP (크로스토크·폐막식 사전접수 확인) — 명단은 접수 시트를 매번 직접 읽고, 입장 체크·현장 접수만 atc/cal/rsvp 에 저장 -->
+  <div class="page" data-page="rsvp">
+    <div class="sec">
+      <div class="sec-t">프로그램<span class="r" id="rv-tot"></span></div>
+      <div class="rv-ses" id="rv-ses"></div>
+    </div>
+    <div class="sec">
+      <div class="sec-t">접수자 확인<span class="r" id="rv-cnt"></span></div>
+      <div class="add"><input type="text" id="rv-q" placeholder="성함 또는 전화 뒷자리 4" autocomplete="off"><button type="button" id="rv-reload" title="시트 다시 읽기">↻</button></div>
+      <p class="rv-flow">*성함과 전화번호 뒷자리 4자리를 여쭤보고 → 명단에서 찾아 체크 → 인원수 확인</p>
+      <div class="rv-st" id="rv-st"></div>
+      <div id="rv-list"></div>
+    </div>
+    <div class="sec fold" id="rv-walk-sec">
+      <div class="sec-t"><i class="tri">▶</i>현장 접수 추가<span class="r">사전신청 없이 오신 분</span></div>
+      <div class="fold-b">
+        <div class="add rv-add">
+          <input type="text" id="rv-w-name" placeholder="성함" autocomplete="off">
+          <input type="text" class="p4-in" id="rv-w-p4" placeholder="뒷자리" inputmode="numeric" maxlength="4">
+          <input type="text" class="n-in" id="rv-w-n" placeholder="명" inputmode="numeric" value="1">
+          <button type="button" id="rv-w-btn">추가</button>
+        </div>
+        <div class="empty">선택한 프로그램에 바로 입장 처리됩니다. 잘못 넣었으면 명단의 ✕로 지우세요.</div>
+      </div>
     </div>
   </div>
 
@@ -1190,6 +1249,7 @@ function startListeners(){
   onValue(ref(db,'atc/cal/team'),  s=>{teamCache=s.val();renderTeam();});
   onValue(ref(db,'atc/cal/report'),s=>{rpCache=s.val()||{};renderRp();if(curView==='month')renderMonth();});
   onValue(ref(db,'atc/cal/lucky'), s=>{lkCache=s.val()||{};if(curView==='lucky')renderLucky();});
+  onValue(ref(db,'atc/cal/rsvp'),  s=>{rvCache=s.val()||{};if(curView==='rsvp')renderRsvp();});
   onValue(ref(db,'atc/cal/meal'),  s=>{mealCache=s.val()||{};renderAtt();});
 }
 function listenEx(dateKey){
@@ -1204,7 +1264,8 @@ function switchView(v){
   document.querySelectorAll('.views button[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.dataset.page===v));
   if(v==='sheet'){ $('sheet-open').href=SHEET_URL; renderWorklog(); }
-  if(v==='lucky'){ $('lk-guide-sec').classList.remove('open'); renderLucky(); } /* 안내문은 탭에 들어올 때마다 닫힌 상태로 — 열어야만 보인다 */
+  if(v==='lucky'){ $('lk-guide-sec').classList.remove('open'); renderLucky(); }
+  if(v==='rsvp'){ renderRsvp(); rvLoad(false); } /* 안내문은 탭에 들어올 때마다 닫힌 상태로 — 열어야만 보인다 */
   renderAll();
 }
 document.querySelectorAll('.views button[data-v]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.v)));
@@ -1714,6 +1775,180 @@ document.addEventListener('click',e=>{
   if(d.lkdel){ if(confirm('삭제할까요?')) remove(ref(db,'atc/cal/lucky/'+d.lkdel)); }
 });
 $('lk-guide-sec').querySelector('.sec-t').addEventListener('click',()=>$('lk-guide-sec').classList.toggle('open'));
+
+/* ── RSVP (크로스토크·폐막식 사전접수 확인) ──
+   명단 정본 = 접수 현황 구글 시트(RV_SHEET). 탭에 들어올 때마다 시트를 직접 읽는다(시트 공유가 '링크가 있는 모든 사용자 · 뷰어'여야 브라우저가 읽을 수 있다).
+   저장하는 건 입장 체크(atc/cal/rsvp/in)와 현장 접수(atc/cal/rsvp/walk)뿐 — 전화번호는 뒷자리 4자리만 키에 쓴다. */
+const RV_SHEET_ID='1NwKQnk5UKuvRw8Jyzlqf0n2nmPCgo48_-yn4nHCd4w4', RV_GID='0';
+const RV_SHEET_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/edit?gid='+RV_GID+'#gid='+RV_GID;
+const RV_CSV_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/gviz/tq?tqx=out:csv&gid='+RV_GID;
+const RV_CAP=15; // 프로그램 정원(선착순), 1회 최대 4명
+/* 프로그램 — 홈페이지 프로그램 카드와 같은 순서. kw = 시트 답변에서 프로그램을 알아내는 실마리(제목 조각·참여자 이름) */
+const RV_SES=[
+  {k:'ct1',d:'2026-09-16',tm:'18:00',t:'클릭! 영등포 테크노 엇박자와 낙서의 영혼',s:'클릭! 영등포 테크노',kw:['클릭','테크노','낙서','김재민이','정다혜']},
+  {k:'ct2',d:'2026-09-16',tm:'19:00',t:'온 보드 — 불러보지 못한 이름과 열어보지 못한 기억을 항해하기',s:'온 보드',kw:['온 보드','온보드','불러보지','항해','최가영']},
+  {k:'ct3',d:'2026-09-17',tm:'12:00',t:'버추얼 퍼포먼스: 오렌지 방과 함께 일하기 (ZOOM)',s:'오렌지 방 (ZOOM)',kw:['오렌지','버추얼','권희수','zoom','줌']},
+  {k:'ct4',d:'2026-09-18',tm:'17:00',t:'장소는 몇 번이나 읽힐 수 있을까?',s:'장소는 몇 번이나',kw:['장소는','몇 번이나','읽힐','주슬아','임석호']},
+  {k:'ct5',d:'2026-09-18',tm:'18:00',t:'위성적 우려가 도착하기 전에',s:'위성적 우려',kw:['위성','반재하','소피']},
+  {k:'ct6',d:'2026-09-19',tm:'15:00',t:'날아가는 골프공을 어떻게 볼 수 있을까?',s:'날아가는 골프공',kw:['골프','장영해','양효실']},
+  {k:'ct7',d:'2026-09-19',tm:'16:00',t:'엇갈리는 진술: 사물, 기술, 신체, 장소',s:'엇갈리는 진술',kw:['엇갈리','진술','조영각','김시흔']},
+  {k:'ct8',d:'2026-09-20',tm:'18:00',t:'연구를 연구하기',s:'연구를 연구하기',kw:['연구를 연구','연구노트','이연지']},
+  {k:'cl', d:'2026-09-20',tm:'19:00',t:'폐막식 「D.C: 맨 처음으로 다시」',s:'폐막식',kw:['폐막','d.c','맨 처음','다시']},
+];
+const RV_UNK={k:'unk',d:'',tm:'',t:'프로그램 미확인 — 시트의 답변에서 프로그램을 알아내지 못한 접수',s:'미확인'};
+let rvRows=[], rvCache={}, rvSel=null, rvLoadedAt=0, rvErr='', rvBusy=false;
+const rvNormName = s => String(s||'').replace(/\s+/g,'').trim();
+const rvHex = s => Array.from(new TextEncoder().encode(s)).map(x=>x.toString(16).padStart(2,'0')).join('');
+const rvKey = (ses,name,p4) => ses+'_'+(p4||'0000')+'_'+rvHex(rvNormName(name));
+const rvDigits = s => String(s||'').replace(/\D/g,'');
+/* CSV(따옴표·줄바꿈 포함) → 2차원 배열 */
+function rvCsv(text){
+  const rows=[]; let row=[], cell='', q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cell+='"';i++;} else q=false; } else cell+=c; }
+    else if(c==='"') q=true;
+    else if(c===','){ row.push(cell); cell=''; }
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n') i++; row.push(cell); rows.push(row); row=[]; cell=''; }
+    else cell+=c;
+  }
+  if(cell!==''||row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r=>r.some(x=>String(x).trim()));
+}
+/* 답변 문구·날짜·시간에서 프로그램 찾기 */
+function rvDetectSes(text){
+  const s=String(text||'').toLowerCase();
+  if(!s) return null;
+  const hit=RV_SES.filter(x=>x.kw.some(w=>s.includes(w.toLowerCase())));
+  if(hit.length===1) return hit[0].k;
+  if(hit.length>1){ const t=hit.find(x=>s.includes(x.tm)||s.includes(String(+x.tm.slice(0,2))+'시')); return (t||hit[0]).k; }
+  const m=s.match(/(?:^|\D)0?9\s*[./월\-]\s*(1[6-9]|20)(?!\d)/);   // 9. 16 / 9/16 / 9월 16 / 09-16
+  if(m){ const day=RV_SES.filter(x=>x.d.endsWith('-'+m[1]));
+    const t=day.find(x=>s.includes(x.tm)||s.includes(String(+x.tm.slice(0,2))+'시')); if(t) return t.k;
+    if(day.length===1) return day[0].k; }
+  return null;
+}
+/* 헤더로 열을 찾고, 못 찾으면 셀 내용으로 짐작한다(폼 응답 시트 = 타임스탬프 · 성함 · 연락처 · 인원 · 프로그램 …) */
+function rvParse(rows){
+  if(!rows.length) return [];
+  const head=rows[0].map(h=>String(h).toLowerCase());
+  const col=(re,not)=>head.findIndex(h=>re.test(h)&&!(not&&not.test(h)));
+  const cName=col(/성함|성명|이름|name/), cPhone=col(/전화|연락|휴대|핸드폰|phone|hp/), cN=col(/인원|명수|몇 명|people|count/,/전화|연락/),
+        cSes=col(/프로그램|세션|크로스토크|회차|program|session/);
+  const out=[];
+  rows.slice(1).forEach((r,ri)=>{
+    const cells=r.map(x=>String(x).trim());
+    let name = cName>=0 ? cells[cName] : (cells.find(c=>/^[가-힣]{2,6}$/.test(c)) || cells.find(c=>/^[A-Za-z][A-Za-z .'\-]{1,30}$/.test(c)&&!/^(yes|no|zoom)$/i.test(c)) || '');
+    name=rvNormName(name);
+    const phone = cPhone>=0 ? cells[cPhone] : (cells.find(c=>/^0?1[016789]\d{7,8}$/.test(rvDigits(c))) || '');
+    let p4 = rvDigits(phone).slice(-4);
+    if(!p4){ const c4=cells.find(c=>/^\d{4}$/.test(c)); if(c4) p4=c4; }
+    let n = cN>=0 ? parseInt(rvDigits(cells[cN]),10) : NaN;
+    if(!(n>0)){ const after=Math.max(cName,cPhone,0); const c=cells.slice(after+1).find(x=>/^[1-9]\s*명?$/.test(x)); n=c?parseInt(c,10):1; }
+    n=Math.min(Math.max(n,1),9);
+    let ses = cSes>=0 ? rvDetectSes(cells[cSes]) : null;
+    if(!ses) ses=rvDetectSes(cells.join(' | '));
+    if(!name && !p4) return;
+    if(!name) name='(이름 없음)';
+    out.push({key:rvKey(ses||'unk',name,p4),ses:ses||'unk',name,p4,n,row:ri+2});
+  });
+  /* 같은 프로그램에 같은 사람이 두 번 접수했으면 나중 접수(아래 행) 기준 */
+  const map={}; out.forEach(e=>{ map[e.key]=e; });
+  return Object.values(map);
+}
+async function rvLoad(force){
+  if(rvBusy) return; if(!force && Date.now()-rvLoadedAt<20000) return;
+  rvBusy=true; rvErr=''; renderRsvpStatus();
+  try{
+    const res=await fetch(RV_CSV_URL+'&_='+Date.now(),{cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const text=await res.text();
+    if(/<html/i.test(text.slice(0,300))) throw new Error('시트가 공개(링크 공유)돼 있지 않아요');
+    rvRows=rvParse(rvCsv(text)); rvLoadedAt=Date.now();
+  }catch(e){ rvErr=String(e&&e.message||e); }
+  rvBusy=false; renderRsvp();
+}
+function rvSesOf(k){ return RV_SES.find(x=>x.k===k)||RV_UNK; }
+function rvDefaultSes(){
+  const now=new Date(), h=now.getHours(), hm=pad(h)+':'+pad(now.getMinutes());
+  /* 오늘 프로그램 중 아직 끝나지 않은 것(시작 후 1시간까지) → 다음 날짜의 첫 프로그램 → 마지막 */
+  const cut=pad(Math.max(h-1,0))+hm.slice(2);
+  const up=RV_SES.find(x=>x.d>todayKey || (x.d===todayKey && x.tm>=cut));
+  return (up||RV_SES[RV_SES.length-1]).k;
+}
+const rvSesDate = x => x.d ? (+x.d.slice(5,7))+'/'+(+x.d.slice(8))+' '+DOW[parseKey(x.d).getDay()]+' '+x.tm : '';
+/* 화면 명단 = 시트 접수 + 현장 접수(walk), 체크 상태는 in/{key} */
+function rvEntries(ses){
+  const walk=Object.entries((rvCache.walk||{})).map(([id,w])=>({key:'w_'+id,ses:w.ses,name:w.name,p4:w.p4||'',n:w.n||1,walk:true,id}));
+  return [...rvRows,...walk].filter(e=>e.ses===ses).map(e=>({...e,in:(rvCache.in||{})[e.key]||null}))
+    .sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+}
+function renderRsvpStatus(){
+  const st=$('rv-st');
+  if(rvBusy&&!rvRows.length){ st.className='rv-st'; st.textContent='접수 시트 읽는 중…'; return; }
+  if(rvErr){ st.className='rv-st err'; st.innerHTML='접수 시트를 읽지 못했어요 ('+esc(rvErr)+'). 시트 공유가 <b>링크가 있는 모든 사용자 · 뷰어</b>인지 확인하세요 — <a href="'+RV_SHEET_URL+'" target="_blank" rel="noopener">시트 열기 ↗</a>'; return; }
+  st.className='rv-st';
+  const t=new Date(rvLoadedAt);
+  st.innerHTML = rvLoadedAt ? '시트 기준 '+pad(t.getHours())+':'+pad(t.getMinutes())+' · 총 접수 '+rvRows.length+'건 · <a href="'+RV_SHEET_URL+'" target="_blank" rel="noopener">시트 열기 ↗</a>' : '';
+}
+function renderRsvp(){
+  if(curView!=='rsvp') return;
+  if(!rvSel) rvSel=rvDefaultSes();
+  const now=new Date(), nowK=todayKey+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  const unk=rvEntries('unk');
+  const list=[...RV_SES, ...(unk.length?[RV_UNK]:[])];
+  $('rv-ses').innerHTML=list.map(x=>{
+    const es=rvEntries(x.k), done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
+    const past=!!x.d && x.d<todayKey;
+    return '<button data-rvses="'+x.k+'" class="'+(x.k===rvSel?'on':'')+(past?' past':'')+'"><b>'+esc(rvSesDate(x)||'—')+'</b>'+esc(x.s)
+      +'<i>'+(es.length?done+'/'+es.length+'팀 · '+ppl+'명':'접수 없음')+'</i></button>';
+  }).join('');
+  const onBtn=$('rv-ses').querySelector('button.on'); if(onBtn&&onBtn.scrollIntoView) onBtn.scrollIntoView({block:'nearest',inline:'center'});
+  const tot=rvRows.reduce((a,e)=>a+e.n,0); $('rv-tot').textContent = rvRows.length ? '전체 '+rvRows.length+'건 · '+tot+'명' : '';
+  /* 명단 */
+  const ses=rvSesOf(rvSel), es=rvEntries(rvSel), q=String($('rv-q').value||'').trim(), qd=rvDigits(q), qn=rvNormName(q);
+  const done=es.filter(e=>e.in), ppl=es.reduce((a,e)=>a+e.n,0), inPpl=done.reduce((a,e)=>a+((e.in&&e.in.a)||e.n),0);
+  $('rv-cnt').innerHTML = es.length ? '입장 <b style="color:var(--red)">'+done.length+'</b>/'+es.length+'팀 · '+inPpl+'/'+ppl+'명'+(ses.k!=='unk'?' · 정원 '+RV_CAP:'') : '';
+  const hit=e=>{ if(!q) return true; if(qd&&qd.length<=4&&e.p4&&e.p4.includes(qd)) return true; return !!qn && rvNormName(e.name).includes(qn); };
+  const shown=es.filter(hit);
+  $('rv-list').innerHTML = es.length ? (shown.length ? shown.map(e=>{
+    const i=e.in;
+    return '<div class="item'+(i?' done':'')+(e.walk?' walk':'')+'" data-rvrow="'+e.key+'">'
+      +'<input type="checkbox" data-rvck="'+e.key+'"'+(i?' checked':'')+(canEdit()?'':' disabled')+'>'
+      +'<span class="txt"><span class="nm">'+esc(e.name)+'</span><span class="p4">'+(e.p4?'· '+esc(e.p4):'')+'</span>'
+      +(i?'<span class="sub">입장 '+esc(i.tm||'')+' · '+esc(i.by||'')+(i.a&&i.a!==e.n?' · 실제 '+i.a+'명':'')+'</span>':(e.walk?'<span class="sub">현장 접수</span>':''))+'</span>'
+      +'<span class="n" data-rvn="'+e.key+'" title="실제 입장 인원 수정">'+e.n+'명</span>'
+      +(e.walk&&canEdit()?'<button class="del" data-rvwdel="'+e.id+'">✕</button>':'')+'</div>';
+  }).join('') : '<div class="empty">"'+esc(q)+'" 에 맞는 접수가 없어요 — 철자·뒷자리를 다시 확인하거나 아래 [현장 접수 추가]로 넣으세요</div>')
+  : '<div class="empty">'+(rvErr?'':(rvBusy?'읽는 중…':'이 프로그램의 접수가 아직 없어요'))+'</div>';
+  renderRsvpStatus();
+}
+$('rv-ses').addEventListener('click',e=>{ const b=e.target.closest('button[data-rvses]'); if(!b) return; rvSel=b.dataset.rvses; $('rv-q').value=''; renderRsvp(); });
+$('rv-q').addEventListener('input',renderRsvp);
+$('rv-reload').addEventListener('click',()=>rvLoad(true));
+$('rv-list').addEventListener('click',e=>{
+  if(!canEdit()) return;
+  const d=e.target.dataset||{};
+  if(d.rvwdel){ if(confirm('현장 접수를 지울까요?')){ remove(ref(db,'atc/cal/rsvp/walk/'+d.rvwdel)); remove(ref(db,'atc/cal/rsvp/in/w_'+d.rvwdel)); } return; }
+  if(d.rvn){ const cur=(rvCache.in||{})[d.rvn]; if(!cur){ toast('먼저 입장 체크를 하세요'); return; }
+    const v=prompt('실제 입장 인원', cur.a||''); if(v===null) return; const a=parseInt(v,10);
+    update(ref(db,'atc/cal/rsvp/in/'+d.rvn),{a:a>0?a:null}); return; }
+  const row=e.target.closest('[data-rvrow]'); if(!row) return;
+  const key=row.dataset.rvrow, cur=(rvCache.in||{})[key];
+  if(cur){ if(e.target.tagName==='INPUT' || confirm('입장 체크를 해제할까요?')) remove(ref(db,'atc/cal/rsvp/in/'+key)); else renderRsvp(); }
+  else set(ref(db,'atc/cal/rsvp/in/'+key),{by:myName(),tm:hhmm(),ts:Date.now(),ses:rvSel});
+});
+$('rv-w-btn').addEventListener('click',()=>{
+  if(!canEdit()) return;
+  const name=rvNormName($('rv-w-name').value), p4=rvDigits($('rv-w-p4').value).slice(-4), n=Math.min(Math.max(parseInt($('rv-w-n').value,10)||1,1),9);
+  if(!name){ toast('성함을 입력하세요'); return; }
+  if(rvSel==='unk'){ toast('프로그램을 먼저 고르세요'); return; }
+  const r=push(ref(db,'atc/cal/rsvp/walk'),{ses:rvSel,name,p4,n,by:myName(),tm:hhmm(),ts:Date.now()});
+  set(ref(db,'atc/cal/rsvp/in/w_'+r.key),{by:myName(),tm:hhmm(),ts:Date.now(),ses:rvSel});
+  $('rv-w-name').value=''; $('rv-w-p4').value=''; $('rv-w-n').value='1'; toast(name+' 현장 접수 · 입장');
+});
+$('rv-walk-sec').querySelector('.sec-t').addEventListener('click',()=>$('rv-walk-sec').classList.toggle('open'));
+setInterval(()=>{ if(curView==='rsvp') rvLoad(false); },60000); // 탭을 열어 둔 동안 1분마다 시트 재확인
 
 /* ── 근무일지 (앱 내 입력 → 구글시트 전송) ── */
 $('go-wl').addEventListener('click',()=>switchView('sheet'));
