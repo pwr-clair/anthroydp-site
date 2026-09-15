@@ -74,7 +74,7 @@
   .card .meta{font-size:12.5px;color:var(--sub)}
   .card p{font-size:13px;color:var(--sub);margin-top:8px;word-break:keep-all}
 
-  a.card{position:relative;padding-right:44px}
+  a.card{position:relative;padding-right:44px;-webkit-user-drag:none;-webkit-user-select:text;user-select:text} /* 링크 카드 안 글자도 드래그로 선택·복사 가능하게 (링크 끌기 대신 글자 선택) */
   a.card::after{content:"↗";position:absolute;top:20px;right:18px;font-size:15px;font-weight:700;color:var(--accent2)}
   a.card:active{border-color:var(--accent2)}
   a.card.todo{border:1.5px dashed var(--todo);background:var(--todo-bg)}
@@ -290,7 +290,7 @@
 <section id="opening">
   <h2>OPENING</h2>
   <!-- 한글 페이지와 동일 폼 사용. RSVP 마감은 구글 폼에서 '응답 받기'를 끄면 방문자에게 마감 페이지가 뜬다 -->
-  <a class="card cello" href="https://forms.gle/3jpuDhaAFKGVBsLa7" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/3jpuDhaAFKGVBsLa7" target="_blank" rel="noopener" draggable="false">
     <h3>Opening Ceremony 〈Questioning Questions〉</h3>
     <div class="meta">Sep 1 (Tue), 4:00 PM · Exhibition venue</div>
     <p style="margin:9px 0 0;font-size:12px">As the exhibition space is limited, admission priority will be given to those who registered in advance.</p>
@@ -301,37 +301,37 @@
   <h2>EXTENDED PROGRAMS · CROSS TALK SERIES</h2>
   <p class="sectionnote">Tap a card to register.<br><strong style="color:var(--accent)">Each program seats 15 (first come, first served)</strong>, up to 4 people per registration. All programs are free.</p>
 
-  <a class="card cello" href="https://forms.gle/kSAgtHG3iK7CMWjR8" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/kSAgtHG3iK7CMWjR8" target="_blank" rel="noopener" draggable="false">
     <h3>Click! Rhythms of Yeongdeungpo Technoeotbak and the Soul of Street Scribbles</h3>
     <div class="meta">Sep 16 (Wed), 6:00 PM · Gemini Kim (Artist) × Dahye Jeong (Collaborator)</div>
   </a>
-  <a class="card cello" href="https://forms.gle/bbqGPKnuFb1zwNKBA" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/bbqGPKnuFb1zwNKBA" target="_blank" rel="noopener" draggable="false">
     <h3>On Board — Navigating Unspoken Names and Unopened Memories</h3>
     <div class="meta">Sep 16 (Wed), 7:00 PM · Kayoung Choi (Artist) × Sun Choi (Artist)</div>
   </a>
-  <a class="card cello" href="https://forms.gle/MWWiMaJCLCqVmhyL8" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/MWWiMaJCLCqVmhyL8" target="_blank" rel="noopener" draggable="false">
     <h3><span class="badge live" id="liveBadge" hidden>LIVE</span><span class="badge zoom">ZOOM</span>Virtual Performance: Working Together in Orange&rsquo;s Room</h3>
     <div class="meta">Sep 17 (Thu), 12:00 PM · Heesoo Kwon (Artist) × Juri Cho (Curator) · Zoom link to be shared</div>
     <button type="button" class="zoombtn" id="zoomBtn" hidden>Join on ZOOM →</button>
   </a>
-  <a class="card cello" href="https://forms.gle/3jTBzap37a5n7xvT8" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/3jTBzap37a5n7xvT8" target="_blank" rel="noopener" draggable="false">
     <h3>How Many Times Can a Place Be Read?</h3>
     <div class="meta">Sep 18 (Fri), 5:00 PM · Sla Joo (Artist) × Seokho Lim (Curator)</div>
   </a>
   <!-- TODO: 이 영문 제목은 한글 〈위성적 우려가 도착하기 전에〉의 임시 번역 — 확정 표기 확인 필요 -->
-  <a class="card cello" href="https://forms.gle/9h3y4DNPPfre9qNZ8" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/9h3y4DNPPfre9qNZ8" target="_blank" rel="noopener" draggable="false">
     <h3>Before Satellite Anxiety Arrives</h3>
     <div class="meta">Sep 18 (Fri), 6:00 PM · Jaeha Ban (Artist) × Yeonhee Sophie Kim (Researcher in Political Science and International Relations)</div>
   </a>
-  <a class="card cello" href="https://forms.gle/GDXfCvRxmWkD4iWG8" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/GDXfCvRxmWkD4iWG8" target="_blank" rel="noopener" draggable="false">
     <h3>How Can We See a Golf Ball in Flight?</h3>
     <div class="meta">Sep 19 (Sat), 3:00 PM · Chang Younghae (Artist) × Hyosil Yang (Aesthetician, Critic)</div>
   </a>
-  <a class="card cello" href="https://forms.gle/dVYAckTt3bYA1cX89" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/dVYAckTt3bYA1cX89" target="_blank" rel="noopener" draggable="false">
     <h3>Diverging Statements: Objects, Technology, Bodies, and Places</h3>
     <div class="meta">Sep 19 (Sat), 4:00 PM · Youngkak Cho (Artist) × Siheun Kim (Artist) × Che Go Eun (Artist)</div>
   </a>
-  <a class="card cello" href="https://forms.gle/6ZtvSm4JzybAvKAJ9" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/6ZtvSm4JzybAvKAJ9" target="_blank" rel="noopener" draggable="false">
     <h3>Researching Research</h3>
     <div class="meta">Sep 20 (Sun), 6:00 PM · Juri Cho (Curator) × Yeonji Lee (Editor)</div>
   </a>
@@ -344,7 +344,7 @@
 
 <section id="closing">
   <h2>CLOSING</h2>
-  <a class="card cello" href="https://forms.gle/JLT7e61i46Gpqabp7" target="_blank" rel="noopener">
+  <a class="card cello" href="https://forms.gle/JLT7e61i46Gpqabp7" target="_blank" rel="noopener" draggable="false">
     <h3>Closing Ceremony 〈D.C.: Back to the Very Beginning〉</h3>
     <div class="meta">Sep 20 (Sun), 7:00 PM · Exhibition venue</div>
   </a>
@@ -352,7 +352,7 @@
 
 <section id="survey">
   <!-- TODO: href에 설문 구글폼 URL -->
-  <a class="card cello survey" href="https://docs.google.com/forms/d/e/1FAIpQLScjfGYCNRYQOjMlvWNA849WHIdKwQ2iK6W7H5jqCf3pVVQnEA/viewform" target="_blank" rel="noopener">
+  <a class="card cello survey" href="https://docs.google.com/forms/d/e/1FAIpQLScjfGYCNRYQOjMlvWNA849WHIdKwQ2iK6W7H5jqCf3pVVQnEA/viewform" target="_blank" rel="noopener" draggable="false">
     <h3><span class="ex">Doing Anthropology: Are Humans We?</span> Visitor Survey</h3>
     <p>Visited the exhibition? Please take 3 minutes to share your thoughts.<br>Participants receive a 🇨🇭&nbsp;Swiss-made <strong>PIGRA&nbsp;pen</strong>.</p>
   </a>
