@@ -124,6 +124,7 @@
   #rv-list .item.done .nm{color:var(--red)}
   #rv-list .item.done .n{background:rgba(0,0,0,.35);color:var(--red)}
   #rv-list .item .rv-out{flex:none;border:1px solid var(--line);background:none;color:var(--ink3);border-radius:999px;font-size:11px;font-weight:800;padding:2px 9px;line-height:1.5}
+  #rv-list .item .rv-out.on{border-color:var(--rv);color:var(--rv);background:var(--rv-soft)}
   #rv-list .item.out{opacity:.55}
   #rv-list .item.out .nm{text-decoration:line-through;color:var(--ink3)}
   #rv-list .item.out .n{background:var(--well);color:var(--ink3)}
@@ -1891,8 +1892,8 @@ const rvSesDate = x => x.d ? (+x.d.slice(5,7))+'/'+(+x.d.slice(8))+' '+DOW[parse
 function rvEntries(ses){
   const walk=Object.entries((rvCache.walk||{})).map(([id,w])=>({key:'w_'+id,ses:w.ses,name:w.name,p4:w.p4||'',n:w.n||1,walk:true,id}));
   const hide=rvCache.hide||{};
-  const outs=rvCache.out||{};
-  return [...rvRows,...walk].filter(e=>e.ses===ses && !hide[e.key]).map(e=>({...e,in:(rvCache.in||{})[e.key]||null,out:outs[e.key]||null}))
+  const outs=rvCache.out||{}, yes=rvCache.yes||{};
+  return [...rvRows,...walk].filter(e=>e.ses===ses && !hide[e.key]).map(e=>({...e,in:(rvCache.in||{})[e.key]||null,out:outs[e.key]||null,yes:yes[e.key]||null}))
     .sort((a,b)=>(!!a.out-!!b.out) || a.name.localeCompare(b.name,'ko'));
 }
 function renderRsvpStatus(){
@@ -1912,10 +1913,10 @@ function renderRsvp(){
   const unk=rvEntries('unk');
   const list=[...RV_SES.filter(x=>x.d>=todayKey), ...RV_SES.filter(x=>x.d<todayKey), ...(unk.length?[RV_UNK]:[])]; // 지난 프로그램은 뒤로
   $('rv-ses').innerHTML=list.map(x=>{
-    const all=rvEntries(x.k), es=all.filter(e=>!e.out), outN=all.length-es.length, done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
+    const all=rvEntries(x.k), es=all.filter(e=>!e.out), outN=all.length-es.length, yesN=es.filter(e=>e.yes).length, done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
     const past=!!x.d && x.d<todayKey;
     return '<button data-rvses="'+x.k+'" class="'+(x.k===rvSel?'on':'')+(past?' past':'')+'"><b>'+esc(rvSesDate(x)||'—')+'</b>'+esc(x.s)
-      +'<i>'+(all.length?done+'/'+es.length+'팀 · '+ppl+'명'+(outN?' · 불참 '+outN:''):'접수 없음')+'</i></button>';
+      +'<i>'+(all.length?done+'/'+es.length+'팀 · '+ppl+'명'+(yesN?' · 예정 '+yesN:'')+(outN?' · 불참 '+outN:''):'접수 없음')+'</i></button>';
   }).join('');
   const onBtn=$('rv-ses').querySelector('button.on'); if(onBtn&&onBtn.scrollIntoView) onBtn.scrollIntoView({block:'nearest',inline:'center'});
   const tot=rvRows.reduce((a,e)=>a+e.n,0); $('rv-tot').textContent = rvRows.length ? '전체 '+rvRows.length+'건 · '+tot+'명' : '';
@@ -1923,7 +1924,8 @@ function renderRsvp(){
   const ses=rvSesOf(rvSel), es=rvEntries(rvSel), q=String($('rv-q').value||'').trim(), qd=rvDigits(q), qn=rvNormName(q);
   const act=es.filter(e=>!e.out), outs=es.filter(e=>e.out), outPpl=outs.reduce((a,e)=>a+e.n,0);
   const done=act.filter(e=>e.in), ppl=act.reduce((a,e)=>a+e.n,0), inPpl=done.reduce((a,e)=>a+((e.in&&e.in.a)||e.n),0);
-  $('rv-cnt').innerHTML = es.length ? '입장 <b style="color:var(--red)">'+done.length+'</b>/'+act.length+'팀 · '+inPpl+'/'+ppl+'명'+(outs.length?' · 불참 '+outs.length+'팀 '+outPpl+'명':'')+(ses.k!=='unk'?' · 잔여 '+(RV_CAP-ppl):'') : '';
+  const yes=act.filter(e=>e.yes), yesPpl=yes.reduce((a,e)=>a+e.n,0);
+  $('rv-cnt').innerHTML = es.length ? '입장 <b style="color:var(--red)">'+done.length+'</b>/'+act.length+'팀 · '+inPpl+'/'+ppl+'명'+(yes.length?' · 참석예정 '+yes.length+'팀 '+yesPpl+'명':'')+(outs.length?' · 불참 '+outs.length+'팀 '+outPpl+'명':'')+(ses.k!=='unk'?' · 잔여 '+(RV_CAP-ppl):'') : '';
   const hit=e=>{ if(!q) return true; if(qd&&qd.length<=4&&e.p4&&e.p4.includes(qd)) return true; return !!qn && rvNormName(e.name).includes(qn); };
   const shown=es.filter(hit);
   $('rv-list').innerHTML = es.length ? (shown.length ? shown.map(e=>{
@@ -1931,9 +1933,9 @@ function renderRsvp(){
     return '<div class="item'+(i?' done':'')+(e.walk?' walk':'')+(e.out?' out':'')+'" data-rvrow="'+e.key+'">'
       +'<input type="checkbox" data-rvck="'+e.key+'"'+(i?' checked':'')+(canEdit()&&!e.out?'':' disabled')+'>'
       +'<span class="txt"><span class="nm">'+esc(e.name)+'</span><span class="p4">'+(e.p4?'· '+esc(e.p4):'')+'</span>'
-      +(e.out?'<span class="sub">불참 '+esc(e.out.tm||'')+' · '+esc(e.out.by||'')+'</span>':i?'<span class="sub">입장 '+esc(i.tm||'')+' · '+esc(i.by||'')+(i.a&&i.a!==e.n?' · 실제 '+i.a+'명':'')+'</span>':(e.walk?'<span class="sub">현장 접수</span>':''))+'</span>'
+      +(e.out?'<span class="sub">불참 '+esc(e.out.tm||'')+' · '+esc(e.out.by||'')+'</span>':i?'<span class="sub">입장 '+esc(i.tm||'')+' · '+esc(i.by||'')+(i.a&&i.a!==e.n?' · 실제 '+i.a+'명':'')+'</span>':e.yes?'<span class="sub">참석예정 '+esc(e.yes.tm||'')+' · '+esc(e.yes.by||'')+'</span>':(e.walk?'<span class="sub">현장 접수</span>':''))+'</span>'
       +'<span class="n" data-rvn="'+e.key+'" title="실제 입장 인원 수정">'+e.n+'명</span>'
-      +(canEdit()?(e.out?'<button class="rv-out" data-rvback="'+e.key+'">복귀</button>':'<button class="rv-out" data-rvout="'+e.key+'">불참</button>'):'')
+      +(canEdit()?(e.out?'<button class="rv-out" data-rvback="'+e.key+'">복귀</button>':'<button class="rv-out'+(e.yes?' on':'')+'" data-rvyes="'+e.key+'">참석예정</button><button class="rv-out" data-rvout="'+e.key+'">불참</button>'):'')
       +(canRvDel()?'<button class="del" data-rvdel="'+e.key+'" title="접수 지우기">✕</button>':'')+'</div>';
   }).join('') : '<div class="empty">"'+esc(q)+'" 에 맞는 접수가 없어요 — 철자·뒷자리를 다시 확인하거나 아래 [현장 접수 추가]로 넣으세요</div>')
   : '<div class="empty">'+(rvErr?'':(rvBusy?'읽는 중…':'이 프로그램의 접수가 아직 없어요'))+'</div>';
@@ -1952,13 +1954,18 @@ $('rv-st').addEventListener('click',e=>{
 $('rv-list').addEventListener('click',e=>{
   if(!canEdit()) return;
   const d=e.target.dataset||{};
+  if(d.rvyes){ const t=rvEntries(rvSel).find(x=>x.key===d.rvyes); if(!t) return;
+    if(t.yes){ remove(ref(db,'atc/cal/rsvp/yes/'+t.key)); toast(t.name+' 참석예정 취소'); }
+    else { set(ref(db,'atc/cal/rsvp/yes/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()}); remove(ref(db,'atc/cal/rsvp/out/'+t.key)); toast(t.name+' 참석예정'); }
+    return; }
   if(d.rvout){ const t=rvEntries(rvSel).find(x=>x.key===d.rvout); if(!t) return;
     set(ref(db,'atc/cal/rsvp/out/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()});
+    remove(ref(db,'atc/cal/rsvp/yes/'+t.key));
     if(t.in) remove(ref(db,'atc/cal/rsvp/in/'+t.key)); toast(t.name+' 불참'); return; }
   if(d.rvback){ remove(ref(db,'atc/cal/rsvp/out/'+d.rvback)); toast('복귀'); return; }
   if(d.rvdel){ if(!canRvDel()) return; const t=rvEntries(rvSel).find(x=>x.key===d.rvdel); if(!t) return;
     if(!confirm(t.name+(t.p4?' ('+t.p4+')':'')+' 접수를 지울까요?')) return;
-    remove(ref(db,'atc/cal/rsvp/in/'+t.key)); remove(ref(db,'atc/cal/rsvp/out/'+t.key));
+    remove(ref(db,'atc/cal/rsvp/in/'+t.key)); remove(ref(db,'atc/cal/rsvp/out/'+t.key)); remove(ref(db,'atc/cal/rsvp/yes/'+t.key));
     if(t.walk) remove(ref(db,'atc/cal/rsvp/walk/'+t.id));
     else set(ref(db,'atc/cal/rsvp/hide/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()}); /* 시트에는 남으므로 숨김으로 기록 */
     toast(t.name+' 지움'); return; }
