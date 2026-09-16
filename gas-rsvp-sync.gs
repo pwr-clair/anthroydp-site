@@ -11,6 +11,7 @@
  *     프로그램별 탭: 성함·전화번호·이메일·인원·접수 시각·구분 (열을 통째로 긁어갈 수 있게)
  *     링크는 '접수' 탭 H3 셀에 적힌다. 소유자만 열 수 있다.
  * (3) 현장 접수 수신(doPost) — 운영인력 페이지에서 현장 접수를 추가하면 여기로 전송돼 '현장접수' 탭에 쌓이고 즉시 동기화된다.
+ *     앱에서 ✕로 지우면 walk_del 신호가 와서 같은 앱 키의 행을 지우고 다시 동기화한다.
  *     쓰려면 1회: 배포 > 새 배포 > 유형 '웹 앱' > 실행 '나' > 액세스 '모든 사용자' > 배포 → 웹 앱 URL을 페이지의 RV_GAS_URL에 넣는다.
  *
  * 처음 1회: installTrigger 실행(권한 승인) → 5분마다 자동 동기화 + 즉시 1회 실행.
@@ -29,13 +30,20 @@ var WHEN = {
   '07': '9/19(토) 16:00', '08': '9/20(일) 18:00', '폐막식': '9/20(일) 19:00'
 };
 
-/* 앱(운영인력 페이지)에서 오는 현장 접수 — {type:'walk', no, title, name, phone, n, by, key} */
+/* 앱(운영인력 페이지)에서 오는 현장 접수 — {type:'walk', no, title, name, phone, n, by, key} / 삭제 — {type:'walk_del', key} */
 function doPost(e) {
   var d = {};
   try { d = JSON.parse((e && e.postData && e.postData.contents) || '{}'); } catch (err) { return json_({ ok: false, err: 'bad json' }); }
-  if (d.type !== 'walk' || !d.name) return json_({ ok: false, err: 'bad payload' });
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = ss.getSheetByName(WALK_SHEET) || ss.insertSheet(WALK_SHEET);
+  if (d.type === 'walk_del') {                       // 앱에서 ✕로 지운 현장 접수 — '현장접수' 탭에서 같은 앱 키 행 삭제
+    if (!d.key) return json_({ ok: false, err: 'no key' });
+    var vals = sh.getDataRange().getValues(), removed = 0;
+    for (var i = vals.length - 1; i >= 1; i--) if (String(vals[i][7] || '') === String(d.key)) { sh.deleteRow(i + 1); removed++; }
+    try { if (removed) syncRsvp(); } catch (err) { return json_({ ok: true, removed: removed, synced: false, err: String(err) }); }
+    return json_({ ok: true, removed: removed, synced: removed > 0 });
+  }
+  if (d.type !== 'walk' || !d.name) return json_({ ok: false, err: 'bad payload' });
   if (sh.getLastRow() === 0) {
     sh.appendRow(['등록 시각', '폼 번호', '프로그램', '성함', '전화번호', '인원', '등록자', '앱 키']);
     sh.getRange(1, 1, 1, 8).setFontWeight('bold'); sh.setFrozenRows(1);
