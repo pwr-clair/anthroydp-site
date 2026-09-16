@@ -2003,6 +2003,7 @@ $('rv-w-btn').addEventListener('click',()=>{
   if(digits && digits.length<4){ toast('전화번호를 다시 확인하세요'); return; }
   if(rvSel==='unk'){ toast('프로그램을 먼저 고르세요'); return; }
   const key=rvKey(rvSel,name,p4); /* 시트 접수와 같은 키 — 나중에 시트에 올라와도 체크 기록이 이어진다 */
+  remove(ref(db,'atc/cal/rsvp/hide/'+key)); remove(ref(db,'atc/cal/rsvp/out/'+key)); /* 전에 지웠거나 불참 처리한 같은 사람이면 되살린다 */
   set(ref(db,'atc/cal/rsvp/walk/'+key),{ses:rvSel,name,p4,n,by:myName(),tm:hhmm(),ts:Date.now(),key});
   set(ref(db,'atc/cal/rsvp/in/'+key),{by:myName(),tm:hhmm(),ts:Date.now(),ses:rvSel});
   $('rv-w-name').value=''; $('rv-w-p4').value=''; $('rv-w-n').value='1'; toast(name+' 현장 접수 · 입장');
