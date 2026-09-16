@@ -1793,6 +1793,9 @@ const RV_SHEET_ID='1NwKQnk5UKuvRw8Jyzlqf0n2nmPCgo48_-yn4nHCd4w4', RV_GID='0', RV
 const RV_SHEET_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/edit?gid='+RV_GID+'#gid='+RV_GID;
 const RV_CSV_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent(RV_TAB);
 const RV_CAP=15; // 프로그램 정원(선착순), 1회 최대 4명
+/* 현장 접수 → 시트 전송: gas-rsvp-sync.gs를 웹 앱으로 배포한 URL. 비어 있으면 앱에만 남는다 */
+const RV_GAS_URL='';
+const RV_NO={ct1:'01',ct2:'02',ct3:'03',ct4:'04',ct5:'05',ct6:'06',ct7:'07',ct8:'08',cl:'폐막식'}; // 시트의 폼 번호
 /* 프로그램 — 홈페이지 프로그램 카드와 같은 순서. kw = 시트 답변에서 프로그램을 알아내는 실마리(제목 조각·참여자 이름) */
 const RV_SES=[
   {k:'ct1',d:'2026-09-16',tm:'18:00',t:'클릭! 영등포 테크노 엇박자와 낙서의 영혼',s:'클릭! 영등포 테크노',kw:['클릭','테크노','낙서','김재민이','정다혜']},
@@ -1892,7 +1895,9 @@ function rvDefaultSes(){
 const rvSesDate = x => x.d ? (+x.d.slice(5,7))+'/'+(+x.d.slice(8))+' '+DOW[parseKey(x.d).getDay()]+' '+x.tm : '';
 /* 화면 명단 = 시트 접수 + 현장 접수(walk), 체크 상태는 in/{key} */
 function rvEntries(ses){
-  const walk=Object.entries((rvCache.walk||{})).map(([id,w])=>({key:'w_'+id,ses:w.ses,name:w.name,p4:w.p4||'',n:w.n||1,walk:true,id}));
+  const sheetKeys=new Set(rvRows.map(e=>e.key));
+  const walk=Object.entries((rvCache.walk||{})).map(([id,w])=>({key:w.key||('w_'+id),ses:w.ses,name:w.name,p4:w.p4||'',n:w.n||1,walk:true,id}))
+    .filter(e=>!sheetKeys.has(e.key)); /* 시트(현장접수 탭 동기화)에 이미 올라간 현장 접수는 시트 행으로 보여준다 */
   const hide=rvCache.hide||{};
   const outs=rvCache.out||{}, yes=rvCache.yes||{};
   return [...rvRows,...walk].filter(e=>e.ses===ses && !hide[e.key]).map(e=>({...e,in:(rvCache.in||{})[e.key]||null,out:outs[e.key]||null,yes:yes[e.key]||null}))
@@ -1970,7 +1975,7 @@ $('rv-list').addEventListener('click',e=>{
     if(!confirm(t.name+(t.p4?' ('+t.p4+')':'')+' 접수를 지울까요?')) return;
     remove(ref(db,'atc/cal/rsvp/in/'+t.key)); remove(ref(db,'atc/cal/rsvp/out/'+t.key)); remove(ref(db,'atc/cal/rsvp/yes/'+t.key));
     if(t.walk) remove(ref(db,'atc/cal/rsvp/walk/'+t.id));
-    else set(ref(db,'atc/cal/rsvp/hide/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()}); /* 시트에는 남으므로 숨김으로 기록 */
+    if(!t.walk || !t.key.startsWith('w_')) set(ref(db,'atc/cal/rsvp/hide/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()}); /* 시트에는 남으므로 숨김으로 기록(시트로 간 현장 접수 포함) */
     toast(t.name+' 지움'); return; }
   if(d.rvn){ const cur=(rvCache.in||{})[d.rvn]; if(!cur){ toast('먼저 입장 체크를 하세요'); return; }
     const v=prompt('실제 입장 인원', cur.a||''); if(v===null) return; const a=parseInt(v,10);
@@ -1987,9 +1992,15 @@ $('rv-w-btn').addEventListener('click',()=>{
   if(!name){ toast('성함을 입력하세요'); return; }
   if(digits && digits.length<4){ toast('전화번호를 다시 확인하세요'); return; }
   if(rvSel==='unk'){ toast('프로그램을 먼저 고르세요'); return; }
-  const r=push(ref(db,'atc/cal/rsvp/walk'),{ses:rvSel,name,p4,n,by:myName(),tm:hhmm(),ts:Date.now()});
-  set(ref(db,'atc/cal/rsvp/in/w_'+r.key),{by:myName(),tm:hhmm(),ts:Date.now(),ses:rvSel});
+  const key=rvKey(rvSel,name,p4); /* 시트 접수와 같은 키 — 나중에 시트에 올라와도 체크 기록이 이어진다 */
+  set(ref(db,'atc/cal/rsvp/walk/'+key),{ses:rvSel,name,p4,n,by:myName(),tm:hhmm(),ts:Date.now(),key});
+  set(ref(db,'atc/cal/rsvp/in/'+key),{by:myName(),tm:hhmm(),ts:Date.now(),ses:rvSel});
   $('rv-w-name').value=''; $('rv-w-p4').value=''; $('rv-w-n').value='1'; toast(name+' 현장 접수 · 입장');
+  if(RV_GAS_URL){ /* 시트에도 기록 — 전화번호 전체는 시트(소유자 전용 발송용)로만 간다 */
+    fetch(RV_GAS_URL,{method:'POST',body:JSON.stringify({type:'walk',no:RV_NO[rvSel]||'',title:rvSesOf(rvSel).t,name,phone:digits,n,by:myName(),key})})
+      .then(r=>r.json()).then(j=>{ if(!j||!j.ok) throw new Error(j&&j.err||''); toast(name+' 시트 반영 완료'); })
+      .catch(()=>toast('시트 전송 실패 — 앱 명단에는 남아 있어요'));
+  }
 });
 $('rv-walk-sec').querySelector('.sec-t').addEventListener('click',()=>$('rv-walk-sec').classList.toggle('open'));
 setInterval(()=>{ if(curView==='rsvp') rvLoad(false); },60000); // 탭을 열어 둔 동안 1분마다 시트 재확인

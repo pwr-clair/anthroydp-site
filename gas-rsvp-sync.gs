@@ -1,23 +1,26 @@
 /**
- * 연계프로그램 접수 동기화 — 구글 폼 응답 → (1) '접수' 탭  (2) 발송용 비공개 시트
+ * 연계프로그램 접수 동기화 — 구글 폼 응답 + 앱 현장 접수 → (1) '접수' 탭  (2) 발송용 비공개 시트
  *
  * 붙이는 곳: "연계프로그램 신청자 현황" 스프레드시트 > 확장 프로그램 > Apps Script
- * 시트1(폼 목록)의 '링크' 열에 있는 폼을 하나씩 열어 응답을 읽는다.
+ * 시트1(폼 목록)의 '링크' 열에 있는 폼을 하나씩 열어 응답을 읽고, '현장접수' 탭(앱에서 들어온 현장 접수)을 합친다.
  *
  * (1) 이 시트의 '접수' 탭 — 운영인력 페이지(RSVP 탭)가 읽는 명단.
- *     [프로그램, 성함, 전화 뒷자리, 인원, 접수 시각, 응답 id]  ※ 전화는 뒷자리 4자리만 (시트가 링크 공유라서)
+ *     [프로그램, 성함, 전화 뒷자리, 인원, 접수 시각, 응답 id, 구분]  ※ 전화는 뒷자리 4자리만 (시트가 링크 공유라서)
  * (2) 발송용 시트 — 소유자 드라이브에 자동 생성되는 비공개 스프레드시트 ('연계프로그램 발송용 명단').
  *     '요약' 탭: 프로그램별 접수 팀·인원·정원 잔여·발송일 + 전화번호/이메일을 쉼표로 이어 붙인 셀(복사해서 문자·메일 수신자에 붙여넣기)
- *     프로그램별 탭: 성함·전화번호·이메일·인원·접수 시각 (열을 통째로 긁어갈 수 있게)
+ *     프로그램별 탭: 성함·전화번호·이메일·인원·접수 시각·구분 (열을 통째로 긁어갈 수 있게)
  *     링크는 '접수' 탭 H3 셀에 적힌다. 소유자만 열 수 있다.
+ * (3) 현장 접수 수신(doPost) — 운영인력 페이지에서 현장 접수를 추가하면 여기로 전송돼 '현장접수' 탭에 쌓이고 즉시 동기화된다.
+ *     쓰려면 1회: 배포 > 새 배포 > 유형 '웹 앱' > 실행 '나' > 액세스 '모든 사용자' > 배포 → 웹 앱 URL을 페이지의 RV_GAS_URL에 넣는다.
  *
  * 처음 1회: installTrigger 실행(권한 승인) → 5분마다 자동 동기화 + 즉시 1회 실행.
  * 수동 갱신: syncRsvp 실행.
  */
-var SRC_SHEET = '시트1';   // 폼 목록 탭 (A=폼 이름, D=링크)
-var OUT_SHEET = '접수';    // 앱용 결과 탭 (없으면 만든다)
+var SRC_SHEET = '시트1';     // 폼 목록 탭 (A=폼 이름, D=링크)
+var OUT_SHEET = '접수';      // 앱용 결과 탭 (없으면 만든다)
+var WALK_SHEET = '현장접수'; // 앱에서 들어온 현장 접수 (없으면 만든다)
 var OUT_BOOK_NAME = '연계프로그램 발송용 명단 (비공개)';
-var CAPACITY = 15;         // 프로그램 정원
+var CAPACITY = 15;           // 프로그램 정원
 
 /* 폼 이름 앞 번호 → 일시 (홈페이지 프로그램 카드 기준) */
 var WHEN = {
@@ -26,7 +29,33 @@ var WHEN = {
   '07': '9/19(토) 16:00', '08': '9/20(일) 18:00', '폐막식': '9/20(일) 19:00'
 };
 
+/* 앱(운영인력 페이지)에서 오는 현장 접수 — {type:'walk', no, title, name, phone, n, by, key} */
+function doPost(e) {
+  var d = {};
+  try { d = JSON.parse((e && e.postData && e.postData.contents) || '{}'); } catch (err) { return json_({ ok: false, err: 'bad json' }); }
+  if (d.type !== 'walk' || !d.name) return json_({ ok: false, err: 'bad payload' });
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(WALK_SHEET) || ss.insertSheet(WALK_SHEET);
+  if (sh.getLastRow() === 0) {
+    sh.appendRow(['등록 시각', '폼 번호', '프로그램', '성함', '전화번호', '인원', '등록자', '앱 키']);
+    sh.getRange(1, 1, 1, 8).setFontWeight('bold'); sh.setFrozenRows(1);
+    sh.getRange('E:E').setNumberFormat('@');
+  }
+  sh.appendRow([new Date(), String(d.no || ''), String(d.title || ''), String(d.name), String(d.phone || ''),
+                parseInt(d.n, 10) || 1, String(d.by || ''), String(d.key || '')]);
+  var r = sh.getLastRow(); sh.getRange(r, 5).setNumberFormat('@').setValue(String(d.phone || ''));
+  try { syncRsvp(); } catch (err) { return json_({ ok: true, synced: false, err: String(err) }); }
+  return json_({ ok: true, synced: true });
+}
+function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
 function syncRsvp() {
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(60000)) return;   // 트리거와 doPost가 겹치면 한 번만
+  try { syncRsvp_(); } finally { lock.releaseLock(); }
+}
+
+function syncRsvp_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var src = ss.getSheetByName(SRC_SHEET) || ss.getSheets()[0];
   var list = src.getDataRange().getValues().slice(1);
@@ -58,38 +87,56 @@ function syncRsvp() {
       if (!email) email = all.filter(function (v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim()); })[0] || '';
       if (!email) { try { email = resp.getRespondentEmail() || ''; } catch (e) {} }   // 폼의 '이메일 수집' 설정
       if (!name) name = all.filter(function (v) { return /^[가-힣]{2,6}$/.test(v.trim()); })[0] || '';
-      var digits = phone.replace(/\D/g, '');
-      if (/^1[016789]\d{7,8}$/.test(digits)) digits = '0' + digits;             // 시트에서 앞 0이 빠진 경우
-      var pretty = /^01\d{8,9}$/.test(digits) ? digits.replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3') : phone.trim();
-      prog.rows.push({
-        name: name.trim(), phone: pretty, digits: digits, p4: digits.slice(-4), email: email.trim().toLowerCase(),
-        n: parseInt(String(n).replace(/\D/g, ''), 10) || 1, ts: resp.getTimestamp(), id: resp.getId()
-      });
+      prog.rows.push(row_(name, phone, email, n, resp.getTimestamp(), resp.getId(), false));
     });
-    /* 같은 프로그램에 같은 사람(이름+전화)이 두 번 접수했으면 나중 접수 기준 — 앱과 같은 규칙 */
-    var seen = {};
-    prog.rows.sort(function (a, b) { return a.ts - b.ts; }).forEach(function (x) { seen[x.name.replace(/\s/g, '') + '|' + x.p4] = x; });
-    prog.rows = Object.keys(seen).map(function (k) { return seen[k]; }).sort(function (a, b) { return a.ts - b.ts; });
     programs.push(prog);
   });
 
+  /* 앱 현장 접수 합치기 — '현장접수' 탭 (폼 번호로 프로그램을 찾는다) */
+  var wsh = ss.getSheetByName(WALK_SHEET);
+  if (wsh && wsh.getLastRow() > 1) {
+    wsh.getDataRange().getValues().slice(1).forEach(function (r) {
+      var no = String(r[1] || '').trim(), prog = null;
+      for (var i = 0; i < programs.length; i++) if (programs[i].no === no) prog = programs[i];
+      if (!prog || !r[3]) return;
+      prog.rows.push(row_(String(r[3]), String(r[4] || ''), '', r[5], r[0] instanceof Date ? r[0] : new Date(), 'walk-' + String(r[7] || ''), true));
+    });
+  }
+
+  /* 같은 프로그램에 같은 사람(이름+전화)이 두 번 있으면 나중 것 기준 — 앱과 같은 규칙 */
+  programs.forEach(function (p) {
+    var seen = {};
+    p.rows.sort(function (a, b) { return a.ts - b.ts; }).forEach(function (x) { seen[x.name.replace(/\s/g, '') + '|' + x.p4] = x; });
+    p.rows = Object.keys(seen).map(function (k) { return seen[k]; }).sort(function (a, b) { return a.ts - b.ts; });
+  });
+
   /* (1) 앱용 '접수' 탭 — 뒷자리 4자리만 */
-  var out = [['프로그램', '성함', '전화 뒷자리', '인원', '접수 시각', '응답 id']];
-  programs.forEach(function (p) { p.rows.forEach(function (x) { out.push([p.title, x.name, x.p4, x.n, x.ts, x.id]); }); });
+  var out = [['프로그램', '성함', '전화 뒷자리', '인원', '접수 시각', '응답 id', '구분']];
+  programs.forEach(function (p) { p.rows.forEach(function (x) { out.push([p.title, x.name, x.p4, x.n, x.ts, x.id, x.walk ? '현장' : '']); }); });
   var sh = ss.getSheetByName(OUT_SHEET) || ss.insertSheet(OUT_SHEET);
   sh.clearContents();
   sh.getRange(1, 3, out.length, 1).setNumberFormat('@');      // 뒷자리가 0으로 시작해도 문자로 유지
   sh.getRange(1, 1, out.length, out[0].length).setValues(out);
   sh.getRange(1, 5, out.length, 1).setNumberFormat('yyyy-mm-dd hh:mm');
   var stamp = Utilities.formatDate(new Date(), 'Asia/Seoul', 'MM-dd HH:mm');
-  sh.getRange('H1').setValue('동기화 ' + stamp + (errors.length ? ' · 오류 ' + errors.length + '건' : ''));
-  sh.getRange('H2').setValue(errors.length ? errors.join('\n') : '');
+  sh.getRange('I1').setValue('동기화 ' + stamp + (errors.length ? ' · 오류 ' + errors.length + '건' : ''));
+  sh.getRange('I2').setValue(errors.length ? errors.join('\n') : '');
 
   /* (2) 발송용 비공개 시트 */
   var book = outBook_();
   writeSummary_(book, programs, stamp);
   programs.forEach(function (p) { writeProgram_(book, p); });
-  sh.getRange('H3').setValue('발송용 명단(비공개, 소유자만): ' + book.getUrl());
+  sh.getRange('I3').setValue('발송용 명단(비공개, 소유자만): ' + book.getUrl());
+}
+
+function row_(name, phone, email, n, ts, id, walk) {
+  var digits = String(phone || '').replace(/\D/g, '');
+  if (/^1[016789]\d{7,8}$/.test(digits)) digits = '0' + digits;             // 시트에서 앞 0이 빠진 경우
+  var pretty = /^01\d{8,9}$/.test(digits) ? digits.replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3') : String(phone || '').trim();
+  return {
+    name: String(name || '').trim(), phone: pretty, digits: digits, p4: digits.slice(-4), email: String(email || '').trim().toLowerCase(),
+    n: parseInt(String(n).replace(/\D/g, ''), 10) || 1, ts: ts, id: id, walk: !!walk
+  };
 }
 
 /* 발송용 시트 — 처음 실행 때 소유자 드라이브에 만들고 id를 기억한다 */
@@ -117,17 +164,18 @@ function sendDay_(when) {
 
 function writeSummary_(book, programs, stamp) {
   var s = sheetOf_(book, '요약');
-  var rows = [['프로그램', '일시', '발송일(전날)', '접수 팀', '인원 합계', '정원 잔여(' + CAPACITY + ')', '전화번호 목록 (복사용)', '이메일 목록 (복사용)']];
+  var rows = [['프로그램', '일시', '발송일(전날)', '접수 팀', '인원 합계', '정원 잔여(' + CAPACITY + ')', '전화번호 목록 (복사용)', '이메일 목록 (복사용)', '현장 접수']];
   programs.forEach(function (p) {
     var ppl = p.rows.reduce(function (a, x) { return a + x.n; }, 0);
+    var walk = p.rows.filter(function (x) { return x.walk; }).length;
     var phones = uniq_(p.rows.map(function (x) { return x.phone; }));
     var mails = uniq_(p.rows.map(function (x) { return x.email; }));
-    rows.push([p.title, p.when, sendDay_(p.when), p.rows.length, ppl, CAPACITY - ppl, phones.join(', '), mails.join(', ')]);
+    rows.push([p.title, p.when, sendDay_(p.when), p.rows.length, ppl, CAPACITY - ppl, phones.join(', '), mails.join(', '), walk ? walk + '팀' : '']);
   });
   rows.push(['']);
   rows.push(['동기화 ' + stamp + ' · 5분마다 자동 갱신 · 프로그램별 탭에 전체 명단']);
-  s.getRange(1, 1, rows.length, 8).setValues(rows.map(function (r) { while (r.length < 8) r.push(''); return r; }));
-  s.getRange(1, 1, 1, 8).setFontWeight('bold');
+  s.getRange(1, 1, rows.length, 9).setValues(rows.map(function (r) { while (r.length < 9) r.push(''); return r; }));
+  s.getRange(1, 1, 1, 9).setFontWeight('bold');
   s.setFrozenRows(1);
   s.setColumnWidth(1, 360); s.setColumnWidth(7, 420); s.setColumnWidth(8, 420);
   s.getRange(2, 7, Math.max(programs.length, 1), 2).setWrap(true);
@@ -139,8 +187,8 @@ function writeSummary_(book, programs, stamp) {
 function writeProgram_(book, p) {
   var name = (p.no === '폐막식' ? '폐막식' : p.no + ' ' + p.title.replace(/^\[\d\d\]\s*/, '').replace(/\s*[—-]\s*신청$/, '')).slice(0, 40);
   var s = sheetOf_(book, name);
-  var rows = [['성함', '전화번호', '이메일', '인원', '접수 시각', p.title + ' · ' + p.when]];
-  p.rows.forEach(function (x) { rows.push([x.name, x.phone, x.email, x.n, x.ts, '']); });
+  var rows = [['성함', '전화번호', '이메일', '인원', '접수 시각', '구분 · ' + p.title + ' · ' + p.when]];
+  p.rows.forEach(function (x) { rows.push([x.name, x.phone, x.email, x.n, x.ts, x.walk ? '현장 접수' : '']); });
   var ppl = p.rows.reduce(function (a, x) { return a + x.n; }, 0);
   rows.push(['합계', p.rows.length + '팀', '', ppl + '명', '', '']);
   s.getRange(1, 2, rows.length, 1).setNumberFormat('@');
