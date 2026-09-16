@@ -49,11 +49,13 @@ function doPost(e) {
   if (sh.getLastRow() === 0) {
     sh.appendRow(['등록 시각', '폼 번호', '프로그램', '성함', '전화번호', '인원', '등록자', '앱 키']);
     sh.getRange(1, 1, 1, 8).setFontWeight('bold'); sh.setFrozenRows(1);
-    sh.getRange('E:E').setNumberFormat('@');
+    sh.getRange('B:B').setNumberFormat('@'); sh.getRange('E:E').setNumberFormat('@');   // 폼 번호 '01'과 전화번호는 문자로
   }
   sh.appendRow([new Date(), String(d.no || ''), String(d.title || ''), String(d.name), String(d.phone || ''),
                 parseInt(d.n, 10) || 1, String(d.by || ''), String(d.key || '')]);
-  var r = sh.getLastRow(); sh.getRange(r, 5).setNumberFormat('@').setValue(String(d.phone || ''));
+  var r = sh.getLastRow();
+  sh.getRange(r, 2).setNumberFormat('@').setValue(String(d.no || ''));       // '01'이 숫자 1로 바뀌지 않게
+  sh.getRange(r, 5).setNumberFormat('@').setValue(String(d.phone || ''));
   try { syncRsvp(); } catch (err) { return json_({ ok: true, synced: false, err: String(err) }); }
   return json_({ ok: true, synced: true });
 }
@@ -107,6 +109,7 @@ function syncRsvp_() {
   if (wsh && wsh.getLastRow() > 1) {
     wsh.getDataRange().getValues().slice(1).forEach(function (r) {
       var no = String(r[1] || '').trim(), prog = null;
+      if (/^\d$/.test(no)) no = '0' + no;                 // 예전 행: 시트가 '01'을 1로 저장한 경우 보정
       for (var i = 0; i < programs.length; i++) if (programs[i].no === no) prog = programs[i];
       if (!prog || !r[3]) return;
       prog.rows.push(row_(String(r[3]), String(r[4] || ''), '', r[5], r[0] instanceof Date ? r[0] : new Date(), 'walk-' + String(r[7] || ''), '현장'));
