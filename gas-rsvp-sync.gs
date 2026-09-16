@@ -10,7 +10,7 @@
  *     '요약' 탭: 프로그램별 접수 팀·인원·정원 잔여·발송일 + 전화번호/이메일을 쉼표로 이어 붙인 셀(복사해서 문자·메일 수신자에 붙여넣기)
  *     프로그램별 탭: 성함·전화번호·이메일·인원·접수 시각·구분 (열을 통째로 긁어갈 수 있게)
  *     링크는 '접수' 탭 H3 셀에 적힌다. 소유자만 열 수 있다.
- * (2-1) 참여 작가(ARTIST_SHEET_ID 시트의 '작가명·전화번호·이메일')는 모든 프로그램에 구분 '작가'로 기본 등록된다. 정원·발송 목록은 관객 기준이고 작가는 따로 표시.
+ * (2-1) ARTIST_NAMES의 작가들은 모든 프로그램에 구분 '작가'로 기본 등록된다(전화·이메일은 ARTIST_SHEET_ID 시트에서). 정원·발송 목록은 관객 기준이고 작가는 따로 표시.
  * (3) 현장 접수 수신(doPost) — 운영인력 페이지에서 현장 접수를 추가하면 여기로 전송돼 '현장접수' 탭에 쌓이고 즉시 동기화된다.
  *     앱에서 ✕로 지우면 walk_del 신호가 와서 같은 앱 키의 행을 지우고 다시 동기화한다.
  *     쓰려면 1회: 배포 > 새 배포 > 유형 '웹 앱' > 실행 '나' > 액세스 '모든 사용자' > 배포 → 웹 앱 URL을 페이지의 RV_GAS_URL에 넣는다.
@@ -23,7 +23,9 @@ var OUT_SHEET = '접수';      // 앱용 결과 탭 (없으면 만든다)
 var WALK_SHEET = '현장접수'; // 앱에서 들어온 현장 접수 (없으면 만든다)
 var OUT_BOOK_NAME = '연계프로그램 발송용 명단 (비공개)';
 var CAPACITY = 15;           // 프로그램 정원 (관객 기준 — 작가는 제외)
-var ARTIST_SHEET_ID = '12PPtDYqR0Cl7rLDmfph4fn4wItkNpo-mBJm9-hgv38U'; // 참여 작가 명단 시트 — 모든 프로그램에 '작가'로 기본 등록
+var ARTIST_SHEET_ID = '12PPtDYqR0Cl7rLDmfph4fn4wItkNpo-mBJm9-hgv38U'; // 참여 작가 명단 시트 — 전화번호·이메일을 여기서 찾는다
+/* 기본 등록할 작가 — 이 명단만 모든 프로그램에 '작가'로 들어간다 (시트에 없는 이름은 이름만으로 등록) */
+var ARTIST_NAMES = ['권희수', '김시흔', '김재민이', '반재하', '주슬아', '조영각', '최가영', '최고은', '장영해', '장종완', '최선', '듀킴', '정혜정'];
 
 /* 폼 이름 앞 번호 → 일시 (홈페이지 프로그램 카드 기준) */
 var WHEN = {
@@ -149,19 +151,26 @@ function syncRsvp_() {
   sh.getRange('I3').setValue('발송용 명단(비공개, 소유자만): ' + book.getUrl());
 }
 
-/* 작가 시트 읽기 — 헤더에서 작가명·전화번호·이메일 열을 찾는다 */
+/* 기본 등록 작가 — ARTIST_NAMES 순서대로, 전화번호·이메일은 작가 시트(작가명·전화번호·이메일 열)에서 찾아 붙인다 */
 function artists_() {
+  var info = {};
   try {
     var sh = SpreadsheetApp.openById(ARTIST_SHEET_ID).getSheets()[0];
-    var vals = sh.getDataRange().getValues(); if (vals.length < 2) return [];
-    var head = vals[0].map(function (h) { return String(h).trim(); });
-    var ci = function (re) { for (var i = 0; i < head.length; i++) if (re.test(head[i])) return i; return -1; };
-    var cn = ci(/작가명|이름|성함/), cp = ci(/전화/), ce = ci(/이메일|메일/);
-    if (cn < 0) return [];
-    return vals.slice(1).map(function (r) {
-      return { name: String(r[cn] || '').trim(), phone: cp >= 0 ? String(r[cp] || '') : '', email: ce >= 0 ? String(r[ce] || '') : '' };
-    }).filter(function (a) { return a.name; });
-  } catch (e) { return []; }
+    var vals = sh.getDataRange().getValues();
+    if (vals.length > 1) {
+      var head = vals[0].map(function (h) { return String(h).trim(); });
+      var ci = function (re) { for (var i = 0; i < head.length; i++) if (re.test(head[i])) return i; return -1; };
+      var cn = ci(/작가명|이름|성함/), cp = ci(/전화/), ce = ci(/이메일|메일/);
+      if (cn >= 0) vals.slice(1).forEach(function (r) {
+        var nm = String(r[cn] || '').replace(/\s/g, '');
+        if (nm) info[nm] = { phone: cp >= 0 ? String(r[cp] || '') : '', email: ce >= 0 ? String(r[ce] || '') : '' };
+      });
+    }
+  } catch (e) {}
+  return ARTIST_NAMES.map(function (name) {
+    var x = info[name.replace(/\s/g, '')] || { phone: '', email: '' };
+    return { name: name, phone: x.phone, email: x.email };
+  });
 }
 
 function row_(name, phone, email, n, ts, id, kind) {
