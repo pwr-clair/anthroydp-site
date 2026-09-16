@@ -10,6 +10,7 @@
  *     '요약' 탭: 프로그램별 접수 팀·인원·정원 잔여·발송일 + 전화번호/이메일을 쉼표로 이어 붙인 셀(복사해서 문자·메일 수신자에 붙여넣기)
  *     프로그램별 탭: 성함·전화번호·이메일·인원·접수 시각·구분 (열을 통째로 긁어갈 수 있게)
  *     링크는 '접수' 탭 H3 셀에 적힌다. 소유자만 열 수 있다.
+ * (2-1) 참여 작가(ARTIST_SHEET_ID 시트의 '작가명·전화번호·이메일')는 모든 프로그램에 구분 '작가'로 기본 등록된다. 정원·발송 목록은 관객 기준이고 작가는 따로 표시.
  * (3) 현장 접수 수신(doPost) — 운영인력 페이지에서 현장 접수를 추가하면 여기로 전송돼 '현장접수' 탭에 쌓이고 즉시 동기화된다.
  *     앱에서 ✕로 지우면 walk_del 신호가 와서 같은 앱 키의 행을 지우고 다시 동기화한다.
  *     쓰려면 1회: 배포 > 새 배포 > 유형 '웹 앱' > 실행 '나' > 액세스 '모든 사용자' > 배포 → 웹 앱 URL을 페이지의 RV_GAS_URL에 넣는다.
@@ -21,7 +22,8 @@ var SRC_SHEET = '시트1';     // 폼 목록 탭 (A=폼 이름, D=링크)
 var OUT_SHEET = '접수';      // 앱용 결과 탭 (없으면 만든다)
 var WALK_SHEET = '현장접수'; // 앱에서 들어온 현장 접수 (없으면 만든다)
 var OUT_BOOK_NAME = '연계프로그램 발송용 명단 (비공개)';
-var CAPACITY = 15;           // 프로그램 정원
+var CAPACITY = 15;           // 프로그램 정원 (관객 기준 — 작가는 제외)
+var ARTIST_SHEET_ID = '12PPtDYqR0Cl7rLDmfph4fn4wItkNpo-mBJm9-hgv38U'; // 참여 작가 명단 시트 — 모든 프로그램에 '작가'로 기본 등록
 
 /* 폼 이름 앞 번호 → 일시 (홈페이지 프로그램 카드 기준) */
 var WHEN = {
@@ -95,7 +97,7 @@ function syncRsvp_() {
       if (!email) email = all.filter(function (v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim()); })[0] || '';
       if (!email) { try { email = resp.getRespondentEmail() || ''; } catch (e) {} }   // 폼의 '이메일 수집' 설정
       if (!name) name = all.filter(function (v) { return /^[가-힣]{2,6}$/.test(v.trim()); })[0] || '';
-      prog.rows.push(row_(name, phone, email, n, resp.getTimestamp(), resp.getId(), false));
+      prog.rows.push(row_(name, phone, email, n, resp.getTimestamp(), resp.getId(), ''));
     });
     programs.push(prog);
   });
@@ -107,20 +109,27 @@ function syncRsvp_() {
       var no = String(r[1] || '').trim(), prog = null;
       for (var i = 0; i < programs.length; i++) if (programs[i].no === no) prog = programs[i];
       if (!prog || !r[3]) return;
-      prog.rows.push(row_(String(r[3]), String(r[4] || ''), '', r[5], r[0] instanceof Date ? r[0] : new Date(), 'walk-' + String(r[7] || ''), true));
+      prog.rows.push(row_(String(r[3]), String(r[4] || ''), '', r[5], r[0] instanceof Date ? r[0] : new Date(), 'walk-' + String(r[7] || ''), '현장'));
     });
   }
 
-  /* 같은 프로그램에 같은 사람(이름+전화)이 두 번 있으면 나중 것 기준 — 앱과 같은 규칙 */
+  /* 참여 작가 기본 등록 — 작가 시트의 모든 작가를 모든 프로그램에 (접수 시각 0 → 본인이 폼으로 신청했으면 그 응답이 우선) */
+  var artists = artists_();
+  programs.forEach(function (p) {
+    artists.forEach(function (a, i) { p.rows.push(row_(a.name, a.phone, a.email, 1, new Date(0), 'artist-' + i, '작가')); });
+  });
+
+  /* 같은 프로그램에 같은 사람(이름+전화)이 두 번 있으면 나중 것 기준 — 앱과 같은 규칙. 관객 먼저, 작가는 뒤로 */
   programs.forEach(function (p) {
     var seen = {};
     p.rows.sort(function (a, b) { return a.ts - b.ts; }).forEach(function (x) { seen[x.name.replace(/\s/g, '') + '|' + x.p4] = x; });
-    p.rows = Object.keys(seen).map(function (k) { return seen[k]; }).sort(function (a, b) { return a.ts - b.ts; });
+    p.rows = Object.keys(seen).map(function (k) { return seen[k]; })
+      .sort(function (a, b) { return ((a.kind === '작가') - (b.kind === '작가')) || (a.ts - b.ts); });
   });
 
   /* (1) 앱용 '접수' 탭 — 뒷자리 4자리만 */
   var out = [['프로그램', '성함', '전화 뒷자리', '인원', '접수 시각', '응답 id', '구분']];
-  programs.forEach(function (p) { p.rows.forEach(function (x) { out.push([p.title, x.name, x.p4, x.n, x.ts, x.id, x.walk ? '현장' : '']); }); });
+  programs.forEach(function (p) { p.rows.forEach(function (x) { out.push([p.title, x.name, x.p4, x.n, x.kind === '작가' ? '' : x.ts, x.id, x.kind]); }); });
   var sh = ss.getSheetByName(OUT_SHEET) || ss.insertSheet(OUT_SHEET);
   sh.clearContents();
   sh.getRange(1, 3, out.length, 1).setNumberFormat('@');      // 뒷자리가 0으로 시작해도 문자로 유지
@@ -137,13 +146,28 @@ function syncRsvp_() {
   sh.getRange('I3').setValue('발송용 명단(비공개, 소유자만): ' + book.getUrl());
 }
 
-function row_(name, phone, email, n, ts, id, walk) {
+/* 작가 시트 읽기 — 헤더에서 작가명·전화번호·이메일 열을 찾는다 */
+function artists_() {
+  try {
+    var sh = SpreadsheetApp.openById(ARTIST_SHEET_ID).getSheets()[0];
+    var vals = sh.getDataRange().getValues(); if (vals.length < 2) return [];
+    var head = vals[0].map(function (h) { return String(h).trim(); });
+    var ci = function (re) { for (var i = 0; i < head.length; i++) if (re.test(head[i])) return i; return -1; };
+    var cn = ci(/작가명|이름|성함/), cp = ci(/전화/), ce = ci(/이메일|메일/);
+    if (cn < 0) return [];
+    return vals.slice(1).map(function (r) {
+      return { name: String(r[cn] || '').trim(), phone: cp >= 0 ? String(r[cp] || '') : '', email: ce >= 0 ? String(r[ce] || '') : '' };
+    }).filter(function (a) { return a.name; });
+  } catch (e) { return []; }
+}
+
+function row_(name, phone, email, n, ts, id, kind) {
   var digits = String(phone || '').replace(/\D/g, '');
   if (/^1[016789]\d{7,8}$/.test(digits)) digits = '0' + digits;             // 시트에서 앞 0이 빠진 경우
   var pretty = /^01\d{8,9}$/.test(digits) ? digits.replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3') : String(phone || '').trim();
   return {
     name: String(name || '').trim(), phone: pretty, digits: digits, p4: digits.slice(-4), email: String(email || '').trim().toLowerCase(),
-    n: parseInt(String(n).replace(/\D/g, ''), 10) || 1, ts: ts, id: id, walk: !!walk
+    n: parseInt(String(n).replace(/\D/g, ''), 10) || 1, ts: ts, id: id, kind: kind || '', walk: kind === '현장'
   };
 }
 
@@ -172,18 +196,24 @@ function sendDay_(when) {
 
 function writeSummary_(book, programs, stamp) {
   var s = sheetOf_(book, '요약');
-  var rows = [['프로그램', '일시', '발송일(전날)', '접수 팀', '인원 합계', '정원 잔여(' + CAPACITY + ')', '전화번호 목록 (복사용)', '이메일 목록 (복사용)', '현장 접수']];
+  var rows = [['프로그램', '일시', '발송일(전날)', '접수 팀(관객)', '인원 합계(관객)', '정원 잔여(' + CAPACITY + ')', '전화번호 목록 (관객, 복사용)', '이메일 목록 (관객, 복사용)', '현장 접수', '작가']];
+  var allArtists = [];
   programs.forEach(function (p) {
-    var ppl = p.rows.reduce(function (a, x) { return a + x.n; }, 0);
-    var walk = p.rows.filter(function (x) { return x.walk; }).length;
-    var phones = uniq_(p.rows.map(function (x) { return x.phone; }));
-    var mails = uniq_(p.rows.map(function (x) { return x.email; }));
-    rows.push([p.title, p.when, sendDay_(p.when), p.rows.length, ppl, CAPACITY - ppl, phones.join(', '), mails.join(', '), walk ? walk + '팀' : '']);
+    var guests = p.rows.filter(function (x) { return x.kind !== '작가'; }), arts = p.rows.filter(function (x) { return x.kind === '작가'; });
+    if (arts.length > allArtists.length) allArtists = arts;
+    var ppl = guests.reduce(function (a, x) { return a + x.n; }, 0);
+    var walk = guests.filter(function (x) { return x.walk; }).length;
+    var phones = uniq_(guests.map(function (x) { return x.phone; }));
+    var mails = uniq_(guests.map(function (x) { return x.email; }));
+    rows.push([p.title, p.when, sendDay_(p.when), guests.length, ppl, CAPACITY - ppl, phones.join(', '), mails.join(', '), walk ? walk + '팀' : '', arts.length ? arts.length + '명' : '']);
   });
   rows.push(['']);
-  rows.push(['동기화 ' + stamp + ' · 5분마다 자동 갱신 · 프로그램별 탭에 전체 명단']);
-  s.getRange(1, 1, rows.length, 9).setValues(rows.map(function (r) { while (r.length < 9) r.push(''); return r; }));
-  s.getRange(1, 1, 1, 9).setFontWeight('bold');
+  rows.push(['참여 작가 전체 (모든 프로그램 기본 등록)', '', '', allArtists.length, allArtists.length, '',
+             uniq_(allArtists.map(function (x) { return x.phone; })).join(', '), uniq_(allArtists.map(function (x) { return x.email; })).join(', '), '', '']);
+  rows.push(['']);
+  rows.push(['동기화 ' + stamp + ' · 5분마다 자동 갱신 · 프로그램별 탭에 전체 명단 · 작가는 각 탭 아래쪽에 구분 "작가"']);
+  s.getRange(1, 1, rows.length, 10).setValues(rows.map(function (r) { while (r.length < 10) r.push(''); return r; }));
+  s.getRange(1, 1, 1, 10).setFontWeight('bold');
   s.setFrozenRows(1);
   s.setColumnWidth(1, 360); s.setColumnWidth(7, 420); s.setColumnWidth(8, 420);
   s.getRange(2, 7, Math.max(programs.length, 1), 2).setWrap(true);
@@ -196,9 +226,10 @@ function writeProgram_(book, p) {
   var name = (p.no === '폐막식' ? '폐막식' : p.no + ' ' + p.title.replace(/^\[\d\d\]\s*/, '').replace(/\s*[—-]\s*신청$/, '')).slice(0, 40);
   var s = sheetOf_(book, name);
   var rows = [['성함', '전화번호', '이메일', '인원', '접수 시각', '구분 · ' + p.title + ' · ' + p.when]];
-  p.rows.forEach(function (x) { rows.push([x.name, x.phone, x.email, x.n, x.ts, x.walk ? '현장 접수' : '']); });
-  var ppl = p.rows.reduce(function (a, x) { return a + x.n; }, 0);
-  rows.push(['합계', p.rows.length + '팀', '', ppl + '명', '', '']);
+  p.rows.forEach(function (x) { rows.push([x.name, x.phone, x.email, x.n, x.kind === '작가' ? '' : x.ts, x.kind === '현장' ? '현장 접수' : x.kind]); });
+  var guests = p.rows.filter(function (x) { return x.kind !== '작가'; }), arts = p.rows.length - guests.length;
+  var ppl = guests.reduce(function (a, x) { return a + x.n; }, 0);
+  rows.push(['합계(관객)', guests.length + '팀', '', ppl + '명', '', arts ? '작가 ' + arts + '명 별도' : '']);
   s.getRange(1, 2, rows.length, 1).setNumberFormat('@');
   s.getRange(1, 1, rows.length, 6).setValues(rows);
   s.getRange(1, 5, rows.length, 1).setNumberFormat('yyyy-mm-dd hh:mm');

@@ -121,6 +121,8 @@
   #rv-list .item .sub{display:block;font-size:10.5px;color:var(--ink3);font-family:var(--num);margin-top:1px}
   #rv-list .item .n{flex:none;font-family:var(--num);font-size:11.5px;font-weight:800;border-radius:2px;padding:1px 7px;background:var(--well);color:var(--ink2)}
   #rv-list .item.walk .n{background:var(--red-soft);color:var(--red)}
+  #rv-list .item.artist .nm{color:var(--ink2)}
+  #rv-list .item.artist .n{background:transparent;border:1px solid var(--line);color:var(--ink3)}
   #rv-list .item.done{background:var(--red-soft);margin:0 -6px;padding-left:8px;padding-right:8px;border-radius:6px}
   #rv-list .item.done .txt{text-decoration:none;color:inherit} /* 완료 항목 공통 취소선은 명단에 쓰지 않는다 */
   #rv-list .item.done .nm{color:var(--red)}
@@ -1848,7 +1850,7 @@ function rvParse(rows){
   const head=rows[0].map(h=>String(h).toLowerCase());
   const col=(re,not)=>head.findIndex(h=>re.test(h)&&!(not&&not.test(h)));
   const cName=col(/성함|성명|이름|name/), cPhone=col(/전화|연락|휴대|핸드폰|phone|hp/), cN=col(/인원|명수|몇 명|people|count/,/전화|연락/),
-        cSes=col(/프로그램|세션|크로스토크|회차|program|session/);
+        cSes=col(/프로그램|세션|크로스토크|회차|program|session/), cKind=col(/^구분$|kind/);
   const out=[];
   rows.slice(1).forEach((r,ri)=>{
     const cells=r.map(x=>String(x).trim());
@@ -1864,7 +1866,8 @@ function rvParse(rows){
     if(!ses) ses=rvDetectSes(cells.join(' | '));
     if(!name && !p4) return;
     if(!name) name='(이름 없음)';
-    out.push({key:rvKey(ses||'unk',name,p4),ses:ses||'unk',name,p4,n,row:ri+2});
+    const kind = cKind>=0 ? cells[cKind] : '';
+    out.push({key:rvKey(ses||'unk',name,p4),ses:ses||'unk',name,p4,n,kind,artist:kind==='작가',walk:kind==='현장',row:ri+2}); /* 시트로 넘어간 현장 접수도 '현장'으로 표시 */
   });
   /* 같은 프로그램에 같은 사람이 두 번 접수했으면 나중 접수(아래 행) 기준 */
   const map={}; out.forEach(e=>{ map[e.key]=e; });
@@ -1901,7 +1904,7 @@ function rvEntries(ses){
   const hide=rvCache.hide||{};
   const outs=rvCache.out||{}, yes=rvCache.yes||{};
   return [...rvRows,...walk].filter(e=>e.ses===ses && !hide[e.key]).map(e=>({...e,in:(rvCache.in||{})[e.key]||null,out:outs[e.key]||null,yes:yes[e.key]||null}))
-    .sort((a,b)=>(!!a.out-!!b.out) || a.name.localeCompare(b.name,'ko'));
+    .sort((a,b)=>(!!a.out-!!b.out) || (!!a.artist-!!b.artist) || a.name.localeCompare(b.name,'ko'));
 }
 function renderRsvpStatus(){
   const st=$('rv-st');
@@ -1920,28 +1923,29 @@ function renderRsvp(){
   const unk=rvEntries('unk');
   const list=[...RV_SES.filter(x=>x.d>=todayKey), ...RV_SES.filter(x=>x.d<todayKey), ...(unk.length?[RV_UNK]:[])]; // 지난 프로그램은 뒤로
   $('rv-ses').innerHTML=list.map(x=>{
-    const all=rvEntries(x.k), es=all.filter(e=>!e.out), outN=all.length-es.length, yesN=es.filter(e=>e.yes).length, done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
+    const all0=rvEntries(x.k), all=all0.filter(e=>!e.artist), artN=all0.length-all.length, es=all.filter(e=>!e.out), outN=all.length-es.length, yesN=es.filter(e=>e.yes).length, done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
     const past=!!x.d && x.d<todayKey;
     return '<button data-rvses="'+x.k+'" class="'+(x.k===rvSel?'on':'')+(past?' past':'')+'"><b>'+esc(rvSesDate(x)||'—')+'</b>'+esc(x.s)
-      +'<i>'+(all.length?done+'/'+es.length+'팀 · '+ppl+'명'+(yesN?' · 예정 '+yesN:'')+(outN?' · 불참 '+outN:''):'접수 없음')+'</i></button>';
+      +'<i>'+(all.length?done+'/'+es.length+'팀 · '+ppl+'명'+(yesN?' · 예정 '+yesN:'')+(outN?' · 불참 '+outN:''):'접수 없음')+(artN?' · 작가 '+artN:'')+'</i></button>';
   }).join('');
   const onBtn=$('rv-ses').querySelector('button.on'); if(onBtn&&onBtn.scrollIntoView) onBtn.scrollIntoView({block:'nearest',inline:'center'});
-  const live=RV_SES.concat([RV_UNK]).flatMap(x=>rvEntries(x.k)).filter(e=>!e.out), tot=live.reduce((a,e)=>a+e.n,0);
+  const live=RV_SES.concat([RV_UNK]).flatMap(x=>rvEntries(x.k)).filter(e=>!e.out&&!e.artist), tot=live.reduce((a,e)=>a+e.n,0);
   $('rv-tot').textContent = live.length ? '전체 '+live.length+'팀 · '+tot+'명' : '';
   /* 명단 */
   const ses=rvSesOf(rvSel), es=rvEntries(rvSel), q=String($('rv-q').value||'').trim(), qd=rvDigits(q), qn=rvNormName(q);
-  const act=es.filter(e=>!e.out), outs=es.filter(e=>e.out), outPpl=outs.reduce((a,e)=>a+e.n,0);
+  const arts=es.filter(e=>e.artist&&!e.out), artIn=arts.filter(e=>e.in).length, guests=es.filter(e=>!e.artist);
+  const act=guests.filter(e=>!e.out), outs=guests.filter(e=>e.out), outPpl=outs.reduce((a,e)=>a+e.n,0);
   const done=act.filter(e=>e.in), ppl=act.reduce((a,e)=>a+e.n,0), inPpl=done.reduce((a,e)=>a+((e.in&&e.in.a)||e.n),0);
   const yes=act.filter(e=>e.yes), yesPpl=yes.reduce((a,e)=>a+e.n,0);
-  $('rv-cnt').innerHTML = es.length ? '입장 <b style="color:var(--red)">'+done.length+'</b>/'+act.length+'팀 · '+inPpl+'/'+ppl+'명'+(yes.length?' · 참석예정 '+yes.length+'팀 '+yesPpl+'명':'')+(outs.length?' · 불참 '+outs.length+'팀 '+outPpl+'명':'')+(ses.k!=='unk'?' · 잔여 '+(RV_CAP-ppl):'') : '';
+  $('rv-cnt').innerHTML = es.length ? '입장 <b style="color:var(--red)">'+done.length+'</b>/'+act.length+'팀 · '+inPpl+'/'+ppl+'명'+(yes.length?' · 참석예정 '+yes.length+'팀 '+yesPpl+'명':'')+(outs.length?' · 불참 '+outs.length+'팀 '+outPpl+'명':'')+(arts.length?' · 작가 '+artIn+'/'+arts.length:'')+(ses.k!=='unk'?' · 잔여 '+(RV_CAP-ppl):'') : '';
   const hit=e=>{ if(!q) return true; if(qd&&qd.length<=4&&e.p4&&e.p4.includes(qd)) return true; return !!qn && rvNormName(e.name).includes(qn); };
   const shown=es.filter(hit);
   $('rv-list').innerHTML = es.length ? (shown.length ? shown.map(e=>{
     const i=e.in;
-    return '<div class="item'+(i?' done':'')+(e.walk?' walk':'')+(e.out?' out':'')+'" data-rvrow="'+e.key+'">'
+    return '<div class="item'+(i?' done':'')+(e.walk?' walk':'')+(e.artist?' artist':'')+(e.out?' out':'')+'" data-rvrow="'+e.key+'">'
       +'<input type="checkbox" data-rvck="'+e.key+'"'+(i?' checked':'')+(canEdit()&&!e.out?'':' disabled')+'>'
       +'<span class="txt"><span class="nm">'+esc(e.name)+'</span><span class="p4">'+(e.p4?'· '+esc(e.p4):'')+'</span>'
-      +(e.out?'<span class="sub">불참 '+esc(e.out.tm||'')+' · '+esc(e.out.by||'')+'</span>':i?'<span class="sub">입장 '+esc(i.tm||'')+' · '+esc(i.by||'')+(i.a&&i.a!==e.n?' · 실제 '+i.a+'명':'')+'</span>':e.yes?'<span class="sub">참석예정 '+esc(e.yes.tm||'')+' · '+esc(e.yes.by||'')+'</span>':(e.walk?'<span class="sub">현장 접수</span>':''))+'</span>'
+      +(e.out?'<span class="sub">불참 '+esc(e.out.tm||'')+' · '+esc(e.out.by||'')+'</span>':i?'<span class="sub">입장 '+esc(i.tm||'')+' · '+esc(i.by||'')+(i.a&&i.a!==e.n?' · 실제 '+i.a+'명':'')+'</span>':e.yes?'<span class="sub">참석예정 '+esc(e.yes.tm||'')+' · '+esc(e.yes.by||'')+'</span>':(e.artist?'<span class="sub">참여 작가</span>':e.walk?'<span class="sub">현장 접수</span>':''))+'</span>'
       +'<span class="n" data-rvn="'+e.key+'" title="실제 입장 인원 수정">'+e.n+'명</span>'
       +(canEdit()?(e.out?'<button class="rv-out" data-rvback="'+e.key+'">복귀</button>':'<button class="rv-out'+(e.yes?' on':'')+'" data-rvyes="'+e.key+'">참석예정</button><button class="rv-out" data-rvout="'+e.key+'">불참</button>'):'')
       +(canRvDel()?'<button class="del" data-rvdel="'+e.key+'" title="접수 지우기">✕</button>':'')+'</div>';
@@ -1974,8 +1978,8 @@ $('rv-list').addEventListener('click',e=>{
   if(d.rvdel){ if(!canRvDel()) return; const t=rvEntries(rvSel).find(x=>x.key===d.rvdel); if(!t) return;
     if(!confirm(t.name+(t.p4?' ('+t.p4+')':'')+' 접수를 지울까요?')) return;
     remove(ref(db,'atc/cal/rsvp/in/'+t.key)); remove(ref(db,'atc/cal/rsvp/out/'+t.key)); remove(ref(db,'atc/cal/rsvp/yes/'+t.key));
-    if(t.walk) remove(ref(db,'atc/cal/rsvp/walk/'+t.id));
-    if(!t.walk || !t.key.startsWith('w_')) set(ref(db,'atc/cal/rsvp/hide/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()}); /* 시트에는 남으므로 숨김으로 기록(시트로 간 현장 접수 포함) */
+    if(t.walk && t.id) remove(ref(db,'atc/cal/rsvp/walk/'+t.id));
+    if(!t.id || !t.key.startsWith('w_')) set(ref(db,'atc/cal/rsvp/hide/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()}); /* 시트에는 남으므로 숨김으로 기록(시트로 간 현장 접수 포함) */
     toast(t.name+' 지움');
     if(RV_GAS_URL && (rvCache.walk||{})[t.key]){ /* 앱에서 넣은 현장 접수면 시트 '현장접수' 탭에서도 지운다 */
       fetch(RV_GAS_URL,{method:'POST',body:JSON.stringify({type:'walk_del',key:t.key,by:myName()})})
