@@ -1723,11 +1723,11 @@ let lkSel='4';
 function renderLucky(){
   const all=lkEntries();
   $('lk-cnt').textContent = all.length ? '총 '+all.length+'명' : '';
-  /* 명단 — 날짜별 묶음, 연번은 전체 통산 */
+  /* 명단 — 날짜별 묶음, 최신 참여자가 위(오래된 날짜는 아래로). 연번은 등록 순서 통산이라 그대로 */
   let html='', last='';
-  all.forEach((e,i)=>{
+  all.map((e,i)=>({...e,no:i+1})).reverse().forEach(e=>{
     if(e.at!==last){ last=e.at; html+='<tr class="dh"><td colspan="5">'+esc(lkDate(e.at))+'</td></tr>'; }
-    html+='<tr><td class="n">'+(i+1)+'</td><td class="acct"><a class="ig" href="https://instagram.com/'+encodeURIComponent(String(e.acct).replace(/^@/,''))+'" target="_blank" rel="noopener">@'+esc(e.acct)+'</a>'+(e.no?' <span class="n">#'+esc(e.no)+'</span>':'')+'</td>'
+    html+='<tr><td class="n">'+e.no+'</td><td class="acct"><a class="ig" href="https://instagram.com/'+encodeURIComponent(String(e.acct).replace(/^@/,''))+'" target="_blank" rel="noopener">@'+esc(e.acct)+'</a>'+(e.no?' <span class="n">#'+esc(e.no)+'</span>':'')+'</td>'
       +'<td>'+lkTier(e.tier)+'</td><td class="tm">'+esc(e.tm||'')+'<br><span class="by">'+esc(e.by||'')+'</span></td>'
       +'<td class="ops">'+(canEdit()?'<button data-lked="'+e.id+'">✎</button><button data-lkdel="'+e.id+'">✕</button>':'')+'</td></tr>';
   });
