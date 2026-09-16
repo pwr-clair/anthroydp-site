@@ -110,7 +110,7 @@
   .rv-st.err{color:var(--red);font-weight:700}
   .rv-st a{color:var(--red)}
   .rv-st .undo{margin-left:6px;cursor:pointer;text-decoration:underline dotted}
-  .rv-add input.p4-in{flex:none;width:76px;font-family:var(--num);text-align:center}
+  .rv-add input.tel-in{flex:1.2;min-width:0;font-family:var(--num)}
   .rv-add input.n-in{flex:none;width:52px;font-family:var(--num);text-align:center}
   #rv-list{margin-top:6px}
   #rv-list .item{align-items:center;padding:9px 2px;cursor:pointer}
@@ -812,11 +812,11 @@
       <div class="fold-b">
         <div class="add rv-add">
           <input type="text" id="rv-w-name" placeholder="성함" autocomplete="off">
-          <input type="text" class="p4-in" id="rv-w-p4" placeholder="뒷자리" inputmode="numeric" maxlength="4">
+          <input type="tel" class="tel-in" id="rv-w-p4" placeholder="전화번호" inputmode="tel" autocomplete="off">
           <input type="text" class="n-in" id="rv-w-n" placeholder="명" inputmode="numeric" value="1">
           <button type="button" id="rv-w-btn">추가</button>
         </div>
-        <div class="empty">선택한 프로그램에 바로 입장 처리됩니다. 잘못 넣었으면 명단의 ✕로 지우세요.</div>
+        <div class="empty">선택한 프로그램에 바로 입장 처리됩니다. 전화번호는 뒷자리 4자리만 명단에 보입니다. 잘못 넣었으면 명단의 ✕로 지우세요.</div>
       </div>
     </div>
   </div>
@@ -1983,8 +1983,9 @@ $('rv-list').addEventListener('click',e=>{
 });
 $('rv-w-btn').addEventListener('click',()=>{
   if(!canEdit()) return;
-  const name=rvNormName($('rv-w-name').value), p4=rvDigits($('rv-w-p4').value).slice(-4), n=Math.min(Math.max(parseInt($('rv-w-n').value,10)||1,1),9);
+  const name=rvNormName($('rv-w-name').value), digits=rvDigits($('rv-w-p4').value), p4=digits.slice(-4), n=Math.min(Math.max(parseInt($('rv-w-n').value,10)||1,1),9);
   if(!name){ toast('성함을 입력하세요'); return; }
+  if(digits && digits.length<4){ toast('전화번호를 다시 확인하세요'); return; }
   if(rvSel==='unk'){ toast('프로그램을 먼저 고르세요'); return; }
   const r=push(ref(db,'atc/cal/rsvp/walk'),{ses:rvSel,name,p4,n,by:myName(),tm:hhmm(),ts:Date.now()});
   set(ref(db,'atc/cal/rsvp/in/w_'+r.key),{by:myName(),tm:hhmm(),ts:Date.now(),ses:rvSel});
