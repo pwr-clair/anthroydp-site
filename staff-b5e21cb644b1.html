@@ -1922,6 +1922,7 @@ function renderRsvp(){
   if(!rvSel || (!rvSelManual && rvPast(rvSesOf(rvSel)))) rvSel=rvDefaultSes(); /* 직접 고른 게 아니면 끝난 프로그램에서 다음으로 자동 이동 */
   const unk=rvEntries('unk');
   const list=[...RV_SES.filter(x=>!rvPast(x)), ...RV_SES.filter(x=>rvPast(x)), ...(unk.length?[RV_UNK]:[])]; // 끝난 프로그램(시작+50분)은 뒤로
+  const keepX=$('rv-ses').scrollLeft; /* 다시 그려도 칩 줄의 가로 위치 유지 */
   $('rv-ses').innerHTML=list.map(x=>{
     const all0=rvEntries(x.k), all=all0.filter(e=>!e.artist), artN=all0.length-all.length, es=all.filter(e=>!e.out), outN=all.length-es.length, yesN=es.filter(e=>e.yes).length, done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
     const past=rvPast(x);
@@ -1931,6 +1932,7 @@ function renderRsvp(){
   /* 선택 칩을 가로로만 가운데로 — 프로그램이 바뀔 때만 (체크할 때마다 페이지가 위로 튀지 않게, 세로 스크롤은 절대 건드리지 않음) */
   if(rvScrolledFor!==rvSel){ rvScrolledFor=rvSel; const wrap=$('rv-ses'), onBtn=wrap.querySelector('button.on');
     if(onBtn) wrap.scrollLeft=Math.max(0, onBtn.offsetLeft-(wrap.clientWidth-onBtn.offsetWidth)/2); }
+  else $('rv-ses').scrollLeft=keepX;
   const live=RV_SES.concat([RV_UNK]).flatMap(x=>rvEntries(x.k)).filter(e=>!e.out&&!e.artist), tot=live.reduce((a,e)=>a+e.n,0);
   $('rv-tot').textContent = live.length ? '전체 '+live.length+'팀 · '+tot+'명' : '';
   /* 명단 */
