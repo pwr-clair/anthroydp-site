@@ -1812,7 +1812,7 @@ const RV_SES=[
   {k:'cl', d:'2026-09-20',tm:'19:00',t:'폐막식 「D.C: 맨 처음으로 다시」',s:'폐막식',kw:['폐막','d.c','맨 처음','다시']},
 ];
 const RV_UNK={k:'unk',d:'',tm:'',t:'프로그램 미확인 — 시트의 답변에서 프로그램을 알아내지 못한 접수',s:'미확인'};
-let rvRows=[], rvCache={}, rvSel=null, rvSelManual=false, rvLoadedAt=0, rvErr='', rvBusy=false;
+let rvRows=[], rvCache={}, rvSel=null, rvSelManual=false, rvScrolledFor=null, rvLoadedAt=0, rvErr='', rvBusy=false;
 const rvEndTs = x => { const d=parseKey(x.d); d.setHours(+x.tm.slice(0,2), +x.tm.slice(3)+RV_RUN, 0, 0); return d.getTime(); };
 const rvPast = x => !!x.d && Date.now() >= rvEndTs(x);
 const canRvDel = ()=> ['joara','jinsun','chaerin'].includes(meId); // 접수 삭제(시트 접수는 숨김 기록) = 조아라·박진선·변채린
@@ -1928,7 +1928,9 @@ function renderRsvp(){
     return '<button data-rvses="'+x.k+'" class="'+(x.k===rvSel?'on':'')+(past?' past':'')+'"><b>'+esc(rvSesDate(x)||'—')+'</b>'+esc(x.s)
       +'<i>'+(all.length?done+'/'+es.length+'팀 · '+ppl+'명'+(yesN?' · 예정 '+yesN:'')+(outN?' · 불참 '+outN:''):'접수 없음')+(artN?' · 작가 '+artN:'')+'</i></button>';
   }).join('');
-  const onBtn=$('rv-ses').querySelector('button.on'); if(onBtn&&onBtn.scrollIntoView) onBtn.scrollIntoView({block:'nearest',inline:'center'});
+  /* 선택 칩을 가로로만 가운데로 — 프로그램이 바뀔 때만 (체크할 때마다 페이지가 위로 튀지 않게, 세로 스크롤은 절대 건드리지 않음) */
+  if(rvScrolledFor!==rvSel){ rvScrolledFor=rvSel; const wrap=$('rv-ses'), onBtn=wrap.querySelector('button.on');
+    if(onBtn) wrap.scrollLeft=Math.max(0, onBtn.offsetLeft-(wrap.clientWidth-onBtn.offsetWidth)/2); }
   const live=RV_SES.concat([RV_UNK]).flatMap(x=>rvEntries(x.k)).filter(e=>!e.out&&!e.artist), tot=live.reduce((a,e)=>a+e.n,0);
   $('rv-tot').textContent = live.length ? '전체 '+live.length+'팀 · '+tot+'명' : '';
   /* 명단 */
