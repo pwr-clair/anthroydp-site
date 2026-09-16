@@ -1976,7 +1976,13 @@ $('rv-list').addEventListener('click',e=>{
     remove(ref(db,'atc/cal/rsvp/in/'+t.key)); remove(ref(db,'atc/cal/rsvp/out/'+t.key)); remove(ref(db,'atc/cal/rsvp/yes/'+t.key));
     if(t.walk) remove(ref(db,'atc/cal/rsvp/walk/'+t.id));
     if(!t.walk || !t.key.startsWith('w_')) set(ref(db,'atc/cal/rsvp/hide/'+t.key),{ses:t.ses,name:t.name,by:myName(),tm:hhmm(),ts:Date.now()}); /* 시트에는 남으므로 숨김으로 기록(시트로 간 현장 접수 포함) */
-    toast(t.name+' 지움'); return; }
+    toast(t.name+' 지움');
+    if(RV_GAS_URL && (rvCache.walk||{})[t.key]){ /* 앱에서 넣은 현장 접수면 시트 '현장접수' 탭에서도 지운다 */
+      fetch(RV_GAS_URL,{method:'POST',body:JSON.stringify({type:'walk_del',key:t.key,by:myName()})})
+        .then(r=>r.json()).then(j=>{ if(!j||!j.ok) throw 0; toast(t.name+' 시트에서도 지움'); })
+        .catch(()=>toast('시트 삭제 실패 — 현장접수 탭에서 직접 지워 주세요'));
+    }
+    return; }
   if(d.rvn){ const cur=(rvCache.in||{})[d.rvn]; if(!cur){ toast('먼저 입장 체크를 하세요'); return; }
     const v=prompt('실제 입장 인원', cur.a||''); if(v===null) return; const a=parseInt(v,10);
     update(ref(db,'atc/cal/rsvp/in/'+d.rvn),{a:a>0?a:null}); return; }
