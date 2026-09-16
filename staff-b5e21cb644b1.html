@@ -1795,6 +1795,7 @@ const RV_SHEET_ID='1NwKQnk5UKuvRw8Jyzlqf0n2nmPCgo48_-yn4nHCd4w4', RV_GID='0', RV
 const RV_SHEET_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/edit?gid='+RV_GID+'#gid='+RV_GID;
 const RV_CSV_URL='https://docs.google.com/spreadsheets/d/'+RV_SHEET_ID+'/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent(RV_TAB);
 const RV_CAP=15; // 프로그램 정원(선착순), 1회 최대 4명
+const RV_RUN=50; // 기본 러닝타임(분) — 시작+50분이 지나면 '지난 프로그램'으로 뒤로 보낸다
 /* 현장 접수 → 시트 전송: gas-rsvp-sync.gs를 웹 앱으로 배포한 URL. 비어 있으면 앱에만 남는다 */
 const RV_GAS_URL='https://script.google.com/macros/s/AKfycbzhsGD0ecy1H41zNI791pMXbduMyPOW4EjJTDWW2kvhtasRVkLAXUAAGh-yTHz-1_uh/exec';
 const RV_NO={ct1:'01',ct2:'02',ct3:'03',ct4:'04',ct5:'05',ct6:'06',ct7:'07',ct8:'08',cl:'폐막식'}; // 시트의 폼 번호
@@ -1811,7 +1812,9 @@ const RV_SES=[
   {k:'cl', d:'2026-09-20',tm:'19:00',t:'폐막식 「D.C: 맨 처음으로 다시」',s:'폐막식',kw:['폐막','d.c','맨 처음','다시']},
 ];
 const RV_UNK={k:'unk',d:'',tm:'',t:'프로그램 미확인 — 시트의 답변에서 프로그램을 알아내지 못한 접수',s:'미확인'};
-let rvRows=[], rvCache={}, rvSel=null, rvLoadedAt=0, rvErr='', rvBusy=false;
+let rvRows=[], rvCache={}, rvSel=null, rvSelManual=false, rvLoadedAt=0, rvErr='', rvBusy=false;
+const rvEndTs = x => { const d=parseKey(x.d); d.setHours(+x.tm.slice(0,2), +x.tm.slice(3)+RV_RUN, 0, 0); return d.getTime(); };
+const rvPast = x => !!x.d && Date.now() >= rvEndTs(x);
 const canRvDel = ()=> ['joara','jinsun','chaerin'].includes(meId); // 접수 삭제(시트 접수는 숨김 기록) = 조아라·박진선·변채린
 const rvNormName = s => String(s||'').replace(/\s+/g,'').trim();
 const rvHex = s => Array.from(new TextEncoder().encode(s)).map(x=>x.toString(16).padStart(2,'0')).join('');
@@ -1889,10 +1892,8 @@ async function rvLoad(force){
 }
 function rvSesOf(k){ return RV_SES.find(x=>x.k===k)||RV_UNK; }
 function rvDefaultSes(){
-  const now=new Date(), h=now.getHours(), hm=pad(h)+':'+pad(now.getMinutes());
-  /* 오늘 프로그램 중 아직 끝나지 않은 것(시작 후 1시간까지) → 다음 날짜의 첫 프로그램 → 마지막 */
-  const cut=pad(Math.max(h-1,0))+hm.slice(2);
-  const up=RV_SES.find(x=>x.d>todayKey || (x.d===todayKey && x.tm>=cut));
+  /* 아직 끝나지 않은(시작+50분 전) 첫 프로그램 → 다 끝났으면 마지막 */
+  const up=RV_SES.find(x=>!rvPast(x));
   return (up||RV_SES[RV_SES.length-1]).k;
 }
 const rvSesDate = x => x.d ? (+x.d.slice(5,7))+'/'+(+x.d.slice(8))+' '+DOW[parseKey(x.d).getDay()]+' '+x.tm : '';
@@ -1918,13 +1919,12 @@ function renderRsvpStatus(){
 }
 function renderRsvp(){
   if(curView!=='rsvp') return;
-  if(!rvSel) rvSel=rvDefaultSes();
-  const now=new Date(), nowK=todayKey+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  if(!rvSel || (!rvSelManual && rvPast(rvSesOf(rvSel)))) rvSel=rvDefaultSes(); /* 직접 고른 게 아니면 끝난 프로그램에서 다음으로 자동 이동 */
   const unk=rvEntries('unk');
-  const list=[...RV_SES.filter(x=>x.d>=todayKey), ...RV_SES.filter(x=>x.d<todayKey), ...(unk.length?[RV_UNK]:[])]; // 지난 프로그램은 뒤로
+  const list=[...RV_SES.filter(x=>!rvPast(x)), ...RV_SES.filter(x=>rvPast(x)), ...(unk.length?[RV_UNK]:[])]; // 끝난 프로그램(시작+50분)은 뒤로
   $('rv-ses').innerHTML=list.map(x=>{
     const all0=rvEntries(x.k), all=all0.filter(e=>!e.artist), artN=all0.length-all.length, es=all.filter(e=>!e.out), outN=all.length-es.length, yesN=es.filter(e=>e.yes).length, done=es.filter(e=>e.in).length, ppl=es.reduce((a,e)=>a+e.n,0);
-    const past=!!x.d && x.d<todayKey;
+    const past=rvPast(x);
     return '<button data-rvses="'+x.k+'" class="'+(x.k===rvSel?'on':'')+(past?' past':'')+'"><b>'+esc(rvSesDate(x)||'—')+'</b>'+esc(x.s)
       +'<i>'+(all.length?done+'/'+es.length+'팀 · '+ppl+'명'+(yesN?' · 예정 '+yesN:'')+(outN?' · 불참 '+outN:''):'접수 없음')+(artN?' · 작가 '+artN:'')+'</i></button>';
   }).join('');
@@ -1953,7 +1953,7 @@ function renderRsvp(){
   : '<div class="empty">'+(rvErr?'':(rvBusy?'읽는 중…':'이 프로그램의 접수가 아직 없어요'))+'</div>';
   renderRsvpStatus();
 }
-$('rv-ses').addEventListener('click',e=>{ const b=e.target.closest('button[data-rvses]'); if(!b) return; rvSel=b.dataset.rvses; $('rv-q').value=''; renderRsvp(); });
+$('rv-ses').addEventListener('click',e=>{ const b=e.target.closest('button[data-rvses]'); if(!b) return; rvSel=b.dataset.rvses; rvSelManual=true; $('rv-q').value=''; renderRsvp(); });
 $('rv-q').addEventListener('input',renderRsvp);
 $('rv-reload').addEventListener('click',()=>rvLoad(true));
 $('rv-st').addEventListener('click',e=>{
@@ -2014,7 +2014,7 @@ $('rv-w-btn').addEventListener('click',()=>{
   }
 });
 $('rv-walk-sec').querySelector('.sec-t').addEventListener('click',()=>$('rv-walk-sec').classList.toggle('open'));
-setInterval(()=>{ if(curView==='rsvp') rvLoad(false); },60000); // 탭을 열어 둔 동안 1분마다 시트 재확인
+setInterval(()=>{ if(curView==='rsvp'){ rvLoad(false); renderRsvp(); } },60000); // 탭을 열어 둔 동안 1분마다 시트 재확인 + 끝난 프로그램 뒤로 넘기기
 
 /* ── 근무일지 (앱 내 입력 → 구글시트 전송) ── */
 $('go-wl').addEventListener('click',()=>switchView('sheet'));
