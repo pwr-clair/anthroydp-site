@@ -364,6 +364,17 @@
   .wl-grid input,.wl-grid textarea{border:1px solid var(--line);border-radius:4px;padding:8px 10px;
     font-size:14px;min-width:0;width:100%;font-family:inherit}
   .wl-grid textarea{min-height:52px;resize:vertical;line-height:1.5}
+  /* 철수 탭 — 작가별 한 줄: 이름·작품 / 20일·21일 시간 + 비고 */
+  .out-row{border-top:1px solid var(--hair);padding:11px 0 12px}
+  .out-row:first-child{border-top:0;padding-top:4px}
+  .out-row .nm{font-weight:800;font-size:14.5px;color:var(--ink)}
+  .out-row .wk{font-size:11px;color:var(--ink3);margin-left:6px;font-weight:600}
+  .out-row .in{display:grid;grid-template-columns:82px 82px 1fr;gap:7px;margin-top:7px}
+  .out-row .in label{display:block;font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--ink3);margin-bottom:3px}
+  .out-row .in input{border:1px solid var(--line);border-radius:4px;padding:8px 9px;font-size:14px;min-width:0;width:100%;font-family:inherit}
+  .out-row .in input.tm{font-family:var(--num);text-align:center}
+  .out-row .in input.set{border-color:rgba(240,96,74,.55);color:var(--red);font-weight:800}
+  .out-row .by{font-size:10.5px;color:var(--ink3);font-family:var(--num);margin-top:5px;min-height:14px}
   .wl-auto{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;font-size:13.5px;color:var(--ink);line-height:1.6}
   .wl-auto b{font-size:11.5px;font-weight:800;color:var(--ink2);margin-right:8px}
   .wl-hint{font-size:11px;font-weight:700;color:var(--red);margin-left:2px}
@@ -539,6 +550,7 @@
     <button data-v="lucky">럭키드로우</button>
     <button data-v="rsvp">RSVP</button>
     <button data-v="sheet">근무일지</button>
+    <button data-v="out">철수</button>
     <button data-v="man">매뉴얼</button>
     <button data-v="onoff">전시장 온오프</button>
   </div>
@@ -949,6 +961,15 @@
     </div>
   </div>
 
+  <!-- 철수 — 작가별 작품 철수 일시(9/20·9/21)와 비고. atc/cal/out/<작가키> 에 저장, 전원 편집 가능 -->
+  <div class="page" data-page="out">
+    <div class="sec">
+      <div class="sec-t">작품 철수 일정<span class="r" id="out-sum"></span></div>
+      <div class="empty">작가별로 철수 오는 날짜 칸에 시간을 적어두세요(예: 14:00, 오후, 미정). 칸을 벗어나면 바로 저장되고 모두에게 실시간으로 보입니다.</div>
+      <div id="out-list"></div>
+    </div>
+  </div>
+
   <!-- 월 -->
   <div class="page" data-page="month">
     <div class="navrow"><div class="cur" id="m-title"></div></div>
@@ -1260,6 +1281,7 @@ function startListeners(){
   onValue(ref(db,'atc/cal/team'),  s=>{teamCache=s.val();renderTeam();});
   onValue(ref(db,'atc/cal/report'),s=>{rpCache=s.val()||{};renderRp();if(curView==='month')renderMonth();});
   onValue(ref(db,'atc/cal/lucky'), s=>{lkCache=s.val()||{};if(curView==='lucky')renderLucky();});
+  onValue(ref(db,'atc/cal/out'),   s=>{outCache=s.val()||{};if(curView==='out')renderOut();});
   onValue(ref(db,'atc/cal/rsvp'),  s=>{rvCache=s.val()||{};if(curView==='rsvp')renderRsvp();});
   onValue(ref(db,'atc/cal/meal'),  s=>{mealCache=s.val()||{};renderAtt();});
 }
@@ -1276,7 +1298,8 @@ function switchView(v){
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.dataset.page===v));
   if(v==='sheet'){ $('sheet-open').href=SHEET_URL; renderWorklog(); }
   if(v==='lucky'){ $('lk-guide-sec').classList.remove('open'); renderLucky(); }
-  if(v==='rsvp'){ renderRsvp(); rvLoad(false); } /* 안내문은 탭에 들어올 때마다 닫힌 상태로 — 열어야만 보인다 */
+  if(v==='rsvp'){ renderRsvp(); rvLoad(false); }
+  if(v==='out'){ renderOut(); } /* 안내문은 탭에 들어올 때마다 닫힌 상태로 — 열어야만 보인다 */
   renderAll();
 }
 document.querySelectorAll('.views button[data-v]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.v)));
@@ -2327,6 +2350,55 @@ $('team-add').addEventListener('click',()=>{
   push(ref(db,'atc/cal/team'),{name,role:role||'',phone:phone||'',by:myName(),o:Object.keys(teamCache||{}).length});
   toast('추가');
 });
+/* ── 철수 탭 — 작가별 철수 일시 기록. atc/cal/out/<key> = {d20,d21,memo,by,ts}
+   칸을 벗어날 때(change) 저장. 다른 사람이 고친 값은 실시간 반영하되, 지금 타이핑 중인 칸은 덮어쓰지 않는다. */
+const OUT_ARTISTS=[
+  {k:'kwon',  n:'권희수', w:'오렌지 방'},
+  {k:'kimsh', n:'김시흔', w:'호흡하는 잔여들'},
+  {k:'gemini',n:'김재민이',w:'테크노엇박과 낙서'},
+  {k:'dew',   n:'듀킴',   w:'Kissing Forever ∞ Kiss of Chaos ☆'},
+  {k:'ban',   n:'반재하', w:'머리 위를 지나 도착하는 곳'},
+  {k:'chang', n:'장영해', w:'Grass, Oxygen, Light, Friends'},
+  {k:'jang',  n:'장종완', w:'오메가 포인트 · 킬리만자로의 선물'},
+  {k:'cho',   n:'조영각', w:'아무도 가지지 못한 것들'},
+  {k:'joo',   n:'주슬아', w:'displace - - -'},
+  {k:'choiky',n:'최가영', w:'우육면 트위스트 · 나의 우육면 다이어리'},
+  {k:'che',   n:'최고은', w:'나는 전기양의 꿈을 꾸는가?'},
+  {k:'choisun',n:'최선',  w:'조용한 말'},
+  {k:'bio',   n:'정혜정·사이언스(황준규)', w:'바이오 오디세이 · 부풀어 오르는'},
+];
+const OUT_FIELDS=[{f:'d20',l:'9/20(일)',cls:'tm',ph:'시간'},{f:'d21',l:'9/21(월)',cls:'tm',ph:'시간'},{f:'memo',l:'비고',cls:'',ph:'차량·인원·주의사항 등'}];
+let outCache={}, outBuilt=false;
+function renderOut(){
+  const box=$('out-list');
+  if(!outBuilt){
+    box.innerHTML = OUT_ARTISTS.map(a=>'<div class="out-row" data-k="'+a.k+'"><span class="nm">'+esc(a.n)+'</span><span class="wk">'+esc(a.w)+'</span>'+
+        '<div class="in">'+OUT_FIELDS.map(x=>'<div><label>'+x.l+'</label><input type="text" class="'+x.cls+'" data-k="'+a.k+'" data-f="'+x.f+'" placeholder="'+x.ph+'" autocomplete="off"'+(x.f!=='memo'?' maxlength="12"':'')+'></div>').join('')+'</div>'+
+        '<div class="by"></div></div>').join('');
+    box.querySelectorAll('input').forEach(inp=>{
+      inp.addEventListener('change',()=>{
+        if(!canEdit()) return;
+        const v=inp.value.trim(); inp.value=v;
+        update(ref(db,'atc/cal/out/'+inp.dataset.k),{[inp.dataset.f]:v,by:myName(),ts:Date.now()});
+        inp.classList.toggle('set', !!v && inp.dataset.f!=='memo'); toast('저장됨');
+      });
+    });
+    outBuilt=true;
+  }
+  let done=0;
+  OUT_ARTISTS.forEach(a=>{
+    const d=outCache[a.k]||{}, row=box.querySelector('.out-row[data-k="'+a.k+'"]');
+    row.querySelectorAll('input').forEach(inp=>{
+      if(inp===document.activeElement) return;                   // 타이핑 중인 칸은 보호
+      const v=d[inp.dataset.f]||''; if(inp.value!==v) inp.value=v;
+      inp.classList.toggle('set', !!v && inp.dataset.f!=='memo');
+    });
+    if(d.d20||d.d21) done++;
+    row.querySelector('.by').textContent = d.by ? '수정 '+d.by+' · '+new Date(d.ts||0).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+  });
+  $('out-sum').textContent = done+' / '+OUT_ARTISTS.length+' 일정 확인';
+}
+
 $('team-x').addEventListener('click',()=>$('team-dlg').close());
 $('team-logout').addEventListener('click',()=>{ if(confirm('로그아웃할까요?')){$('team-dlg').close();signOut(auth);} });
 
