@@ -364,17 +364,29 @@
   .wl-grid input,.wl-grid textarea{border:1px solid var(--line);border-radius:4px;padding:8px 10px;
     font-size:14px;min-width:0;width:100%;font-family:inherit}
   .wl-grid textarea{min-height:52px;resize:vertical;line-height:1.5}
-  /* 철수 탭 — 작가별 한 줄: 이름·작품 / 20일·21일 시간 + 비고 */
+  /* 철수 탭 — 알림판(전원) / 편집(조아라만): 날짜 체크 + 시간·비고 입력 */
   .out-row{border-top:1px solid var(--hair);padding:11px 0 12px}
   .out-row:first-child{border-top:0;padding-top:4px}
-  .out-row .nm{font-weight:800;font-size:14.5px;color:var(--ink)}
-  .out-row .wk{font-size:11px;color:var(--ink3);margin-left:6px;font-weight:600}
-  .out-row .in{display:grid;grid-template-columns:82px 82px 1fr;gap:7px;margin-top:7px}
-  .out-row .in label{display:block;font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--ink3);margin-bottom:3px}
-  .out-row .in input{border:1px solid var(--line);border-radius:4px;padding:8px 9px;font-size:14px;min-width:0;width:100%;font-family:inherit}
-  .out-row .in input.tm{font-family:var(--num);text-align:center}
-  .out-row .in input.set{border-color:rgba(240,96,74,.55);color:var(--red);font-weight:800}
-  .out-row .by{font-size:10.5px;color:var(--ink3);font-family:var(--num);margin-top:5px;min-height:14px}
+  .out-row .hd{display:flex;align-items:baseline;gap:8px;min-width:0}
+  .out-row .nm{font-weight:800;font-size:14.5px;color:var(--ink);flex:none}
+  .out-row .wk{font-size:11px;color:var(--ink3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .out-row .when{flex:none;margin-left:auto;font-size:13.5px;font-weight:800;color:var(--red);white-space:nowrap}
+  .out-row .when .tm{font-family:var(--num);margin-left:5px}
+  .out-row .when .tbd{color:var(--ink3);font-weight:700}
+  .out-row .memo{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.5;white-space:pre-wrap}
+  .out-row .by{font-size:10.5px;color:var(--ink3);font-family:var(--num);margin-top:4px}
+  .out-row .by:empty{display:none}
+  .out-row .in{display:grid;grid-template-columns:auto auto 1fr;gap:7px 10px;align-items:center;margin-top:8px}
+  .out-row .in .ck{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink2);cursor:pointer;white-space:nowrap}
+  .out-row .in .ck input{appearance:none;-webkit-appearance:none;flex:none;position:relative;width:18px;height:18px;margin:0;border:1px solid var(--line);border-radius:4px;background:transparent}
+  .out-row .in .ck input:checked{border-color:var(--red);background:var(--red-soft)}
+  .out-row .in .ck input:checked::after{content:'';position:absolute;left:5.5px;top:2px;width:5px;height:9px;border:solid var(--red);border-width:0 1.6px 1.6px 0;transform:rotate(43deg)}
+  .out-row .in .ck input:checked+span{color:var(--red)}
+  .out-row .in input[type=text]{border:1px solid var(--line);border-radius:4px;padding:8px 10px;font-size:14px;min-width:0;width:100%;font-family:inherit}
+  .out-row .in input.tm{font-family:var(--num)}
+  .out-row .in input[data-f=memo]{grid-column:1/-1}
+  #out-edit{margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:999px;padding:3px 11px;font-size:11.5px;font-weight:800}
+  #out-edit.on{border-color:var(--red);background:var(--red-soft);color:var(--red)}
   .wl-auto{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;font-size:13.5px;color:var(--ink);line-height:1.6}
   .wl-auto b{font-size:11.5px;font-weight:800;color:var(--ink2);margin-right:8px}
   .wl-hint{font-size:11px;font-weight:700;color:var(--red);margin-left:2px}
@@ -550,9 +562,9 @@
     <button data-v="lucky">럭키드로우</button>
     <button data-v="rsvp">RSVP</button>
     <button data-v="sheet">근무일지</button>
-    <button data-v="out">철수</button>
     <button data-v="man">매뉴얼</button>
     <button data-v="onoff">전시장 온오프</button>
+    <button data-v="out">철수</button>
   </div>
 
   <!-- 출결 -->
@@ -961,11 +973,12 @@
     </div>
   </div>
 
-  <!-- 철수 — 작가별 작품 철수 일시(9/20·9/21)와 비고. atc/cal/out/<작가키> 에 저장, 전원 편집 가능 -->
+  <!-- 철수 — 작가별 작품 철수 확정 일시(9/20 또는 9/21 택1 + 시간)와 비고. atc/cal/out/<작가키> 에 저장.
+       전원에게는 알림판으로 보이고, 편집(수정 버튼)은 조아라만 -->
   <div class="page" data-page="out">
     <div class="sec">
-      <div class="sec-t">작품 철수 일정<span class="r" id="out-sum"></span></div>
-      <div class="empty">작가별로 철수 오는 날짜 칸에 시간을 적어두세요(예: 14:00, 오후, 미정). 칸을 벗어나면 바로 저장되고 모두에게 실시간으로 보입니다.</div>
+      <div class="sec-t">작품 철수 일정<span class="r" id="out-sum"></span><button type="button" id="out-edit" hidden>수정</button></div>
+      <div class="empty" id="out-note"></div>
       <div id="out-list"></div>
     </div>
   </div>
@@ -2350,8 +2363,9 @@ $('team-add').addEventListener('click',()=>{
   push(ref(db,'atc/cal/team'),{name,role:role||'',phone:phone||'',by:myName(),o:Object.keys(teamCache||{}).length});
   toast('추가');
 });
-/* ── 철수 탭 — 작가별 철수 일시 기록. atc/cal/out/<key> = {d20,d21,memo,by,ts}
-   칸을 벗어날 때(change) 저장. 다른 사람이 고친 값은 실시간 반영하되, 지금 타이핑 중인 칸은 덮어쓰지 않는다. */
+/* ── 철수 탭 — atc/cal/out/<key> = {day:'20'|'21'|'', tm, memo, by, ts}
+   전원: 알림판(읽기 전용). 조아라: '수정' 버튼으로 편집 모드 — 날짜 체크(택1)·시간·비고, 칸을 벗어나면 즉시 저장.
+   다른 기기의 변경은 실시간 반영하되, 편집 중 포커스가 목록 안에 있으면 다시 그리지 않고 포커스가 빠질 때 반영. */
 const OUT_ARTISTS=[
   {k:'kwon',  n:'권희수', w:'오렌지 방'},
   {k:'kimsh', n:'김시흔', w:'호흡하는 잔여들'},
@@ -2367,37 +2381,64 @@ const OUT_ARTISTS=[
   {k:'choisun',n:'최선',  w:'조용한 말'},
   {k:'bio',   n:'정혜정·사이언스(황준규)', w:'바이오 오디세이 · 부풀어 오르는'},
 ];
-const OUT_FIELDS=[{f:'d20',l:'9/20(일)',cls:'tm',ph:'시간'},{f:'d21',l:'9/21(월)',cls:'tm',ph:'시간'},{f:'memo',l:'비고',cls:'',ph:'차량·인원·주의사항 등'}];
-let outCache={}, outBuilt=false;
-function renderOut(){
-  const box=$('out-list');
-  if(!outBuilt){
-    box.innerHTML = OUT_ARTISTS.map(a=>'<div class="out-row" data-k="'+a.k+'"><span class="nm">'+esc(a.n)+'</span><span class="wk">'+esc(a.w)+'</span>'+
-        '<div class="in">'+OUT_FIELDS.map(x=>'<div><label>'+x.l+'</label><input type="text" class="'+x.cls+'" data-k="'+a.k+'" data-f="'+x.f+'" placeholder="'+x.ph+'" autocomplete="off"'+(x.f!=='memo'?' maxlength="12"':'')+'></div>').join('')+'</div>'+
-        '<div class="by"></div></div>').join('');
-    box.querySelectorAll('input').forEach(inp=>{
-      inp.addEventListener('change',()=>{
-        if(!canEdit()) return;
-        const v=inp.value.trim(); inp.value=v;
-        update(ref(db,'atc/cal/out/'+inp.dataset.k),{[inp.dataset.f]:v,by:myName(),ts:Date.now()});
-        inp.classList.toggle('set', !!v && inp.dataset.f!=='memo'); toast('저장됨');
-      });
-    });
-    outBuilt=true;
-  }
-  let done=0;
-  OUT_ARTISTS.forEach(a=>{
-    const d=outCache[a.k]||{}, row=box.querySelector('.out-row[data-k="'+a.k+'"]');
-    row.querySelectorAll('input').forEach(inp=>{
-      if(inp===document.activeElement) return;                   // 타이핑 중인 칸은 보호
-      const v=d[inp.dataset.f]||''; if(inp.value!==v) inp.value=v;
-      inp.classList.toggle('set', !!v && inp.dataset.f!=='memo');
-    });
-    if(d.d20||d.d21) done++;
-    row.querySelector('.by').textContent = d.by ? '수정 '+d.by+' · '+new Date(d.ts||0).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
-  });
-  $('out-sum').textContent = done+' / '+OUT_ARTISTS.length+' 일정 확인';
+const OUT_DAYS={'20':'9/20(일)','21':'9/21(월)'};
+let outCache={}, outEdit=false;
+const canOutEdit=()=> meId==='joara';                       // 철수 일정 편집 = 조아라만
+function outGet(k){
+  const d=outCache[k]||{}; let day=d.day||'', tm=d.tm||'';
+  if(!day){ if(d.d20){day='20';tm=d.d20;} else if(d.d21){day='21';tm=d.d21;} }   // 첫 버전(d20/d21 칸) 호환
+  return {day,tm,memo:d.memo||'',by:d.by||'',ts:d.ts||0};
 }
+const outFmt = ts => new Date(ts).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+function outSave(k,patch){ if(!canOutEdit()) return; update(ref(db,'atc/cal/out/'+k),{...patch,by:myName(),ts:Date.now()}); toast('저장됨'); }
+function renderOut(){
+  const box=$('out-list'), eb=$('out-edit');
+  eb.hidden=!canOutEdit(); eb.textContent=outEdit?'완료':'수정'; eb.classList.toggle('on',outEdit);
+  $('out-note').textContent = outEdit ? '날짜를 체크하고 시간을 적으세요. 칸을 벗어나면 바로 저장됩니다.'
+                                      : '작가별 작품 철수 확정 일시입니다. 미정인 팀은 정해지는 대로 갱신됩니다.';
+  let done=0;
+  if(outEdit && box.dataset.mode==='edit'){                     // 편집 중: 다시 그리지 않고 값만 제자리 갱신 (타이핑 보호)
+    OUT_ARTISTS.forEach(a=>{
+      const d=outGet(a.k); if(d.day) done++;
+      const row=box.querySelector('.out-row[data-k="'+a.k+'"]'); if(!row) return;
+      row.querySelectorAll('input').forEach(inp=>{
+        if(inp===document.activeElement) return;
+        if(inp.dataset.f==='day') inp.checked = d.day===inp.value;
+        else if(inp.value!==d[inp.dataset.f]) inp.value=d[inp.dataset.f];
+      });
+      row.querySelector('.by').textContent = d.by ? d.by+' · '+outFmt(d.ts) : '';
+    });
+    $('out-sum').textContent = done+' / '+OUT_ARTISTS.length+' 확정';
+    return;
+  }
+  box.dataset.mode = outEdit ? 'edit' : 'view';
+  box.innerHTML = OUT_ARTISTS.map(a=>{
+    const d=outGet(a.k); if(d.day) done++;
+    const hd='<span class="nm">'+esc(a.n)+'</span><span class="wk">'+esc(a.w)+'</span>';
+    const by='<div class="by">'+(d.by?esc(d.by)+' · '+outFmt(d.ts):'')+'</div>';
+    if(!outEdit){
+      const when = d.day ? OUT_DAYS[d.day]+(d.tm?'<span class="tm">'+esc(d.tm)+'</span>':'') : '<span class="tbd">미정</span>';
+      return '<div class="out-row"><div class="hd">'+hd+'<span class="when">'+when+'</span></div>'+
+             (d.memo?'<div class="memo">'+esc(d.memo)+'</div>':'')+(d.by?by:'')+'</div>';
+    }
+    return '<div class="out-row" data-k="'+a.k+'"><div class="hd">'+hd+'</div><div class="in">'+
+      Object.keys(OUT_DAYS).map(v=>'<label class="ck"><input type="checkbox" data-k="'+a.k+'" data-f="day" value="'+v+'"'+(d.day===v?' checked':'')+'><span>'+OUT_DAYS[v]+'</span></label>').join('')+
+      '<input type="text" class="tm" data-k="'+a.k+'" data-f="tm" placeholder="시간 (예: 14:00)" maxlength="20" autocomplete="off" value="'+esc(d.tm)+'">'+
+      '<input type="text" data-k="'+a.k+'" data-f="memo" placeholder="비고 — 차량·인원·주의사항 등" autocomplete="off" value="'+esc(d.memo)+'">'+
+      '</div>'+by+'</div>';
+  }).join('');
+  $('out-sum').textContent = done+' / '+OUT_ARTISTS.length+' 확정';
+}
+$('out-edit').addEventListener('click',()=>{ if(!canOutEdit()) return; outEdit=!outEdit; renderOut(); });
+$('out-list').addEventListener('change',e=>{
+  const inp=e.target; if(!inp.dataset||!inp.dataset.f||!canOutEdit()) return;
+  const k=inp.dataset.k;
+  if(inp.dataset.f==='day'){                                   // 택1: 하나 체크하면 다른 날은 해제
+    const day=inp.checked?inp.value:'';
+    inp.closest('.in').querySelectorAll('input[data-f=day]').forEach(c=>{ if(c!==inp) c.checked=false; });
+    outSave(k,{day});
+  } else { const v=inp.value.trim(); inp.value=v; outSave(k,{[inp.dataset.f]:v}); }
+});
 
 $('team-x').addEventListener('click',()=>$('team-dlg').close());
 $('team-logout').addEventListener('click',()=>{ if(confirm('로그아웃할까요?')){$('team-dlg').close();signOut(auth);} });
